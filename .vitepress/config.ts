@@ -135,7 +135,6 @@ const globalSidebar = [
           },
           { text: 'Rat Companions', link: '/resources/dumpsters/rat-companions' },
           { text: 'Recycler System', link: '/resources/dumpsters/recycler' },
-          { text: 'Common Issues', link: '/resources/dumpsters/common-issues' },
         ],
       },
       {
@@ -146,7 +145,6 @@ const globalSidebar = [
           { text: 'Installation', link: '/resources/beekeeping/installation' },
           { text: 'Configuration', link: '/resources/beekeeping/configuration' },
           { text: 'Full Config', link: '/resources/beekeeping/full-config' },
-          { text: 'Common Issues', link: '/resources/beekeeping/common-issues' },
         ],
       },
       {

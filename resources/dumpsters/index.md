@@ -196,4 +196,3 @@ sd-dumpsters/
 - [Configuration](/resources/dumpsters/configuration) -- Customize every aspect
 - [Rat Companions](/resources/dumpsters/rat-companions) -- Deep dive into the rat system
 - [Recycler](/resources/dumpsters/recycler) -- Recycler locations and items
-- [Common Issues](/resources/dumpsters/common-issues) -- Troubleshooting guide

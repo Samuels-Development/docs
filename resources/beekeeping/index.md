@@ -230,4 +230,3 @@ sd-beekeeping/
 
 - [Installation](/resources/beekeeping/installation) — Get up and running
 - [Configuration](/resources/beekeeping/configuration) — Every config option explained
-- [Common Issues](/resources/beekeeping/common-issues) — Troubleshooting guide
