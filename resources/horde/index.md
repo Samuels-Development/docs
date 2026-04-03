@@ -237,5 +237,6 @@ sd-horde/
 
 - [Installation](/resources/horde/installation) -- Get up and running
 - [Configuration](/resources/horde/configuration) -- Customize every aspect
-- [Exports](/resources/horde/exports) -- Integrate with other scripts
+- [Client Exports](/resources/horde/exports-client) -- Client-side integration
+- [Server Exports](/resources/horde/exports-server) -- Server-side integration
 - [Creating Maps](/resources/horde/creating-maps) -- Build your own maps
