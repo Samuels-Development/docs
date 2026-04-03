@@ -226,6 +226,7 @@ Set the `Minigame` value to the name of the minigame you want to use. The `Args`
 
 ### Supported Minigames
 
+::: v-pre
 | Source | Minigame Key | Default Args | Description |
 |---|---|---|---|
 | **ps_ui** | `ps-circle` | `{2, 20}` | Number of circles, time (ms) |
@@ -271,6 +272,7 @@ Set the `Minigame` value to the name of the minigame you want to use. The `Args`
 | **glitch** | `gl-data-crack` | `{3}` | Difficulty |
 | **glitch** | `gl-brute-force` | `{}` | No args (default 5 lives) |
 | **glitch** | `gl-var-hack` | `{5, 5}` | Blocks, speed (s) |
+:::
 
 ::: info
 Both Laptop and Terminal support the same full list of minigames. Only the active `Minigame` value determines which one runs -- all other entries in `Args` are ignored at runtime.

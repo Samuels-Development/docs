@@ -240,9 +240,11 @@ Set `Minigame` to any key from the `Args` table. The matching entry supplies the
 
 #### ox_lib
 
+::: v-pre
 | Minigame | Default Args | Parameters |
 |---|---|---|
 | `lib.skillCheck` | `{{'easy','medium',{areaSize=40,speedMultiplier=1.2}}, {'w','a','s','d'}}` | Difficulty presets / custom config, Input keys |
+:::
 
 ::: warning
 If you use `lib.skillCheck`, you must add `ox_lib` to this resource's imports / dependencies.
@@ -264,6 +266,7 @@ If you use `lib.skillCheck`, you must add `ox_lib` to this resource's imports / 
 
 #### Glitch Minigames
 
+::: v-pre
 | Minigame | Default Args | Parameters |
 |---|---|---|
 | `gl-firewall-pulse` | `{3, 2, 10, 10, 40, 120, 10}` | requiredHacks, initialSpeed, maxSpeed, timeLimit (s), safeZoneMinWidth (px), safeZoneMaxWidth (px), safeZoneShrinkAmount (px) |
@@ -274,6 +277,7 @@ If you use `lib.skillCheck`, you must add `ox_lib` to this resource's imports / 
 | `gl-data-crack` | `{3}` | difficulty |
 | `gl-brute-force` | `{}` | No arguments (default numLives = 5) |
 | `gl-var-hack` | `{5, 5}` | blocks, speed (s) |
+:::
 
 ## Props
 

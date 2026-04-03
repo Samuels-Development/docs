@@ -440,6 +440,7 @@ Config.Minigame = {
 
 The following minigames are supported out of the box. Set `Config.Minigame.Minigame` to any key below and its matching `Args` entry will be used:
 
+::: v-pre
 | Minigame | Default Args | Description |
 |---|---|---|
 | `ps-circle` | `{2, 10}` | Number of circles, time in ms |
@@ -469,6 +470,7 @@ The following minigames are supported out of the box. Set `Config.Minigame.Minig
 | `rm-hackerminigame` | `{5, 3}` | Length, number of lives |
 | `rm-safecrack` | `{'easy'}` | Difficulty |
 | `lib.skillCheck` | `{{'easy','medium',{areaSize=40,speedMultiplier=1.2}}, {'w','a','s','d'}}` | Preset/custom difficulties, key inputs |
+:::
 
 ::: tip
 You can also use custom difficulty objects in `Config.Levels[i].Robbery.Difficulty` instead of preset strings:
