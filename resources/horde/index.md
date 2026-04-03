@@ -1,8 +1,6 @@
 # Horde Mission <VersionBadge repo="sd-horde" fallback="1.1.4" />
 
-**Version:** 1.1.4 | **Locales:** English, German
-
-Horde Mission is a wave-based survival game mode for FiveM. Assemble a group of up to four players, select a map and difficulty, and fight through increasingly difficult rounds of enemies. Earn points from kills, loot crates between rounds, spend currency in the shop, vote on team perks, and cash out your rewards at the end.
+**Horde Mission** (`sd-horde`) is a wave-based survival game mode for FiveM. Assemble a group of up to four players, select a map and difficulty, and fight through increasingly difficult rounds of enemies. Earn points from kills, loot crates between rounds, spend currency in the shop, vote on team perks, and cash out your rewards at the end.
 
 ## Preview
 
@@ -141,6 +139,7 @@ Choose from four distinct environments, each with multiple difficulty levels (Ea
 | Framework | Status |
 |---|---|
 | `qb-core` | Fully supported |
+| `qbx_core` | Fully supported |
 | `es_extended` (ESX) | Fully supported |
 
 ## Supported Inventories

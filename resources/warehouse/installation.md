@@ -33,16 +33,17 @@ Register the thermite item in your inventory system:
 
 ['thermite_h'] = {
     label = 'Thermite',
-    weight = 2000,
-    stack = true,
+    weight = 1000,
+    stack = false,
     close = true,
+    description = 'A low-yield thermite charge..',
 },
 ```
 
 ```lua [qb-core]
 -- Add to qb-core/shared/items.lua
 
-['thermite_h'] = { name = 'thermite_h', label = 'Thermite', weight = 2000, type = 'item', image = 'thermite_h.png', unique = false, useable = true, shouldClose = true, description = 'Thermite charge' },
+['thermite_h'] = { name = 'thermite_h', label = 'Thermite', weight = 1000, type = 'item', image = 'thermite_h.png', unique = true, useable = true, shouldClose = true, description = 'A low-yield thermite charge..' },
 ```
 
 ```sql [ESX]
@@ -56,7 +57,31 @@ INSERT INTO `items` (`name`, `label`, `weight`) VALUES
 
 Also ensure all loot reward items exist in your inventory system (gold bars, laptops, weapons, drugs, etc.).
 
-## Step 3: Start and Verify
+## Step 3: Copy Item Images
+
+Copy the item images from `sd-warehouse/images/` to your inventory's image folder:
+
+| Inventory | Image Path |
+|---|---|
+| ox_inventory | `ox_inventory/web/images/` |
+| qb-inventory / ps-inventory | `<inventory>/html/images/` |
+| qs-inventory | `qs-inventory/html/images/` |
+| codem-inventory | `codem-inventory/html/itemimages/` |
+| origen_inventory | `origen_inventory/ui/images/` |
+
+<ItemImageGrid
+  title="Warehouse Item Images"
+  zipName="sd-warehouse-images"
+  :images="[
+    { src: '/items/warehouse/thermite_h.png', name: 'thermite_h.png', alt: 'Thermite' },
+  ]"
+/>
+
+::: tip
+If you are using a custom inventory, place the images wherever your inventory loads item icons from.
+:::
+
+## Step 4: Start and Verify
 
 1. Start your server
 2. Check the server console for any errors

@@ -1,8 +1,6 @@
 # Corner Selling <VersionBadge repo="sd-selling" fallback="2.2.4" />
 
-**Version:** 2.2.4 | **Author:** Samuel#0008 | **Locales:** English, German, Spanish, French, Arabic
-
-An advanced drug dealing and corner selling system for FiveM. Sell drugs to NPCs in designated zones, progress through a 5-level reputation system, complete delivery missions, encounter bulk buyers, and track your milestones. Features dynamic pricing, robbery mechanics, money laundering, and a full statistics system.
+**Corner Selling** (`sd-selling`) is an advanced drug dealing and corner selling system for FiveM. Sell drugs to NPCs in designated zones, progress through a 5-level reputation system, complete delivery missions, encounter bulk buyers, and track your milestones. Features dynamic pricing, robbery mechanics, money laundering, and a full statistics system.
 
 ## Preview
 

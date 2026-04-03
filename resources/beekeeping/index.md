@@ -1,8 +1,6 @@
 # Beekeeping <VersionBadge repo="sd-beekeeping" fallback="1.3.2" />
 
-**Version:** 1.3.1 | **Author:** Samuel#0008 & ZF Labo | **Locales:** English, German, Spanish, French, Arabic
-
-An advanced beekeeping system for FiveM. Place hives and bee houses in the world, capture wild bees, produce regional honey types, manage infections and aggression, collaborate with other players, and sell your products to the Beekeeper NPC.
+**Beekeeping** (`sd-beekeeping`) is an advanced beekeeping system for FiveM. Place hives and bee houses in the world, capture wild bees, produce regional honey types, manage infections and aggression, collaborate with other players, and sell your products to the Beekeeper NPC.
 
 ## Preview
 

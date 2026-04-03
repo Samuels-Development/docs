@@ -1,8 +1,6 @@
 # Pacific Bank Heist <VersionBadge repo="sd-pacificbank" fallback="1.2.4" />
 
-**Version:** 1.2.4 | **Author:** Samuel#0008 | **Locales:** English, German, Spanish, French, Arabic
-
-A comprehensive Pacific Bank heist for FiveM featuring computer hacking, door consoles, laser grids, thermite breaching, vault bombing, cash tray looting, and deposit box drilling. A multi-phase robbery with full multiplayer synchronization.
+**Pacific Bank Heist** (`sd-pacificbank`) is a comprehensive Pacific Bank heist for FiveM featuring computer hacking, door consoles, laser grids, thermite breaching, vault bombing, cash tray looting, and deposit box drilling. A multi-phase robbery with full multiplayer synchronization.
 
 ## Preview
 

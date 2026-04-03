@@ -6,7 +6,7 @@
     </div>
     <div class="stat-divider"></div>
     <div class="stat-item">
-      <span class="stat-value">5</span>
+      <span class="stat-value">14</span>
       <span class="stat-label">Premium Scripts</span>
     </div>
     <div class="stat-divider"></div>

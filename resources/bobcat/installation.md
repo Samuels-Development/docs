@@ -66,32 +66,38 @@ Register the required items in your inventory system:
 ```lua [ox_inventory]
 -- Add to ox_inventory/data/items.lua
 
-['thermite_h'] = {
-    label = 'Thermite',
-    weight = 2000,
-    stack = true,
-    close = true,
-},
 ['bobcatkeycard'] = {
     label = 'Bobcat Security Card',
-    weight = 100,
+    weight = 1000,
     stack = false,
     close = true,
+    description = 'A keycard used at the Bobcat Security Deposit.',
 },
 ['c4_bomb'] = {
-    label = 'C4 Explosive',
-    weight = 1500,
-    stack = true,
+    label = 'C4 Brick',
+    weight = 1000,
+    stack = false,
     close = true,
+    description = 'Very Dangerous! High Yield Explosive.',
+},
+['thermite_h'] = {
+    label = 'Thermite',
+    weight = 1000,
+    stack = false,
+    close = true,
+    description = 'A low-yield thermite charge.',
+    server = {
+        export = 'sd-bobcat.useThermite_h',
+    },
 },
 ```
 
 ```lua [qb-core]
 -- Add to qb-core/shared/items.lua
 
-['thermite_h']     = { name = 'thermite_h',     label = 'Thermite',              weight = 2000, type = 'item', image = 'thermite_h.png',     unique = false, useable = true, shouldClose = true, description = 'Thermite charge' },
-['bobcatkeycard']  = { name = 'bobcatkeycard',   label = 'Bobcat Security Card',  weight = 100,  type = 'item', image = 'bobcatkeycard.png',  unique = true,  useable = true, shouldClose = true, description = 'A Bobcat Security keycard' },
-['c4_bomb']        = { name = 'c4_bomb',         label = 'C4 Explosive',          weight = 1500, type = 'item', image = 'c4_bomb.png',        unique = false, useable = true, shouldClose = true, description = 'C4 explosive charge' },
+['bobcatkeycard']  = { name = 'bobcatkeycard',  label = 'Bobcat Security Card', weight = 1000, type = 'item', image = 'bobcatkeycard.png', unique = false, useable = true,  shouldClose = true, description = 'A keycard used at the Bobcat Security Deposit.' },
+['c4_bomb']        = { name = 'c4_bomb',        label = 'C4 Brick',            weight = 1000, type = 'item', image = 'c4_bomb.png',       unique = true,  useable = false, shouldClose = true, description = 'Very Dangerous! High Yield Explosive.' },
+['thermite_h']     = { name = 'thermite_h',     label = 'Thermite',            weight = 1000, type = 'item', image = 'thermite_h.png',    unique = true,  useable = true,  shouldClose = true, description = 'A low-yield thermite charge.' },
 ```
 
 ```sql [ESX]
@@ -99,13 +105,39 @@ Register the required items in your inventory system:
 
 INSERT INTO `items` (`name`, `label`, `weight`) VALUES
   ('bobcatkeycard', 'Bobcat Security Card', 1),
-  ('c4_bomb', 'C4 Explosive', 15),
-  ('thermite_h', 'Thermite', 20);
+  ('c4_bomb', 'C4 Brick', 10),
+  ('thermite_h', 'Thermite', 10);
 ```
 
 :::
 
-## Step 5: Start and Verify
+## Step 5: Copy Item Images
+
+Copy the item images from `sd-bobcat/images/` to your inventory's image folder:
+
+| Inventory | Image Path |
+|---|---|
+| ox_inventory | `ox_inventory/web/images/` |
+| qb-inventory / ps-inventory | `<inventory>/html/images/` |
+| qs-inventory | `qs-inventory/html/images/` |
+| codem-inventory | `codem-inventory/html/itemimages/` |
+| origen_inventory | `origen_inventory/ui/images/` |
+
+<ItemImageGrid
+  title="Bobcat Item Images"
+  zipName="sd-bobcat-images"
+  :images="[
+    { src: '/items/bobcat/bobcatkeycard.png', name: 'bobcatkeycard.png', alt: 'Bobcat Keycard' },
+    { src: '/items/bobcat/c4_bomb.png', name: 'c4_bomb.png', alt: 'C4 Bomb' },
+    { src: '/items/bobcat/thermite_h.png', name: 'thermite_h.png', alt: 'Thermite' },
+  ]"
+/>
+
+::: tip
+If you are using a custom inventory, place the images wherever your inventory loads item icons from.
+:::
+
+## Step 6: Start and Verify
 
 1. Start your server
 2. Check the server console for any errors

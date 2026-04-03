@@ -54,60 +54,79 @@ Register the required heist items in your inventory system:
 
 ['laptop_pink'] = {
     label = 'Pink Laptop',
-    weight = 500,
-    stack = true,
+    weight = 5000,
     close = true,
+    description = 'A pink security Laptop',
 },
 ['laptop_gold'] = {
     label = 'Gold Laptop',
-    weight = 500,
-    stack = true,
+    weight = 5000,
     close = true,
+    description = 'A gold security Laptop',
+},
+['c4_bomb'] = {
+    label = 'C4 Brick',
+    weight = 1000,
+    close = true,
+    description = 'Very Dangerous! High-Yield Explosive.',
 },
 ['large_drill'] = {
     label = 'Large Drill',
-    weight = 2000,
-    stack = false,
+    weight = 20000,
     close = true,
-},
-['thermite'] = {
-    label = 'Thermite',
-    weight = 200,
-    stack = true,
-    close = true,
-},
-['c4_bomb'] = {
-    label = 'C4 Explosive',
-    weight = 2000,
-    stack = true,
-    close = true,
+    description = 'A Large Drill, good at cracking Secure Locks.',
 },
 ```
 
 ```lua [qb-core]
 -- Add to qb-core/shared/items.lua
 
-['laptop_pink'] = { name = 'laptop_pink', label = 'Pink Laptop',    weight = 500,  type = 'item', image = 'laptop_pink.png', unique = false, useable = true, shouldClose = true, description = 'A pink laptop' },
-['laptop_gold'] = { name = 'laptop_gold', label = 'Gold Laptop',    weight = 500,  type = 'item', image = 'laptop_gold.png', unique = false, useable = true, shouldClose = true, description = 'A gold laptop' },
-['large_drill'] = { name = 'large_drill', label = 'Large Drill',    weight = 2000, type = 'item', image = 'large_drill.png', unique = true,  useable = true, shouldClose = true, description = 'A large drill' },
-['thermite']    = { name = 'thermite',    label = 'Thermite',        weight = 200,  type = 'item', image = 'thermite.png',    unique = false, useable = true, shouldClose = true, description = 'Thermite charge' },
-['c4_bomb']     = { name = 'c4_bomb',     label = 'C4 Explosive',    weight = 2000, type = 'item', image = 'c4_bomb.png',     unique = false, useable = true, shouldClose = true, description = 'C4 explosive charge' },
+['laptop_pink'] = { name = 'laptop_pink', label = 'Pink Laptop',  weight = 5000,  type = 'item', image = 'laptop_pink.png', unique = true,  useable = true,  shouldClose = true, description = 'A pink security Laptop' },
+['laptop_gold'] = { name = 'laptop_gold', label = 'Gold Laptop',  weight = 5000,  type = 'item', image = 'laptop_gold.png', unique = true,  useable = true,  shouldClose = true, description = 'A gold security Laptop' },
+['c4_bomb']     = { name = 'c4_bomb',     label = 'C4 Brick',     weight = 1000,  type = 'item', image = 'c4_bomb.png',     unique = true,  useable = false, shouldClose = true, description = 'Very Dangerous! High-Yield Explosive.' },
+['large_drill'] = { name = 'large_drill', label = 'Large Drill',  weight = 20000, type = 'item', image = 'large_drill.png', unique = false, useable = false, shouldClose = true, description = 'A Large Drill, good at cracking Secure Locks.' },
 ```
 
 ```sql [ESX]
 -- Import sd-pacificbank/[SQL]/ESX/items.sql or run manually:
 
 INSERT INTO `items` (`name`, `label`, `weight`) VALUES
-  ('laptop_pink', 'Pink Laptop', 5),
-  ('laptop_gold', 'Gold Laptop', 5),
-  ('large_drill', 'Large Drill', 20),
-  ('thermite', 'Thermite', 2),
-  ('c4_bomb', 'C4 Explosive', 20);
+  ('laptop_pink', 'Pink Laptop', 50),
+  ('laptop_gold', 'Gold Laptop', 50),
+  ('c4_bomb', 'C4 Brick', 10),
+  ('large_drill', 'Large Drill', 200);
 ```
 
 :::
 
-## Step 4: Configure Laser Resource (Optional)
+## Step 4: Copy Item Images
+
+Copy the item images from `sd-pacificbank/images/` to your inventory's image folder:
+
+| Inventory | Image Path |
+|---|---|
+| ox_inventory | `ox_inventory/web/images/` |
+| qb-inventory / ps-inventory | `<inventory>/html/images/` |
+| qs-inventory | `qs-inventory/html/images/` |
+| codem-inventory | `codem-inventory/html/itemimages/` |
+| origen_inventory | `origen_inventory/ui/images/` |
+
+<ItemImageGrid
+  title="Pacific Bank Item Images"
+  zipName="sd-pacificbank-images"
+  :images="[
+    { src: '/items/pacificbank/laptop_pink.png', name: 'laptop_pink.png', alt: 'Laptop (Pink)' },
+    { src: '/items/pacificbank/laptop_gold.png', name: 'laptop_gold.png', alt: 'Laptop (Gold)' },
+    { src: '/items/pacificbank/c4_bomb.png', name: 'c4_bomb.png', alt: 'C4 Bomb' },
+    { src: '/items/pacificbank/large_drill.png', name: 'large_drill.png', alt: 'Large Drill' },
+  ]"
+/>
+
+::: tip
+If you are using a custom inventory, place the images wherever your inventory loads item icons from.
+:::
+
+## Step 5: Configure Laser Resource (Optional)
 
 If using the laser grid feature, ensure `mka-lasers` is installed and set the resource name in config:
 
@@ -116,7 +135,7 @@ Config.EnableLasers = true
 Config.LaserResourceName = 'mka-lasers'
 ```
 
-## Step 5: Start and Verify
+## Step 6: Start and Verify
 
 1. Start your server
 2. Check the server console for any errors

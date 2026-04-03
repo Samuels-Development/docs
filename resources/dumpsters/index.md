@@ -1,8 +1,6 @@
 # Dumpster Diving <VersionBadge repo="sd-dumpsters" fallback="1.3.3" />
 
-**Version:** 1.3.3 | **Locales:** English, Spanish, German, French, Arabic
-
-Dumpster Diving is a scavenging and survival-economy script for FiveM. Search dumpsters and trash bins for loot, encounter random events like needle pricks and hobo attacks, trade with the Hobo King, raise a rat companion, recycle scrap into useful materials, and progress through a leveling system with milestones, daily objectives, and a global leaderboard.
+**Dumpster Diving** (`sd-dumpsters`) is a scavenging and survival-economy script for FiveM. Search dumpsters and trash bins for loot, encounter random events like needle pricks and hobo attacks, trade with the Hobo King, raise a rat companion, recycle scrap into useful materials, and progress through a leveling system with milestones, daily objectives, and a global leaderboard.
 
 ## Preview
 
@@ -112,6 +110,7 @@ Convert scavenged junk into useful materials at recycler stations:
 | Framework | Status |
 |---|---|
 | `qb-core` | Fully supported |
+| `qbx_core` | Fully supported |
 | `es_extended` (ESX) | Fully supported |
 
 ## Supported Inventories

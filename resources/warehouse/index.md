@@ -1,8 +1,6 @@
 # Warehouse Heist <VersionBadge repo="sd-warehouse" fallback="1.5.0" />
 
-**Version:** 1.4.5 | **Author:** Samuel#0008 | **Locales:** English, German, Spanish, French, Arabic
-
-A secured warehouse heist for FiveM. Breach the exterior with thermite, enter the interior, hack the laptop to unlock exits, and loot six crates filled with weapons, drugs, electronics, and valuables. Features optional NPC guards, cinematic explosions, and a two-exit escape system.
+**Warehouse Heist** (`sd-warehouse`) is a secured warehouse heist for FiveM. Breach the exterior with thermite, enter the interior, hack the laptop to unlock exits, and loot six crates filled with weapons, drugs, electronics, and valuables. Features optional NPC guards, cinematic explosions, and a two-exit escape system.
 
 ## Preview
 

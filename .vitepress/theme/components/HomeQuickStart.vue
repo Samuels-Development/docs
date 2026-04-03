@@ -65,9 +65,8 @@
 
 <style scoped>
 .quickstart-section {
-  padding: 64px 24px;
-  max-width: 1152px;
-  margin: 0 auto;
+  padding: 48px 0;
+  max-width: 100%;
 }
 
 .container {

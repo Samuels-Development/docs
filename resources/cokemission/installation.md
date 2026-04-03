@@ -35,38 +35,68 @@ If using the sealed cache system (`Config.UsingSealedCache = true`), register th
 
 ['sealed_cache'] = {
     label = 'Sealed Cache',
-    weight = 1500,
-    stack = true,
+    weight = 15000,
+    stack = false,
     close = true,
+    description = 'A heavy and resilient lockbox',
+    server = {
+        export = 'sd-cokemission.useSealed_cache',
+    },
 },
 ['cache_key'] = {
-    label = 'Lockbox Key',
-    weight = 5,
-    stack = true,
+    label = 'Cache Key',
+    weight = 500,
+    stack = false,
     close = true,
+    description = 'Key used for lock boxes',
 },
 ```
 
 ```lua [qb-core]
 -- Add to qb-core/shared/items.lua
 
-['sealed_cache'] = { name = 'sealed_cache', label = 'Sealed Cache', weight = 1500, type = 'item', image = 'sealed_cache.png', unique = false, useable = true, shouldClose = true, description = 'A sealed cache of contraband' },
-['cache_key']    = { name = 'cache_key',    label = 'Lockbox Key',  weight = 5,    type = 'item', image = 'cache_key.png',    unique = false, useable = true, shouldClose = true, description = 'A key for lockboxes' },
+['sealed_cache'] = { name = 'sealed_cache', label = 'Sealed Cache', weight = 15000, type = 'item', image = 'sealed_cache.png', unique = true, useable = true, shouldClose = false, description = 'A heavy and resilient lockbox' },
+['cache_key']    = { name = 'cache_key',    label = 'Cache Key',    weight = 500,   type = 'item', image = 'cache_key.png',    unique = true, useable = true, shouldClose = true,  description = 'Key used for lock boxes' },
 ```
 
 ```sql [ESX]
 -- Import sd-cokemission/[SQL]/ESX/items.sql or run manually:
 
 INSERT INTO `items` (`name`, `label`, `weight`) VALUES
-  ('cache_key', 'Lockbox Key', 5),
-  ('sealed_cache', 'Sealed Cache', 1500);
+  ('sealed_cache', 'Sealed Cache', 150),
+  ('cache_key', 'Cache Key', 5);
 ```
 
 :::
 
 Also ensure your reward items exist (default: `coke_brick`, `weed_brick`).
 
-## Step 3: Start and Verify
+## Step 3: Copy Item Images
+
+Copy the item images from `sd-cokemission/images/` to your inventory's image folder:
+
+| Inventory | Image Path |
+|---|---|
+| ox_inventory | `ox_inventory/web/images/` |
+| qb-inventory / ps-inventory | `<inventory>/html/images/` |
+| qs-inventory | `qs-inventory/html/images/` |
+| codem-inventory | `codem-inventory/html/itemimages/` |
+| origen_inventory | `origen_inventory/ui/images/` |
+
+<ItemImageGrid
+  title="Coke Mission Item Images"
+  zipName="sd-cokemission-images"
+  :images="[
+    { src: '/items/cokemission/cache_key.png', name: 'cache_key.png', alt: 'Cache Key' },
+    { src: '/items/cokemission/sealed_cache.png', name: 'sealed_cache.png', alt: 'Sealed Cache' },
+  ]"
+/>
+
+::: tip
+If you are using a custom inventory, place the images wherever your inventory loads item icons from.
+:::
+
+## Step 4: Start and Verify
 
 1. Start your server
 2. Check the server console for any errors

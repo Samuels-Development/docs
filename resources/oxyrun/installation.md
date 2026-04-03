@@ -39,32 +39,87 @@ Register the package item and reward items in your inventory system:
 ```lua [ox_inventory]
 -- Add to ox_inventory/data/items.lua
 
-['package'] = {
-    label = 'A Sealed Package',
-    weight = 2500,
+['bands'] = {
+    label = 'Band Of Notes',
+    weight = 100,
     stack = true,
     close = true,
+    description = 'A band of small notes..',
+},
+['rolls'] = {
+    label = 'Roll Of Small Notes',
+    weight = 100,
+    stack = true,
+    close = true,
+    description = 'A roll of small notes..',
+},
+['package'] = {
+    label = 'Suspicious Package',
+    weight = 10000,
+    stack = false,
+    close = true,
+    description = 'A mysterious package.. Scary!',
+},
+['oxy'] = {
+    label = 'Prescription Oxy',
+    weight = 0,
+    stack = true,
+    close = true,
+    description = 'The Label Has Been Ripped Off',
 },
 ```
 
 ```lua [qb-core]
 -- Add to qb-core/shared/items.lua
 
-['package'] = { name = 'package', label = 'A Sealed Package', weight = 2500, type = 'item', image = 'package.png', unique = false, useable = false, shouldClose = true, description = 'A sealed package' },
+['bands']   = { name = 'bands',   label = 'Band Of Notes',       weight = 100,   type = 'item', image = 'bands.png',   unique = false, useable = false, shouldClose = true, description = 'A band of small notes..' },
+['rolls']   = { name = 'rolls',   label = 'Roll Of Small Notes', weight = 100,   type = 'item', image = 'rolls.png',   unique = false, useable = false, shouldClose = true, description = 'A roll of small notes..' },
+['package'] = { name = 'package', label = 'Suspicious Package',  weight = 10000, type = 'item', image = 'package.png', unique = true,  useable = true,  shouldClose = true, description = 'A mysterious package.. Scary!' },
+['oxy']     = { name = 'oxy',     label = 'Prescription Oxy',    weight = 0,     type = 'item', image = 'oxy.png',     unique = false, useable = true,  shouldClose = true, description = 'The Label Has Been Ripped Off' },
 ```
 
 ```sql [ESX]
 -- Import sd-oxyrun/[SQL]/ESX/items.sql or run manually:
 
 INSERT INTO `items` (`name`, `label`, `weight`) VALUES
-  ('package', 'A Sealed Package', 2500);
+  ('bands', 'Band Of Notes', 1),
+  ('rolls', 'Roll Of Small Notes', 1),
+  ('package', 'Suspicious Package', 100),
+  ('oxy', 'Prescription Oxy', 0);
 ```
 
 :::
 
-Also ensure your reward items exist: `oxy`, `bands`, `rolls`, and any rare items configured in the level rewards.
+Also ensure any rare items configured in the level rewards exist in your inventory system.
 
-## Step 3: Start and Verify
+## Step 3: Copy Item Images
+
+Copy the item images from `sd-oxyrun/images/` to your inventory's image folder:
+
+| Inventory | Image Path |
+|---|---|
+| ox_inventory | `ox_inventory/web/images/` |
+| qb-inventory / ps-inventory | `<inventory>/html/images/` |
+| qs-inventory | `qs-inventory/html/images/` |
+| codem-inventory | `codem-inventory/html/itemimages/` |
+| origen_inventory | `origen_inventory/ui/images/` |
+
+<ItemImageGrid
+  title="Oxy Run Item Images"
+  zipName="sd-oxyrun-images"
+  :images="[
+    { src: '/items/oxyrun/bands.png', name: 'bands.png', alt: 'Bands' },
+    { src: '/items/oxyrun/oxy.png', name: 'oxy.png', alt: 'Oxy' },
+    { src: '/items/oxyrun/package.png', name: 'package.png', alt: 'Package' },
+    { src: '/items/oxyrun/rolls.png', name: 'rolls.png', alt: 'Rolls' },
+  ]"
+/>
+
+::: tip
+If you are using a custom inventory, place the images wherever your inventory loads item icons from.
+:::
+
+## Step 4: Start and Verify
 
 1. Start your server
 2. Check the server console for any errors

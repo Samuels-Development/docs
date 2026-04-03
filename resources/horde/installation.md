@@ -99,32 +99,3 @@ To update Horde Mission:
 Configuration files are preserved during updates as long as you do not overwrite them. Always compare your config with the new version's defaults to check for new options.
 :::
 
-## Troubleshooting
-
-### Script fails to start
-
-- Ensure all dependencies are listed **before** `sd-horde` in your `server.cfg`
-- Check that `oxmysql` is connected to your database
-- Check that `ox_lib` is the correct version and started
-
-### Framework not detected
-
-- The script checks for `qb-core` and `es_extended` via `GetResourceState()`. If neither returns `'started'`, the script will throw a critical error and stop
-- Make sure your framework resource name matches exactly (`qb-core` or `es_extended`)
-
-### Radio sync not working
-
-- Confirm `pma-voice` is running and players can use radios normally outside of horde missions
-- Ensure `RadioSync.enabled` is `true` in the config
-- Check the radio channel configuration in [Configuration](/resources/horde/configuration)
-
-### Players cannot interact with horde NPC
-
-- Verify `ox_lib` is running (target interactions use `ox_target` via ox_lib)
-- Make sure the ped spawns at the configured coordinates (check `Ped.coords` in config)
-- Check that `Ped.enabled` is `true` and/or `Zone.enabled` is `true` for zone-based interaction
-
-### Map fails to load
-
-- Verify the map file name in `Config.Maps` matches the actual file name in `configs/maps/` (without `.lua` extension)
-- Check server console for specific error messages from the map loader

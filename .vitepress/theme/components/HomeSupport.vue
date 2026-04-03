@@ -39,9 +39,8 @@
 
 <style scoped>
 .support-section {
-  padding: 0 24px 80px;
-  max-width: 1152px;
-  margin: 0 auto;
+  padding: 0 0 48px;
+  max-width: 100%;
 }
 
 .container {
@@ -168,7 +167,7 @@
     grid-template-columns: 1fr;
   }
   .support-section {
-    padding: 0 16px 64px;
+    padding: 0 0 32px;
   }
 }
 </style>

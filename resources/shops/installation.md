@@ -119,13 +119,3 @@ sd-shops/
   fxmanifest.lua
 ```
 
-## Troubleshooting
-
-| Issue | Solution |
-|---|---|
-| Shop peds not spawning | Ensure the resource is started and check for errors in the server console |
-| Database tables not created | Verify `oxmysql` is running and properly connected to your database |
-| Target prompts not appearing | Confirm your target system is started and `sd-shops` is loading after it |
-| Items not showing in shop | Check that item names in the config match your inventory's item registry |
-| Framework not detected | Ensure `qb-core` or `es_extended` starts before `sd-shops` |
-| No item images | Verify your inventory resource is started and item images exist |

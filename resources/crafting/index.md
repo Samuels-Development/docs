@@ -1,6 +1,6 @@
 # Advanced Crafting <VersionBadge repo="sd-crafting" fallback="1.1.5" />
 
-**sd-crafting** v1.1.5 -- A fully featured crafting system for FiveM with static and placeable workbenches, recipe tables, blueprints, tech trees, tool requirements, leveling, an admin panel, and a persistent crafting queue.
+**Advanced Crafting** (`sd-crafting`) is a fully featured crafting system for FiveM with static and placeable workbenches, recipe tables, blueprints, tech trees, tool requirements, leveling, an admin panel, and a persistent crafting queue.
 
 ## Preview
 
@@ -78,6 +78,7 @@ Built-in locale support with translations for:
 | Framework | Status |
 |---|---|
 | `qb-core` | Fully supported |
+| `qbx_core` | Fully supported |
 | `es_extended` (ESX) | Fully supported |
 
 ## Supported Inventories

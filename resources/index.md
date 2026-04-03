@@ -19,7 +19,7 @@ Loot dumpsters and trash bins, encounter the Hobo King, befriend rat companions,
 ### [Beekeeping](/resources/beekeeping/)
 An advanced beekeeping system with hive placement, honey production from multiple regions, infection and aggression mechanics, protective clothing, and a collaborator system.
 
-### [Multi-Job](/resources/multijob/)
+### [Multijob & Boss Menu](/resources/multijob/)
 An advanced multi-job management system allowing players to hold multiple jobs simultaneously, with duty zones, boss menus, applications, society accounting, bonuses, leaderboards, and weekly goals.
 
 ### [Corner Selling](/resources/selling/)

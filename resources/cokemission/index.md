@@ -1,8 +1,6 @@
 # Coke Mission <VersionBadge repo="sd-cokemission" fallback="2.0.53" />
 
-**Version:** 2.0.53 | **Author:** Samuel#0008 | **Locales:** English, German, Spanish, French, Arabic
-
-A NoPixel-inspired cocaine trafficking mission for FiveM. Players pay a boss NPC to initiate an underwater drug run, collect sealed caches from submerged vehicles, and optionally complete a phone number puzzle minigame before the drop locations are revealed.
+**Coke Mission** (`sd-cokemission`) is a NoPixel-inspired cocaine trafficking mission for FiveM. Players pay a boss NPC to initiate an underwater drug run, collect sealed caches from submerged vehicles, and optionally complete a phone number puzzle minigame before the drop locations are revealed.
 
 ## Preview
 

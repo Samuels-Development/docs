@@ -91,6 +91,7 @@ Shops can be linked to framework jobs via `frameworkJob`. When a player purchase
 | Framework | Status |
 |---|---|
 | `qb-core` | Fully supported |
+| `qbx_core` | Fully supported |
 | `es_extended` (ESX) | Fully supported |
 
 ## Supported Inventories
@@ -125,17 +126,6 @@ Shops can be linked to framework jobs via `frameworkJob`. When a player purchase
 | **oxmysql** | Yes | -- |
 | **Target System** | Yes | `ox_target` / `qb-target` / `qtarget` |
 | **Inventory** | Yes | Any of the 10 supported inventories listed above |
-
-## Locales
-
-Shops Pro ships with full localization support:
-
-- English (`en`)
-- German (`de`)
-
-## UI
-
-The management and shopping interface is built with **React**, providing a modern, responsive experience for both customers and shop owners.
 
 ## File Structure
 

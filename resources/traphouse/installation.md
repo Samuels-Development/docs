@@ -52,29 +52,56 @@ Register the required items in your inventory system:
 -- Add to ox_inventory/data/items.lua
 
 ['gang-keychain'] = {
-    label = 'Gang Keychain',
-    weight = 100,
+    label = 'Keychain',
+    weight = 50,
     stack = true,
     close = true,
+    description = 'A keychain with a load of oddly labelled keys',
 },
 ['safecracker'] = {
-    label = 'Safecracker Kit',
+    label = 'Safe Cracker',
     weight = 500,
     stack = true,
     close = true,
+    description = 'A specialized tool used for breaking into safes.',
 },
 ```
 
 ```lua [qb-core]
 -- Add to qb-core/shared/items.lua
 
-['gang-keychain'] = { name = 'gang-keychain', label = 'Gang Keychain',  weight = 100, type = 'item', image = 'gang-keychain.png', unique = false, useable = true, shouldClose = true, description = 'A gang keychain' },
-['safecracker']   = { name = 'safecracker',   label = 'Safecracker Kit', weight = 500, type = 'item', image = 'safecracker.png',   unique = false, useable = true, shouldClose = true, description = 'Tools for cracking safes' },
+['gang-keychain'] = { name = 'gang-keychain', label = 'Gang Keychain', weight = 20,  type = 'item', image = 'gang-keychain.png', unique = true,  useable = false, shouldClose = true, description = 'A keychain with a load of oddly labelled keys' },
+['safecracker']   = { name = 'safecracker',   label = 'Safe Cracker',  weight = 500, type = 'item', image = 'safecracker.png',   unique = true,  useable = false, shouldClose = true, description = 'A specialized tool used for breaking into safes.' },
 ```
 
 :::
 
-## Step 4: Start and Verify
+## Step 4: Copy Item Images
+
+Copy the item images from `sd-traphouse/images/` to your inventory's image folder:
+
+| Inventory | Image Path |
+|---|---|
+| ox_inventory | `ox_inventory/web/images/` |
+| qb-inventory / ps-inventory | `<inventory>/html/images/` |
+| qs-inventory | `qs-inventory/html/images/` |
+| codem-inventory | `codem-inventory/html/itemimages/` |
+| origen_inventory | `origen_inventory/ui/images/` |
+
+<ItemImageGrid
+  title="Traphouse Item Images"
+  zipName="sd-traphouse-images"
+  :images="[
+    { src: '/items/traphouse/gang-keychain.png', name: 'gang-keychain.png', alt: 'Gang Keychain' },
+    { src: '/items/traphouse/safecracker.png', name: 'safecracker.png', alt: 'Safecracker' },
+  ]"
+/>
+
+::: tip
+If you are using a custom inventory, place the images wherever your inventory loads item icons from.
+:::
+
+## Step 5: Start and Verify
 
 1. Start your server
 2. Check the server console for any errors

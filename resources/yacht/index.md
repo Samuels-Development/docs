@@ -1,8 +1,6 @@
 # Yacht Heist <VersionBadge repo="sd-yacht" fallback="1.1.1" />
 
-**Version:** 1.1.2 | **Authors:** Samuel#0008, Phade, AbbyBabyy, Blaizee | **Locales:** English, German, Spanish, French, Arabic
-
-A sophisticated multi-stage yacht heist for FiveM. Override security systems, manage engine pressure, solve symbol puzzles, hack laptops, crack the final password, and access the vault for the ultimate briefcase. Features 10 NPC guards, lootable valuables, cabin searching, cash trays, and a cinematic beach washup ending.
+**Yacht Heist** (`sd-yacht`) is a sophisticated multi-stage yacht heist for FiveM. Override security systems, manage engine pressure, solve symbol puzzles, hack laptops, crack the final password, and access the vault for the ultimate briefcase. Features 10 NPC guards, lootable valuables, cabin searching, cash trays, and a cinematic beach washup ending.
 
 ## Preview
 

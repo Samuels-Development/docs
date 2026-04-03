@@ -2,7 +2,6 @@ import { defineConfig } from 'vitepress'
 
 const globalSidebar = [
   {
-    text: 'Getting Started',
     items: [
       { text: 'Getting Started', link: '/' },
     ],
@@ -78,7 +77,14 @@ const globalSidebar = [
               { text: 'gunrunning_bunker.lua', link: '/resources/horde/full-config-map-gunrunning-bunker' },
             ],
           },
-          { text: 'Exports', link: '/resources/horde/exports' },
+          {
+            text: 'Exports',
+            collapsed: true,
+            items: [
+              { text: 'Client Exports', link: '/resources/horde/exports-client' },
+              { text: 'Server Exports', link: '/resources/horde/exports-server' },
+            ],
+          },
           { text: 'Creating New Maps', link: '/resources/horde/creating-maps' },
         ],
       },
@@ -193,7 +199,7 @@ const globalSidebar = [
         ],
       },
       {
-        text: 'Multi-Job',
+        text: 'Multijob & Boss Menu',
         collapsed: true,
         items: [
           { text: 'Overview', link: '/resources/multijob/' },

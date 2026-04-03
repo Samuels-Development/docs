@@ -1,8 +1,6 @@
 # Bobcat Security Heist <VersionBadge repo="sd-bobcat" fallback="1.5.71" />
 
-**Version:** 1.5.71 | **Author:** Samuel#0008 | **Locales:** English, German, Spanish, French, Arabic
-
-A fully-featured Bobcat Security weapons depot heist for FiveM. Breach three progressively secure doors, hack security systems, eliminate guards, loot weapon caches, and detonate C4 to access the vault. Supports three MLO variants: Gabz, NoPixel/Tobii, and K4MB1.
+**Bobcat Security Heist** (`sd-bobcat`) is a fully-featured Bobcat Security weapons depot heist for FiveM. Breach three progressively secure doors, hack security systems, eliminate guards, loot weapon caches, and detonate C4 to access the vault. Supports three MLO variants: Gabz, NoPixel/Tobii, and K4MB1.
 
 ## Preview
 

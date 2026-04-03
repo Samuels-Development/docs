@@ -1,8 +1,6 @@
 # Oxy Run <VersionBadge repo="sd-oxyrun" fallback="1.7.2" />
 
-**Version:** 1.7.2 | **Author:** Samuel#0008 | **Locales:** English, German, Spanish, French, Arabic
-
-A NoPixel-inspired Oxy Run drug delivery system for FiveM. Players pick up packages from suppliers and deliver them to NPC buyers in vehicles across the city. Features a 3-level reputation system, money washing, configurable routes, and a robbery minigame mechanic.
+**Oxy Run** (`sd-oxyrun`) is a NoPixel-inspired Oxy Run drug delivery system for FiveM. Players pick up packages from suppliers and deliver them to NPC buyers in vehicles across the city. Features a 3-level reputation system, money washing, configurable routes, and a robbery minigame mechanic.
 
 ## Preview
 

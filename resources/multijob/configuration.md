@@ -21,7 +21,7 @@ Config.NotificationDuration = 259200
 | `Config.UseNoiseEffect` | `boolean` | `true` | Adds a noise/grain effect overlay on the custom NUI panel. Only applies when `Config.UseCustomUI` is `true`. |
 | `Config.NotificationDuration` | `number` | `259200` | How long (in seconds) bonus and message notifications persist before expiring. Default is 72 hours. |
 
-## Multi-Job Settings
+## Multijob Settings
 
 ```lua
 Config.Multijob = {

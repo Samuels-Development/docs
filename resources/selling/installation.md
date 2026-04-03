@@ -41,32 +41,66 @@ If using money washing, ensure the cash items exist:
 -- Add to ox_inventory/data/items.lua (if not already present)
 
 ['bands'] = {
-    label = 'Band of Cash',
-    weight = 30,
+    label = 'Band Of Notes',
+    weight = 100,
     stack = true,
     close = true,
+    description = 'A band of small notes..',
 },
 ['rolls'] = {
-    label = 'Roll of Cash',
-    weight = 30,
+    label = 'Roll Of Small Notes',
+    weight = 100,
     stack = true,
     close = true,
+    description = 'A roll of small notes..',
 },
+```
+
+```lua [qb-core]
+-- Add to qb-core/shared/items.lua
+
+['bands'] = { name = 'bands', label = 'Band Of Notes',       weight = 100, type = 'item', image = 'bands.png', unique = false, useable = false, shouldClose = true, description = 'A band of small notes..' },
+['rolls'] = { name = 'rolls', label = 'Roll Of Small Notes', weight = 100, type = 'item', image = 'rolls.png', unique = false, useable = false, shouldClose = true, description = 'A roll of small notes..' },
 ```
 
 ```sql [ESX]
 -- Import sd-selling/[SQL]/ESX/items.sql or run manually:
 
 INSERT INTO `items` (`name`, `label`, `weight`) VALUES
-  ('bands', 'Band of Cash', 30),
-  ('rolls', 'Roll of Cash', 30);
+  ('bands', 'Band Of Notes', 1),
+  ('rolls', 'Roll Of Small Notes', 1);
 ```
 
 :::
 
 Also ensure all drugs configured in `Config.Zones` and `Config.Delivery.Drugs` exist in your inventory system (e.g., `cokebaggy`, `crack_baggy`, `xtcbaggy`, `oxy`, `meth`, weed variants).
 
-## Step 3: Start and Verify
+## Step 3: Copy Item Images
+
+Copy the item images from `sd-selling/images/` to your inventory's image folder:
+
+| Inventory | Image Path |
+|---|---|
+| ox_inventory | `ox_inventory/web/images/` |
+| qb-inventory / ps-inventory | `<inventory>/html/images/` |
+| qs-inventory | `qs-inventory/html/images/` |
+| codem-inventory | `codem-inventory/html/itemimages/` |
+| origen_inventory | `origen_inventory/ui/images/` |
+
+<ItemImageGrid
+  title="Selling Item Images"
+  zipName="sd-selling-images"
+  :images="[
+    { src: '/items/selling/bands.png', name: 'bands.png', alt: 'Bands' },
+    { src: '/items/selling/rolls.png', name: 'rolls.png', alt: 'Rolls' },
+  ]"
+/>
+
+::: tip
+If you are using a custom inventory, place the images wherever your inventory loads item icons from.
+:::
+
+## Step 4: Start and Verify
 
 1. Start your server
 2. Check the server console for any errors

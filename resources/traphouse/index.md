@@ -1,8 +1,6 @@
 # Traphouse Robbery <VersionBadge repo="sd-traphouse" fallback="1.0.7" />
 
-**Version:** 1.0.7 | **Author:** Samuel#0008 | **Locales:** English, German, Spanish, French, Arabic
-
-A Vagos gang traphouse robbery for FiveM. Break into the front door, collect cash, drugs, weapons, and valuables from 22 interactive props scattered throughout the property, crack open a vault, and fight off NPC guards. Features hacking minigames, weighted loot tables, and doorlock integration.
+**Traphouse Robbery** (`sd-traphouse`) is a Vagos gang traphouse robbery for FiveM. Break into the front door, collect cash, drugs, weapons, and valuables from 22 interactive props scattered throughout the property, crack open a vault, and fight off NPC guards. Features hacking minigames, weighted loot tables, and doorlock integration.
 
 ## Preview
 

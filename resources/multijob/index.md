@@ -1,16 +1,14 @@
-# Multi-Job <VersionBadge repo="sd-multijob" fallback="1.2.1" />
+# Multijob & Boss Menu <VersionBadge repo="sd-multijob" fallback="1.2.1" />
 
-**Version:** 1.2.1 | **Author:** Samuel#0008 | **Locales:** English, German, Spanish, French, Arabic
-
-An advanced multi-job management system for FiveM. Players can hold multiple jobs simultaneously, switch between them, toggle duty status, and interact with boss menus for hiring, firing, bonuses, applications, society accounting, and more. Features a custom NUI or ox_lib-based interface.
+**Multijob & Boss Menu** (`sd-multijob`) is an advanced multi-job management system for FiveM. Players can hold multiple jobs simultaneously, switch between them, toggle duty status, and interact with boss menus for hiring, firing, bonuses, applications, society accounting, and more. Features a custom NUI or ox_lib-based interface.
 
 ## Preview
 
-<YouTubeEmbed id="DBZSaE61GS8" title="Multi-Job & Boss Menu — Full Showcase" />
+<YouTubeEmbed id="DBZSaE61GS8" title="Multijob & Boss Menu & Boss Menu — Full Showcase" />
 
 ## Key Features
 
-### Multi-Job Roster
+### Multijob & Boss Menu Roster
 
 - Players can hold up to **5 jobs** simultaneously (configurable)
 - Switch active job at any time via the `/multijob` command or **F5** keybind
