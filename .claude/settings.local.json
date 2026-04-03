@@ -1,0 +1,30 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx vitepress:*)",
+      "Bash(node:*)",
+      "Bash(echo:*)",
+      "Bash(cp /tmp/yt_channel.html /tmp/yt_videos.html \"$USERPROFILE/\")",
+      "Read(//c/Users/samni/OneDrive/Dokumente/Resources/docs/$USERPROFILE/**)",
+      "Bash(cp \"C:/Users/samni/OneDrive/Dokumente/Resources/Source Code/sd-shops/configs/config.lua\" \"C:/Users/samni/OneDrive/Dokumente/Resources/docs/public/configs/sd-shops.lua\")",
+      "Bash(cp \"C:/Users/samni/OneDrive/Dokumente/Resources/Source Code/sd-horde/configs/config.lua\" \"C:/Users/samni/OneDrive/Dokumente/Resources/docs/public/configs/sd-horde.lua\")",
+      "Bash(cp \"C:/Users/samni/OneDrive/Dokumente/Resources/Source Code/sd-crafting/configs/config.lua\" \"C:/Users/samni/OneDrive/Dokumente/Resources/docs/public/configs/sd-crafting.lua\")",
+      "Bash(cp \"C:/Users/samni/OneDrive/Dokumente/Resources/Source Code/sd-dumpsters/configs/config.lua\" \"C:/Users/samni/OneDrive/Dokumente/Resources/docs/public/configs/sd-dumpsters.lua\")",
+      "Bash(cp \"C:/Users/samni/OneDrive/Dokumente/Resources/Source Code/sd-beekeeping/config.lua\" \"C:/Users/samni/OneDrive/Dokumente/Resources/docs/public/configs/sd-beekeeping.lua\")",
+      "Bash(npm install:*)",
+      "Bash(npm run:*)",
+      "Bash(find C:\\\\Users\\\\samni\\\\OneDrive\\\\Dokumente\\\\Resources\\\\Source Code\\\\sd-bobcat:*)",
+      "Bash(find C:\\\\Users\\\\samni\\\\OneDrive\\\\Dokumente\\\\Resources\\\\Source Code\\\\sd-selling:*)",
+      "Bash(grep -v \"\\\\\\\\.\")",
+      "Bash(cp '/c/Users/samni/OneDrive/Dokumente/Resources/Source Code/sd-bobcat/config.lua' /c/Users/samni/OneDrive/Dokumente/Resources/docs/public/configs/sd-bobcat.lua)",
+      "Bash(cp '/c/Users/samni/OneDrive/Dokumente/Resources/Source Code/sd-cokemission/config.lua' /c/Users/samni/OneDrive/Dokumente/Resources/docs/public/configs/sd-cokemission.lua)",
+      "Bash(cp '/c/Users/samni/OneDrive/Dokumente/Resources/Source Code/sd-multijob/config.lua' /c/Users/samni/OneDrive/Dokumente/Resources/docs/public/configs/sd-multijob.lua)",
+      "Bash(cp '/c/Users/samni/OneDrive/Dokumente/Resources/Source Code/sd-oxyrun/config.lua' /c/Users/samni/OneDrive/Dokumente/Resources/docs/public/configs/sd-oxyrun.lua)",
+      "Bash(cp '/c/Users/samni/OneDrive/Dokumente/Resources/Source Code/sd-pacificbank/config.lua' /c/Users/samni/OneDrive/Dokumente/Resources/docs/public/configs/sd-pacificbank.lua)",
+      "Bash(npx playwright:*)",
+      "Bash([ -d \"$SRC/$r\" ])",
+      "Bash(gh api:*)",
+      "Bash(gh auth:*)"
+    ]
+  }
+}

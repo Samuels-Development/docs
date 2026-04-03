@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" fill="none">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="128" y2="128" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#1a1b21"/>
+      <stop offset="100%" stop-color="#0f1014"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="32" y1="24" x2="96" y2="104" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#b5f050"/>
+      <stop offset="100%" stop-color="#94DD0C"/>
+    </linearGradient>
+  </defs>
+  <rect width="128" height="128" rx="28" fill="url(#bg)"/>
+  <rect x="2" y="2" width="124" height="124" rx="26" fill="none" stroke="#94DD0C" stroke-width="2" stroke-opacity="0.2"/>
+  <text x="64" y="84" font-family="system-ui, -apple-system, sans-serif" font-size="72" font-weight="800" fill="url(#accent)" text-anchor="middle" letter-spacing="-4">S</text>
+</svg>
