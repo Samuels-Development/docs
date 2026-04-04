@@ -1,14 +1,33 @@
 # Installation
 
+## Supported Inventories
+
+| Inventory | Status |
+|---|---|
+| `ox_inventory` | Fully supported |
+| `tgiann-inventory` | Supported |
+| `jaksam_inventory` | Supported |
+| `qs-inventory` | Supported |
+| `qs-inventory-pro` | Supported |
+| `qb-inventory` | Supported |
+| `ps-inventory` | Supported |
+| `lj-inventory` | Supported |
+| `codem-inventory` | Supported |
+
 ## Dependencies
 
 Ensure the following resources are installed and running **before** sd-cokemission:
 
 | Dependency | Options |
 |---|---|
-| **Library** | `sd_lib` |
-| **Zones** | `PolyZone` |
-| **Interaction** | `ox_target` / `qb-target` / `qtarget` (or use TextUI) |
+| **Framework** | `qb-core` / `qbx_core` / `es_extended` |
+| **Library** | `sd_lib` (required) |
+| **Zones** | `PolyZone` (required) |
+| **Target System** | `ox_target` / `qb-target` / `qtarget` / TextUI fallback |
+
+::: info
+Framework, inventory, and target system are all auto-detected via sd_lib. No database tables are required -- state is managed in memory.
+:::
 
 ## Step 1: Add the Resource
 
@@ -37,7 +56,7 @@ If using the sealed cache system (`Config.UsingSealedCache = true`), register th
     label = 'Sealed Cache',
     weight = 15000,
     stack = false,
-    close = true,
+    close = false,
     description = 'A heavy and resilient lockbox',
     server = {
         export = 'sd-cokemission.useSealed_cache',

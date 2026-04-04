@@ -51,49 +51,6 @@ The phone booth minigame gives you **3 strikes** before the supplier abandons yo
 - Optional **blackout mode** -- mission only available during power outages (requires qb-weathersync)
 - Minimum police check before starting
 
-## Supported Frameworks
-
-| Framework | Status |
-|---|---|
-| `qb-core` | Fully supported |
-| `qbx_core` | Fully supported |
-| `es_extended` (ESX) | Fully supported |
-
-## Supported Inventories
-
-| Inventory | Status |
-|---|---|
-| `ox_inventory` | Fully supported |
-| `tgiann-inventory` | Supported |
-| `jaksam_inventory` | Supported |
-| `qs-inventory` | Supported |
-| `qs-inventory-pro` | Supported |
-| `qb-inventory` | Supported |
-| `ps-inventory` | Supported |
-| `lj-inventory` | Supported |
-| `codem-inventory` | Supported |
-
-## Supported Target Systems
-
-| Target | Status |
-|---|---|
-| `ox_target` | Fully supported |
-| `qb-target` | Fully supported |
-| `qtarget` | Fully supported |
-
-## Dependencies
-
-| Dependency | Options |
-|---|---|
-| **Framework** | `qb-core` / `qbx_core` / `es_extended` |
-| **Library** | `sd_lib` (required) |
-| **Zones** | `PolyZone` (required) |
-| **Target System** | `ox_target` / `qb-target` / `qtarget` / TextUI fallback |
-
-::: info
-Framework, inventory, and target system are all auto-detected via sd_lib. No database tables are required -- state is managed in memory.
-:::
-
 ## File Structure
 
 ```

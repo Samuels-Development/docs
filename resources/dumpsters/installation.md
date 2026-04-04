@@ -2,33 +2,41 @@
 
 Follow these steps to install sd-dumpsters on your FiveM server.
 
+## Supported Inventories
+
+| Inventory | Status |
+|---|---|
+| `ox_inventory` | Fully supported |
+| `codem-inventory` | Supported |
+| `tgiann-inventory` | Supported |
+| `jaksam_inventory` | Supported |
+| `qs-inventory-pro` | Supported |
+| `origen_inventory` | Supported |
+
 ## Dependencies
 
 Ensure the following resources are installed and running **before** sd-dumpsters:
 
 | Dependency | Options |
 |---|---|
-| **Framework** | `qb-core` or `es_extended` |
+| **Framework** | `qb-core` / `qbx_core` / `es_extended` |
 | **Library** | `ox_lib` |
 | **Database** | `oxmysql` |
-| **Target** | `ox_target` / `qb-target` / `qtarget` (or use built-in TextUI fallback) |
-| **Inventory** | Any supported inventory, or the framework default |
-
-### Supported Inventory Systems
-
-The script auto-detects which inventory system is running. The following are supported:
-
-- `ox_inventory`
-- `codem-inventory`
-- `tgiann-inventory`
-- `jaksam_inventory`
-- `qs-inventory-pro`
-- `origen_inventory`
-- Framework default (ESX or QBCore built-in inventory)
+| **Target System** | `ox_target` / `qb-target` / `qtarget` (or built-in TextUI fallback) |
+| **Inventory** | Any of the 6 supported inventories listed above (or framework default) |
 
 ::: info
-`ox_inventory` is required if you want to use the **stash mode** (`Config.Stashes`) or the **loot-to-stash mode** (`Config.LootToStash`). All other features work with any supported inventory.
+The framework is auto-detected at startup. Target and inventory systems are also auto-detected from running resources. If no target resource is found, the script falls back to a built-in TextUI interaction system.
 :::
+
+### Optional Integrations
+
+| Integration | Purpose |
+|---|---|
+| **ox_inventory** | Required for stash mode and loot-to-stash mode |
+| **lation_ui** | Alternative notification and progress bar provider |
+| **cd_drawtextui** | Alternative TextUI provider |
+| **Minigame scripts** | ps-ui, memorygame, ran-minigames, hacking, howdy-hackminigame, SN-Hacking, rm_minigames, bl_ui, glitch-minigames |
 
 ## Step 1: Drag and Drop
 
@@ -52,19 +60,19 @@ The power saw is used to open locked dumpsters. Bottle caps are the alternative 
 -- Add to ox_inventory/data/items.lua
 
 ['powersaw'] = {
-    label = 'Powersaw',
+    label = 'Power Saw',
     weight = 2500,
-    stack = false,
+    stack = true,
     close = true,
-    description = 'A heavy-duty power saw for cutting through metal.'
+    description = 'A powerful tool designed for cutting wood, metal, and other materials with precision and ease.',
 },
 
 ['bottle_cap'] = {
     label = 'Bottle Cap',
     weight = 1,
     stack = true,
-    close = true,
-    description = 'A currency used among scavengers.'
+    close = false,
+    description = 'A small metallic cap from a bottle. Seems insignificant, but collectors might find it valuable.',
 },
 ```
 
@@ -73,14 +81,14 @@ The power saw is used to open locked dumpsters. Bottle caps are the alternative 
 
 ['powersaw'] = {
     name = 'powersaw',
-    label = 'Powersaw',
+    label = 'Power Saw',
     weight = 2500,
     type = 'item',
     image = 'powersaw.png',
     unique = false,
-    useable = true,
+    useable = false,
     shouldClose = true,
-    description = 'A heavy-duty power saw for cutting through metal.'
+    description = 'A powerful tool designed for cutting wood, metal, and other materials with precision and ease.',
 },
 
 ['bottle_cap'] = {
@@ -91,8 +99,8 @@ The power saw is used to open locked dumpsters. Bottle caps are the alternative 
     image = 'bottle_cap.png',
     unique = false,
     useable = false,
-    shouldClose = true,
-    description = 'A currency used among scavengers.'
+    shouldClose = false,
+    description = 'A small metallic cap from a bottle. Seems insignificant, but collectors might find it valuable.',
 },
 ```
 

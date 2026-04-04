@@ -1,15 +1,35 @@
 # Installation
 
+## Supported Inventories
+
+| Inventory | Status |
+|---|---|
+| `ox_inventory` | Fully supported |
+| `tgiann-inventory` | Supported |
+| `jaksam_inventory` | Supported |
+| `qs-inventory` | Supported |
+| `qs-inventory-pro` | Supported |
+| `qb-inventory` | Supported |
+| `ps-inventory` | Supported |
+| `lj-inventory` | Supported |
+| `codem-inventory` | Supported |
+
 ## Dependencies
 
 Ensure the following resources are installed and running **before** sd-yacht:
 
 | Dependency | Options |
 |---|---|
-| **Library** | `sd_lib` |
+| **Framework** | `qb-core` / `qbx_core` / `es_extended` |
+| **Library** | `sd_lib` (required) |
 | **UI Library** | `ox_lib` |
-| **Interaction** | `ox_target` / `qb-target` / `qtarget` (or use TextUI) |
-| **Sound** | `InteractSound` (optional) |
+| **Target System** | `ox_target` / `qb-target` / `qtarget` / TextUI fallback |
+| **Minigame** | Any one of 20+ supported resources |
+| **Sound** | `InteractSound` (optional, for SFX) |
+
+::: info
+Framework, inventory, and target system are all auto-detected via sd_lib. No custom database tables are created -- all state is managed in memory.
+:::
 
 ## Step 1: Add the Resource
 
@@ -39,6 +59,10 @@ Register the required items in your inventory system:
     stack = false,
     close = true,
     description = 'The first half of codes for the Yacht',
+    consume = 0,
+    server = {
+        export = 'sd-yacht.useYachtcodes',
+    },
 },
 ['casinocodes'] = {
     label = 'Casino Access Codes',
@@ -46,6 +70,10 @@ Register the required items in your inventory system:
     stack = false,
     close = true,
     description = 'The first half of codes for the Casino',
+    consume = 0,
+    server = {
+        export = 'sd-yacht.useCasinocodes',
+    },
 },
 ['secured_safe'] = {
     label = 'Safe',
@@ -53,6 +81,7 @@ Register the required items in your inventory system:
     stack = false,
     close = true,
     description = 'Meant to protect valuables',
+    consume = 0,
 },
 ['expensive_champagne'] = {
     label = 'Champagne',
@@ -60,6 +89,7 @@ Register the required items in your inventory system:
     stack = true,
     close = true,
     description = 'A sparkling wine from France',
+    consume = 0,
 },
 ['default_gateway_override'] = {
     label = 'Gateway Override',
@@ -67,6 +97,7 @@ Register the required items in your inventory system:
     stack = false,
     close = true,
     description = 'A default gateway override on a usb',
+    consume = 0,
 },
 ['revivekit'] = {
     label = 'Revival Kit',
@@ -74,6 +105,10 @@ Register the required items in your inventory system:
     stack = false,
     close = true,
     description = 'When your pal needs that pick me up',
+    consume = 0,
+    server = {
+        export = 'sd-yacht.useRevivekit',
+    },
 },
 ```
 

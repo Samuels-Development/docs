@@ -2,20 +2,33 @@
 
 Getting Horde Mission up and running on your server is straightforward. The script handles framework detection and database setup automatically.
 
-## Requirements
+## Supported Inventories
+
+| Inventory | Status |
+|---|---|
+| `ox_inventory` | Fully supported |
+| `tgiann-inventory` | Supported |
+| `jaksam_inventory` | Supported |
+| `qs-inventory` | Supported |
+| `qs-inventory-pro` | Supported |
+| `origen_inventory` | Supported |
+| `qb-inventory` | Supported |
+| `codem-inventory` | Supported |
+
+## Dependencies
 
 Before installing, make sure you have the following resources running on your server:
 
 | Dependency | Required | Notes |
 |---|---|---|
-| `qb-core` / `es_extended` | Yes | Any one supported framework |
-| `ox_lib` | Yes | Utility library (used for zones, targets, points, callbacks) |
-| `oxmysql` | Yes | Database driver |
-| `pma-voice` | No | Required only if `RadioSync.enabled = true` |
-| `ox_inventory` | No | Required for `InventoryRestrictions` (drop/give prevention) |
+| **Framework** | Yes | `qb-core` / `qbx_core` / `es_extended` |
+| **Library** | Yes | `ox_lib` |
+| **Database** | Yes | `oxmysql` |
+| **Voice** | Optional | `pma-voice` (required for radio sync) |
+| **Inventory** | Recommended | `ox_inventory` (required for inventory restrictions) |
 
-::: warning
-The script only supports **QBCore** (`qb-core`) and **ESX** (`es_extended`). QBX (`qbx_core`) is not listed as a detected framework in the bridge code. Target interactions are handled through `ox_target` via `ox_lib` -- there is no separate target system detection.
+::: info
+The framework is auto-detected on startup. Target interactions use `ox_target` via `ox_lib`.
 :::
 
 ## Step-by-Step Installation

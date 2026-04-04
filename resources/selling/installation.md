@@ -1,16 +1,35 @@
 # Installation
 
+## Supported Inventories
+
+| Inventory | Status |
+|---|---|
+| `ox_inventory` | Fully supported (metadata, drug variants) |
+| `tgiann-inventory` | Supported |
+| `jaksam_inventory` | Supported |
+| `qs-inventory` | Supported |
+| `qs-inventory-pro` | Supported |
+| `qb-inventory` | Supported |
+| `ps-inventory` | Supported |
+| `lj-inventory` | Supported |
+| `codem-inventory` | Supported |
+
 ## Dependencies
 
 Ensure the following resources are installed and running **before** sd-selling:
 
 | Dependency | Options |
 |---|---|
-| **Library** | `sd_lib` |
-| **Target** | `ox_target` |
+| **Framework** | `qb-core` / `qbx_core` / `es_extended` |
+| **Library** | `sd_lib` (required) |
+| **Target System** | `ox_target` / `qb-target` / `qtarget` |
 | **UI Library** | `ox_lib` |
-| **Inventory** | `ox_inventory` (recommended) |
+| **Inventory** | `ox_inventory` (recommended, for metadata support) |
 | **Database** | `oxmysql` |
+
+::: info
+Framework, inventory, and target system are all auto-detected via sd_lib. The `sd_cornerselling` database table is created automatically on first start.
+:::
 
 ## Step 1: Add the Resource
 
@@ -44,14 +63,14 @@ If using money washing, ensure the cash items exist:
     label = 'Band Of Notes',
     weight = 100,
     stack = true,
-    close = true,
+    close = false,
     description = 'A band of small notes..',
 },
 ['rolls'] = {
     label = 'Roll Of Small Notes',
     weight = 100,
     stack = true,
-    close = true,
+    close = false,
     description = 'A roll of small notes..',
 },
 ```
@@ -59,8 +78,8 @@ If using money washing, ensure the cash items exist:
 ```lua [qb-core]
 -- Add to qb-core/shared/items.lua
 
-['bands'] = { name = 'bands', label = 'Band Of Notes',       weight = 100, type = 'item', image = 'bands.png', unique = false, useable = false, shouldClose = true, description = 'A band of small notes..' },
-['rolls'] = { name = 'rolls', label = 'Roll Of Small Notes', weight = 100, type = 'item', image = 'rolls.png', unique = false, useable = false, shouldClose = true, description = 'A roll of small notes..' },
+['bands'] = { name = 'bands', label = 'Band Of Notes',       weight = 100, type = 'item', image = 'bands.png', unique = false, useable = false, shouldClose = false, description = 'A band of small notes..' },
+['rolls'] = { name = 'rolls', label = 'Roll Of Small Notes', weight = 100, type = 'item', image = 'rolls.png', unique = false, useable = false, shouldClose = false, description = 'A roll of small notes..' },
 ```
 
 ```sql [ESX]
@@ -113,9 +132,23 @@ Make sure `sd_lib` is started **before** sd-selling in your server.cfg, or the r
 
 ## Database Table
 
+The `sd_cornerselling` table stores player progression and is created automatically on first start:
+
 | Column | Type | Purpose |
 |---|---|---|
 | `Identifier` | VARCHAR(255) | Player identifier |
 | `XP` | INT | Total reputation experience points |
 | `Stats` | JSON | Per-drug sales counts |
 | `Milestones` | JSON | Redeemed milestone tracking |
+
+::: details Manual SQL (only if the table was not auto-created)
+```sql
+CREATE TABLE IF NOT EXISTS `sd_cornerselling` (
+  `Identifier` VARCHAR(255) NOT NULL,
+  `XP` INT NOT NULL DEFAULT 0,
+  `Stats` JSON DEFAULT NULL,
+  `Milestones` JSON DEFAULT NULL,
+  PRIMARY KEY (`Identifier`)
+);
+```
+:::

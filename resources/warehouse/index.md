@@ -66,49 +66,6 @@ Supports **21+ configurable minigame resources** with separate settings for the 
 - **Map blip** for the warehouse location
 - **Target or TextUI** interaction modes
 
-## Supported Frameworks
-
-| Framework | Status |
-|---|---|
-| `qb-core` | Fully supported |
-| `qbx_core` | Fully supported |
-| `es_extended` (ESX) | Fully supported |
-
-## Supported Inventories
-
-| Inventory | Status |
-|---|---|
-| `ox_inventory` | Fully supported |
-| `tgiann-inventory` | Supported |
-| `jaksam_inventory` | Supported |
-| `qs-inventory` | Supported |
-| `qs-inventory-pro` | Supported |
-| `qb-inventory` | Supported |
-| `ps-inventory` | Supported |
-| `lj-inventory` | Supported |
-| `codem-inventory` | Supported |
-
-## Supported Target Systems
-
-| Target | Status |
-|---|---|
-| `ox_target` | Fully supported |
-| `qb-target` | Fully supported |
-| `qtarget` | Fully supported |
-
-## Dependencies
-
-| Dependency | Options |
-|---|---|
-| **Framework** | `qb-core` / `qbx_core` / `es_extended` |
-| **Library** | `sd_lib` (required) |
-| **Target System** | `ox_target` / `qb-target` / `qtarget` / TextUI fallback |
-| **Minigame** | Any one of 21+ supported resources |
-
-::: info
-Framework, inventory, and target system are all auto-detected via sd_lib. No custom database tables are created.
-:::
-
 ## File Structure
 
 ```

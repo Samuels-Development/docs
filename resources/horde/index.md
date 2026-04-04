@@ -134,47 +134,6 @@ Choose from four distinct environments, each with multiple difficulty levels (Ea
 - Discord logs support rich embeds with color coding and inline fields
 - All log messages support placeholders for player info, game state, and event-specific data
 
-## Supported Frameworks
-
-| Framework | Status |
-|---|---|
-| `qb-core` | Fully supported |
-| `qbx_core` | Fully supported |
-| `es_extended` (ESX) | Fully supported |
-
-## Supported Inventories
-
-| Inventory | Status |
-|---|---|
-| `ox_inventory` | Fully supported |
-| `tgiann-inventory` | Supported |
-| `jaksam_inventory` | Supported |
-| `qs-inventory` | Supported |
-| `qs-inventory-pro` | Supported |
-| `origen_inventory` | Supported |
-| `qb-inventory` | Supported |
-| `codem-inventory` | Supported |
-
-## Supported Target Systems
-
-| Target | Status |
-|---|---|
-| `ox_target` | Fully supported (via `ox_lib`) |
-
-## Dependencies
-
-| Dependency | Required | Notes |
-|---|---|---|
-| **Framework** | Yes | `qb-core` or `es_extended` |
-| **Library** | Yes | `ox_lib` |
-| **Database** | Yes | `oxmysql` |
-| **Voice** | Optional | `pma-voice` (required for radio sync) |
-| **Inventory** | Recommended | `ox_inventory` (required for inventory restrictions) |
-
-::: info
-The framework is auto-detected on startup. Target interactions use `ox_target` via `ox_lib`.
-:::
-
 ## File Structure
 
 ```

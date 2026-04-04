@@ -7,17 +7,32 @@ description: How to install and set up Shops Pro for your FiveM server.
 
 Follow these steps to install Shops Pro on your FiveM server.
 
-## Prerequisites
+## Supported Inventories
+
+| Inventory | Status |
+|---|---|
+| `ox_inventory` | Fully supported (metadata, display metadata, images) |
+| `tgiann-inventory` | Supported |
+| `jaksam_inventory` | Supported |
+| `qs-inventory` | Supported |
+| `qs-inventory-pro` | Supported |
+| `origen_inventory` | Supported |
+| `qb-inventory` | Supported |
+| `ps-inventory` | Supported |
+| `lj-inventory` | Supported |
+| `codem-inventory` | Supported |
+
+## Dependencies
 
 Ensure the following dependencies are installed and running on your server before starting:
 
 | Dependency | Required | Notes |
 |---|---|---|
-| **Framework** | Yes | `qb-core` or `es_extended` |
+| **Framework** | Yes | `qb-core` / `qbx_core` / `es_extended` |
 | **ox_lib** | Yes | Must be started before `sd-shops` |
 | **oxmysql** | Yes | Must be started before `sd-shops` |
-| **Target System** | Yes | `ox_target`, `qb-target`, or `qtarget` |
-| **Inventory** | Yes | Any supported inventory (see [overview](./index#supported-inventories)) |
+| **Target System** | Yes | `ox_target` / `qb-target` / `qtarget` |
+| **Inventory** | Yes | Any of the 10 supported inventories listed above |
 
 ## Step 1 -- Add the Resource
 

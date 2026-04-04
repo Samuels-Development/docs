@@ -1,15 +1,34 @@
 # Installation
 
+## Supported Inventories
+
+| Inventory | Status |
+|---|---|
+| `ox_inventory` | Fully supported |
+| `tgiann-inventory` | Supported |
+| `jaksam_inventory` | Supported |
+| `qs-inventory` | Supported |
+| `qs-inventory-pro` | Supported |
+| `qb-inventory` | Supported |
+| `ps-inventory` | Supported |
+| `lj-inventory` | Supported |
+| `codem-inventory` | Supported |
+
 ## Dependencies
 
 Ensure the following resources are installed and running **before** sd-oxyrun:
 
 | Dependency | Options |
 |---|---|
-| **Library** | `sd_lib` |
-| **Zones** | `PolyZone` |
+| **Framework** | `qb-core` / `qbx_core` / `es_extended` |
+| **Library** | `sd_lib` (required) |
+| **Zones** | `PolyZone` (required) |
 | **Database** | `oxmysql` |
-| **Interaction** | `ox_target` / `qb-target` / `qtarget` (or use TextUI) |
+| **Target System** | `ox_target` / `qb-target` / `qtarget` / TextUI fallback |
+
+::: info
+Framework, inventory, and target system are all auto-detected via sd_lib. The `sd_oxyrun` database table is created automatically on first start and stores player XP.
+:::
 
 ## Step 1: Add the Resource
 
@@ -43,22 +62,25 @@ Register the package item and reward items in your inventory system:
     label = 'Band Of Notes',
     weight = 100,
     stack = true,
-    close = true,
+    close = false,
     description = 'A band of small notes..',
+    consume = 0,
 },
 ['rolls'] = {
     label = 'Roll Of Small Notes',
     weight = 100,
     stack = true,
-    close = true,
+    close = false,
     description = 'A roll of small notes..',
+    consume = 0,
 },
 ['package'] = {
     label = 'Suspicious Package',
     weight = 10000,
     stack = false,
-    close = true,
+    close = false,
     description = 'A mysterious package.. Scary!',
+    consume = 0,
 },
 ['oxy'] = {
     label = 'Prescription Oxy',
@@ -66,15 +88,16 @@ Register the package item and reward items in your inventory system:
     stack = true,
     close = true,
     description = 'The Label Has Been Ripped Off',
+    consume = 0,
 },
 ```
 
 ```lua [qb-core]
 -- Add to qb-core/shared/items.lua
 
-['bands']   = { name = 'bands',   label = 'Band Of Notes',       weight = 100,   type = 'item', image = 'bands.png',   unique = false, useable = false, shouldClose = true, description = 'A band of small notes..' },
-['rolls']   = { name = 'rolls',   label = 'Roll Of Small Notes', weight = 100,   type = 'item', image = 'rolls.png',   unique = false, useable = false, shouldClose = true, description = 'A roll of small notes..' },
-['package'] = { name = 'package', label = 'Suspicious Package',  weight = 10000, type = 'item', image = 'package.png', unique = true,  useable = true,  shouldClose = true, description = 'A mysterious package.. Scary!' },
+['bands']   = { name = 'bands',   label = 'Band Of Notes',       weight = 100,   type = 'item', image = 'bands.png',   unique = false, useable = false, shouldClose = false, description = 'A band of small notes..' },
+['rolls']   = { name = 'rolls',   label = 'Roll Of Small Notes', weight = 100,   type = 'item', image = 'rolls.png',   unique = false, useable = false, shouldClose = false, description = 'A roll of small notes..' },
+['package'] = { name = 'package', label = 'Suspicious Package',  weight = 10000, type = 'item', image = 'package.png', unique = true,  useable = true,  shouldClose = false, description = 'A mysterious package.. Scary!' },
 ['oxy']     = { name = 'oxy',     label = 'Prescription Oxy',    weight = 0,     type = 'item', image = 'oxy.png',     unique = false, useable = true,  shouldClose = true, description = 'The Label Has Been Ripped Off' },
 ```
 
@@ -132,7 +155,19 @@ Make sure `sd_lib` is started **before** sd-oxyrun in your server.cfg, or the re
 
 ## Database Table
 
+The `sd_oxyrun` table stores player reputation and is created automatically on first start:
+
 | Column | Type | Purpose |
 |---|---|---|
 | `Identifier` | VARCHAR(255) | Player identifier (license, steam, etc.) |
 | `XP` | INT | Total reputation experience points |
+
+::: details Manual SQL (only if the table was not auto-created)
+```sql
+CREATE TABLE IF NOT EXISTS `sd_oxyrun` (
+  `Identifier` VARCHAR(255) NOT NULL,
+  `XP` INT NOT NULL DEFAULT 0,
+  PRIMARY KEY (`Identifier`)
+);
+```
+:::

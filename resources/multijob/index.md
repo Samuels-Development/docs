@@ -87,35 +87,6 @@ exports['sd-multijob']:withdrawSocietyFunds(source, jobName, amount, moneyType)
 exports['sd-multijob']:getSocietyBalance(source)
 ```
 
-## Supported Frameworks
-
-| Framework | Status |
-|---|---|
-| `qb-core` | Fully supported |
-| `qbx_core` | Fully supported |
-| `es_extended` (ESX) | Fully supported |
-
-## Supported Target Systems
-
-| Target | Status |
-|---|---|
-| `ox_target` | Fully supported |
-| `qb-target` | Fully supported |
-| `qtarget` | Fully supported |
-
-## Dependencies
-
-| Dependency | Options |
-|---|---|
-| **Framework** | `qb-core` / `qbx_core` / `es_extended` |
-| **Library** | `ox_lib` |
-| **Database** | `oxmysql` |
-| **Inventory** | `ox_inventory` (optional, for boss stash) |
-
-::: info
-The framework is auto-detected at startup. Three database tables (`saved_jobs`, `boss_menus`, `sd_multijob_settings`) are created automatically on first start.
-:::
-
 ## File Structure
 
 ```

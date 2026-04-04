@@ -1,15 +1,35 @@
 # Installation
 
+## Supported Inventories
+
+| Inventory | Status |
+|---|---|
+| `ox_inventory` | Fully supported |
+| `tgiann-inventory` | Supported |
+| `jaksam_inventory` | Supported |
+| `qs-inventory` | Supported |
+| `qs-inventory-pro` | Supported |
+| `qb-inventory` | Supported |
+| `ps-inventory` | Supported |
+| `lj-inventory` | Supported |
+| `codem-inventory` | Supported |
+
 ## Dependencies
 
 Ensure the following resources are installed and running **before** sd-pacificbank:
 
 | Dependency | Options |
 |---|---|
-| **Library** | `sd_lib` |
+| **Framework** | `qb-core` / `qbx_core` / `es_extended` |
+| **Library** | `sd_lib` (required) |
 | **UI Library** | `ox_lib` |
 | **Doorlock** | `ox_doorlock` / `qb-doorlock` / `nui_doorlock` |
-| **Lasers** | `mka-lasers` (optional) |
+| **Lasers** | `mka-lasers` (optional, for laser grid) |
+| **Minigame** | Any one of 20+ supported resources |
+
+::: info
+Framework, inventory, and target system are all auto-detected via sd_lib. No custom database tables are created -- the script uses the framework's existing inventory system.
+:::
 
 ## Step 1: Add the Resource
 
@@ -84,7 +104,7 @@ Register the required heist items in your inventory system:
 ['laptop_pink'] = { name = 'laptop_pink', label = 'Pink Laptop',  weight = 5000,  type = 'item', image = 'laptop_pink.png', unique = true,  useable = true,  shouldClose = true, description = 'A pink security Laptop' },
 ['laptop_gold'] = { name = 'laptop_gold', label = 'Gold Laptop',  weight = 5000,  type = 'item', image = 'laptop_gold.png', unique = true,  useable = true,  shouldClose = true, description = 'A gold security Laptop' },
 ['c4_bomb']     = { name = 'c4_bomb',     label = 'C4 Brick',     weight = 1000,  type = 'item', image = 'c4_bomb.png',     unique = true,  useable = false, shouldClose = true, description = 'Very Dangerous! High-Yield Explosive.' },
-['large_drill'] = { name = 'large_drill', label = 'Large Drill',  weight = 20000, type = 'item', image = 'large_drill.png', unique = false, useable = false, shouldClose = true, description = 'A Large Drill, good at cracking Secure Locks.' },
+['large_drill'] = { name = 'large_drill', label = 'Large Drill',  weight = 20000, type = 'item', image = 'large_drill.png', unique = false, useable = false, shouldClose = false, description = 'A Large Drill, good at cracking Secure Locks.' },
 ```
 
 ```sql [ESX]

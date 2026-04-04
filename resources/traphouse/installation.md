@@ -1,14 +1,34 @@
 # Installation
 
+## Supported Inventories
+
+| Inventory | Status |
+|---|---|
+| `ox_inventory` | Fully supported |
+| `tgiann-inventory` | Supported |
+| `jaksam_inventory` | Supported |
+| `qs-inventory` | Supported |
+| `qs-inventory-pro` | Supported |
+| `qb-inventory` | Supported |
+| `ps-inventory` | Supported |
+| `lj-inventory` | Supported |
+| `codem-inventory` | Supported |
+
 ## Dependencies
 
 Ensure the following resources are installed and running **before** sd-traphouse:
 
 | Dependency | Options |
 |---|---|
-| **Library** | `sd_lib` |
-| **Interaction** | `ox_target` / `qb-target` / `qtarget` |
+| **Framework** | `qb-core` / `qbx_core` / `es_extended` |
+| **Library** | `sd_lib` (required) |
+| **Target System** | `ox_target` / `qb-target` / `qtarget` |
 | **Doorlock** | `ox_doorlock` / `qb-nui_doorlock` |
+| **Minigame** | Any one of 30+ supported resources |
+
+::: info
+Framework, inventory, and target system are all auto-detected via sd_lib. No custom database tables are created -- all state is managed in memory during active robberies.
+:::
 
 ## Step 1: Add the Resource
 

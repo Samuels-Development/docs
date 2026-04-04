@@ -1,5 +1,19 @@
 # Installation
 
+## Supported Inventories
+
+| Inventory | Status |
+|---|---|
+| `ox_inventory` | Fully supported |
+| `tgiann-inventory` | Supported |
+| `jaksam_inventory` | Supported |
+| `qs-inventory` | Supported |
+| `qs-inventory-pro` | Supported |
+| `qb-inventory` | Supported |
+| `ps-inventory` | Supported |
+| `lj-inventory` | Supported |
+| `codem-inventory` | Supported |
+
 ## Dependencies
 
 Ensure the following resources are installed and running **before** sd-beekeeping:
@@ -9,7 +23,12 @@ Ensure the following resources are installed and running **before** sd-beekeepin
 | **Framework** | `qb-core` / `qbx_core` / `es_extended` |
 | **Library** | `ox_lib` |
 | **Database** | `oxmysql` |
-| **Target** | `ox_target` / `qb-target` / `qtarget` |
+| **Target System** | `ox_target` / `qb-target` / `qtarget` |
+| **Inventory** | Any of the 9 supported inventories listed above |
+
+::: tip
+Framework, inventory, and target system are all auto-detected. The database table `sd_beekeeping` is created automatically on first start.
+:::
 
 ## Step 1: Add the Resource
 
@@ -44,6 +63,10 @@ Register **11 items** in your inventory system. Item names use **hyphens** (e.g.
     stack = false,
     close = true,
     description = 'A placeable bee hive for honey production.',
+    consume = 0,
+    server = {
+        export = 'sd-beekeeping.useBee-hive',
+    },
 },
 ['bee-house'] = {
     label = 'Bee House',
@@ -51,6 +74,10 @@ Register **11 items** in your inventory system. Item names use **hyphens** (e.g.
     stack = false,
     close = true,
     description = 'A placeable bee house for capturing wild bees.',
+    consume = 0,
+    server = {
+        export = 'sd-beekeeping.useBee-house',
+    },
 },
 ['bee-queen'] = {
     label = 'Bee Queen',
@@ -197,7 +224,7 @@ Missing images won't break the script, but items will display without icons in t
 
 ## Database Table
 
-The `sd_beekeeping` table stores all facility data:
+The `sd_beekeeping` table stores all facility data and is created automatically on first start:
 
 | Column | Type | Purpose |
 |---|---|---|
@@ -209,4 +236,20 @@ The `sd_beekeeping` table stores all facility data:
 | `citizenid` | varchar(255) | Owner identifier |
 | `collaborators` | JSON | Array of collaborator objects |
 | `durability` | int | 0–100 health percentage |
+
+::: details Manual SQL (only if the table was not auto-created)
+```sql
+CREATE TABLE IF NOT EXISTS `sd_beekeeping` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `hive_type` VARCHAR(50) NOT NULL,
+  `coords` VARCHAR(255) NOT NULL,
+  `options` LONGTEXT DEFAULT NULL,
+  `data` LONGTEXT DEFAULT NULL,
+  `citizenid` VARCHAR(255) NOT NULL,
+  `collaborators` JSON DEFAULT NULL,
+  `durability` INT NOT NULL DEFAULT 100,
+  PRIMARY KEY (`id`)
+);
+```
+:::
 

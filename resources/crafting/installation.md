@@ -1,5 +1,35 @@
 # Installation
 
+## Supported Inventories
+
+| Inventory | Status |
+|---|---|
+| `ox_inventory` | Fully supported |
+| `tgiann-inventory` | Supported |
+| `jaksam_inventory` | Supported |
+| `qs-inventory` | Supported |
+| `qs-inventory-pro` | Supported |
+| `origen_inventory` | Supported |
+| `qb-inventory` | Supported |
+| `ps-inventory` | Supported |
+| `lj-inventory` | Supported |
+| `codem-inventory` | Supported |
+
+## Dependencies
+
+| Dependency | Options | Required |
+|---|---|---|
+| **Framework** | `qb-core` / `qbx_core` / `es_extended` | Yes |
+| **Library** | `ox_lib` | Yes |
+| **Database** | `oxmysql` | Yes |
+| **Target System** | `ox_target` / `qb-target` / `qtarget` | Yes |
+| **Inventory** | Any of the 10 supported inventories listed above | Yes |
+| **Placement** | `object_gizmo` (optional) | No |
+
+::: tip
+The framework and inventory system are auto-detected at startup. Database tables are created automatically on first boot -- no manual SQL imports are required.
+:::
+
 ## Step 1: Add the Resource
 
 1. Download **sd-crafting** from your purchase and extract it into your server's `resources` folder.
@@ -27,9 +57,13 @@ Placeable workbenches are inventory items that players use to deploy a crafting 
     weight = 10000,
     stack = false,
     close = true,
-    description = 'A portable basic workbench for crafting.',
+    description = 'A portable workbench for basic crafting.',
+    consume = 0,
     client = {
         image = 'workbench.png',
+    },
+    server = {
+        export = 'sd-crafting.useWorkbench',
     },
 },
 
@@ -38,9 +72,13 @@ Placeable workbenches are inventory items that players use to deploy a crafting 
     weight = 15000,
     stack = false,
     close = true,
-    description = 'A portable advanced workbench for complex crafting.',
+    description = 'A high-tech workbench with advanced crafting capabilities.',
+    consume = 0,
     client = {
         image = 'advanced_workbench.png',
+    },
+    server = {
+        export = 'sd-crafting.useAdvanced_workbench',
     },
 },
 ```

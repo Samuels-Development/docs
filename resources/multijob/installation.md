@@ -11,6 +11,10 @@ Ensure the following resources are installed and running **before** sd-multijob:
 | **Database** | `oxmysql` |
 | **Inventory** | `ox_inventory` (optional, for boss stash) |
 
+::: info
+The framework is auto-detected at startup. Three database tables (`saved_jobs`, `boss_menus`, `sd_multijob_settings`) are created automatically on first start.
+:::
+
 ## Step 1: Add the Resource
 
 1. Download `sd-multijob` from [Keymaster](https://keymaster.fivem.net)

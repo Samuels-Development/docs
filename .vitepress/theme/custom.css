@@ -75,8 +75,70 @@
 
 /* ---- Content ---- */
 
+/* ---- Custom Containers (tip, info, warning, danger) ---- */
+
+.custom-block {
+  border-radius: 10px;
+  border: 1px solid transparent;
+  border-left: 4px solid;
+  padding: 16px 20px;
+  margin: 20px 0;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.dark .custom-block {
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.25);
+}
+
+.custom-block:not(.dark) {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.custom-block .custom-block-title {
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
 .custom-block.tip {
-  border-color: var(--vp-c-brand-1);
+  border-color: rgba(148, 221, 12, 0.25);
+  border-left-color: var(--vp-c-brand-1);
+  background: linear-gradient(135deg, rgba(148, 221, 12, 0.08), rgba(148, 221, 12, 0.02));
+}
+
+.dark .custom-block.tip {
+  background: linear-gradient(135deg, rgba(148, 221, 12, 0.1), rgba(148, 221, 12, 0.03));
+}
+
+.custom-block.info {
+  border-color: rgba(100, 180, 255, 0.2);
+  border-left-color: var(--vp-c-info-1, #3b82f6);
+  background: linear-gradient(135deg, rgba(100, 180, 255, 0.08), rgba(100, 180, 255, 0.02));
+}
+
+.dark .custom-block.info {
+  background: linear-gradient(135deg, rgba(100, 180, 255, 0.1), rgba(100, 180, 255, 0.03));
+}
+
+.custom-block.warning {
+  border-color: rgba(255, 197, 23, 0.25);
+  border-left-color: var(--vp-c-warning-1, #f59e0b);
+  background: linear-gradient(135deg, rgba(255, 197, 23, 0.08), rgba(255, 197, 23, 0.02));
+}
+
+.dark .custom-block.warning {
+  background: linear-gradient(135deg, rgba(255, 197, 23, 0.1), rgba(255, 197, 23, 0.03));
+}
+
+.custom-block.danger {
+  border-color: rgba(255, 80, 80, 0.25);
+  border-left-color: var(--vp-c-danger-1, #ef4444);
+  background: linear-gradient(135deg, rgba(255, 80, 80, 0.08), rgba(255, 80, 80, 0.02));
+}
+
+.dark .custom-block.danger {
+  background: linear-gradient(135deg, rgba(255, 80, 80, 0.1), rgba(255, 80, 80, 0.03));
 }
 
 .VPBadge.tip {
@@ -111,49 +173,6 @@
 
 .dark ::-webkit-scrollbar-thumb:hover {
   background: var(--vp-c-text-3);
-}
-
-/* ---- Item Image Grid (installation pages) ---- */
-
-.item-image-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-  gap: 12px;
-  margin: 20px 0;
-}
-
-.item-image-card {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 6px;
-  padding: 12px 8px;
-  border-radius: 10px;
-  background: var(--vp-c-bg-soft);
-  border: 1px solid var(--vp-c-divider);
-  transition: border-color 0.2s ease, transform 0.2s ease;
-}
-
-.item-image-card:hover {
-  border-color: var(--vp-c-brand-1);
-  transform: translateY(-2px);
-}
-
-.item-image-card img {
-  width: 64px;
-  height: 64px;
-  object-fit: contain;
-  image-rendering: pixelated;
-  border-radius: 6px;
-  background: var(--vp-c-bg);
-}
-
-.item-image-card span {
-  font-size: 11px;
-  color: var(--vp-c-text-3);
-  font-family: var(--vp-font-family-mono);
-  text-align: center;
-  word-break: break-all;
 }
 
 /* ---- Code groups (tabbed code blocks) — fixed height with scroll ---- */

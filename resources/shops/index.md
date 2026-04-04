@@ -86,47 +86,6 @@ Full logging support with multiple backends: Discord webhooks, Fivemanage, Fivem
 
 Shops can be linked to framework jobs via `frameworkJob`. When a player purchases a shop, they are automatically assigned the corresponding job. Selling or transferring removes or reassigns the job.
 
-## Supported Frameworks
-
-| Framework | Status |
-|---|---|
-| `qb-core` | Fully supported |
-| `qbx_core` | Fully supported |
-| `es_extended` (ESX) | Fully supported |
-
-## Supported Inventories
-
-| Inventory | Status |
-|---|---|
-| `ox_inventory` | Fully supported (metadata, display metadata, images) |
-| `tgiann-inventory` | Supported |
-| `jaksam_inventory` | Supported |
-| `qs-inventory` | Supported |
-| `qs-inventory-pro` | Supported |
-| `origen_inventory` | Supported |
-| `qb-inventory` | Supported |
-| `ps-inventory` | Supported |
-| `lj-inventory` | Supported |
-| `codem-inventory` | Supported |
-
-## Supported Target Systems
-
-| Target | Status |
-|---|---|
-| `ox_target` | Fully supported |
-| `qb-target` | Fully supported |
-| `qtarget` | Fully supported |
-
-## Dependencies
-
-| Dependency | Required | Notes |
-|---|---|---|
-| **Framework** | Yes | `qb-core` or `es_extended` |
-| **ox_lib** | Yes | -- |
-| **oxmysql** | Yes | -- |
-| **Target System** | Yes | `ox_target` / `qb-target` / `qtarget` |
-| **Inventory** | Yes | Any of the 10 supported inventories listed above |
-
 ## File Structure
 
 ```
