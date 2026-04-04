@@ -1,7 +1,7 @@
 ---
 layout: doc
 title: Getting Started
-aside: true
+aside: false
 ---
 
 <div class="header">
@@ -330,13 +330,6 @@ aside: true
   color: var(--vp-c-brand-1);
 }
 
-/* Hide right aside nav on this page only */
-.VPDocAsideOutline {
-  display: none !important;
-}
-.aside-container .aside-content {
-  display: none !important;
-}
 
 /* About cards */
 .about-grid {
