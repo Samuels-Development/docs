@@ -11,7 +11,7 @@ Follow these steps to install Shops Pro on your FiveM server.
 
 | Inventory | Status |
 |---|---|
-| `ox_inventory` | Fully supported (metadata, display metadata, images) |
+| `ox_inventory` | Supported |
 | `tgiann-inventory` | Supported |
 | `jaksam_inventory` | Supported |
 | `qs-inventory` | Supported |
@@ -21,6 +21,10 @@ Follow these steps to install Shops Pro on your FiveM server.
 | `ps-inventory` | Supported |
 | `lj-inventory` | Supported |
 | `codem-inventory` | Supported |
+
+::: tip Recommendation
+We heavily recommend using `ox_inventory` — it's the best inventory system available and more importantly, it's completely free and open source! You won't be missing out on any features in our scripts if you use a different inventory, this is simply a recommendation.
+:::
 
 ## Dependencies
 
@@ -32,7 +36,7 @@ Ensure the following dependencies are installed and running on your server befor
 | **ox_lib** | Yes | Must be started before `sd-shops` |
 | **oxmysql** | Yes | Must be started before `sd-shops` |
 | **Target System** | Yes | `ox_target` / `qb-target` / `qtarget` |
-| **Inventory** | Yes | Any of the 10 supported inventories listed above |
+| **Inventory** | Yes | Any of the supported inventories listed above |
 
 ## Step 1 -- Add the Resource
 
@@ -45,13 +49,11 @@ resources/
   sd-shops/        <-- place here
 ```
 
-::: tip Automatic Setup
-Shops Pro **automatically creates** all required database tables on first start. There is no need to manually import any SQL files.
-
-The script also **auto-detects** your framework and inventory system -- no manual framework configuration is needed.
+::: tip
+Framework, target system, and inventory are all automatically detected and used — you don't need to configure any of it.
 :::
 
-Ensure `sd-shops` starts **after** all of its dependencies in your `server.cfg`:
+Add the following to your `server.cfg` (or `resources.cfg`, in case you load resources differently). Simply ensuring the sub-folder (i.e. `ensure [sd]`) will work too, provided dependencies are started in a separate sub-folder before.
 
 ```ini
 ensure oxmysql
@@ -63,22 +65,7 @@ ensure ox_inventory   # or any other supported inventory
 ensure sd-shops
 ```
 
-## Step 2 -- Configure Shops
-
-All configuration is done through Lua files inside the `configs/` directory of the `sd-shops` resource:
-
-| File | Purpose |
-|---|---|
-| `configs/config.lua` | [Main Configuration](./config-main) -- locale, serial numbers, metadata, base products, categories, loyalty, coupons, society payments |
-| `configs/shops.lua` | [Shop Definitions](./config-shops) -- individual shop locations, types, items, restrictions, and ownership |
-| `configs/management.lua` | [Management Settings](./config-management) -- ownership limits, upgrades, product whitelists, employee permissions, stock delivery |
-| `configs/fallbacks.lua` | [Fallback Configuration](./config-fallbacks) -- item name and description fallbacks |
-| `configs/theme.lua` | [Theme Configuration](./config-theme) -- UI preset, background pattern, color overrides |
-| `configs/logs.lua` | Logging configuration -- service selection, Discord/Fivemanage/Loki/Grafana settings, per-event config |
-
-Start by reviewing the [Main Configuration](./config-main) and [Shop Definitions](./config-shops) pages.
-
-## Step 3 -- Start Your Server
+## Step 2 -- Start Your Server
 
 Start your server. On the first boot, Shops Pro will:
 
@@ -97,40 +84,6 @@ Check your server console for startup messages. You should see:
 [SD-SHOPS] Client hooks system loaded
 ```
 
-::: warning Metadata Features Require ox_inventory
-If you want to use item metadata features such as **durability**, **quality**, **display metadata**, or **custom fields**, you must have `ox_inventory` installed. The `displayMetadata` configuration is only functional with ox_inventory.
-:::
+## Configuration
 
-## File Structure
-
-```
-sd-shops/
-  bridge/
-    init.lua          -- Framework detection
-    shared.lua        -- Locale system, shared utilities
-    client.lua        -- Client bridge (notifications, target, images, labels)
-    server.lua        -- Server bridge (money, inventory, player management)
-  client/
-    hooks.lua         -- Client hook system
-    main.lua          -- Client-side shop logic
-    peds.lua          -- Ped spawning/management
-  configs/
-    config.lua        -- Main configuration
-    shops.lua         -- Shop definitions
-    management.lua    -- Management/ownership settings
-    fallbacks.lua     -- Item name/description fallbacks
-    theme.lua         -- UI theme configuration
-    logs.lua          -- Logging configuration
-  locales/
-    en.json           -- English locale
-    de.json           -- German locale
-  server/
-    hooks.lua         -- Server hook system
-    datastore.lua     -- Database operations
-    management.lua    -- Shop management logic
-    main.lua          -- Server-side shop logic
-  web/
-    build/            -- React UI build files
-  fxmanifest.lua
-```
-
+Configure the resource to fit your server's needs. See the [Configuration](./config-main) pages for detailed explanations of each setting, or edit the files directly in the `configs/` folder.

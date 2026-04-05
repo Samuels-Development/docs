@@ -2,24 +2,29 @@
 
 ## Dependencies
 
-Ensure the following resources are installed and running **before** sd-multijob:
+Ensure the following dependencies are installed and running on your server before starting:
 
-| Dependency | Options |
-|---|---|
-| **Framework** | `qb-core` / `qbx_core` / `es_extended` |
-| **Library** | `ox_lib` |
-| **Database** | `oxmysql` |
-| **Inventory** | `ox_inventory` (optional, for boss stash) |
+| Dependency | Required | Notes |
+|---|---|---|
+| **Framework** | Yes | `qb-core` / `qbx_core` / `es_extended` |
+| **ox_lib** | Yes | |
+| **oxmysql** | Yes | |
+| **Target System** | Yes | `ox_target` / `qb-target` / `qtarget` |
+| **Inventory** | Yes | Any of the supported inventories listed above |
 
-::: info
-The framework is auto-detected at startup. Three database tables (`saved_jobs`, `boss_menus`, `sd_multijob_settings`) are created automatically on first start.
+::: tip
+Framework, target system, and inventory are all automatically detected and used — you don't need to configure any of it.
+:::
+
+::: tip Recommendation
+We heavily recommend using `ox_inventory` — it's the best inventory system available and more importantly, it's completely free and open source! You won't be missing out on any features in our scripts if you use a different inventory, this is simply a recommendation.
 :::
 
 ## Step 1: Add the Resource
 
 1. Download `sd-multijob` from [Keymaster](https://keymaster.fivem.net)
 2. Extract it into your server's `resources` directory
-3. Add `ensure sd-multijob` to your `server.cfg` **after** all dependencies
+3. Add the following to your `server.cfg` (or `resources.cfg`, in case you load resources differently). Simply ensuring the sub-folder (i.e. `ensure [sd]`) will work too, provided dependencies are started in a separate sub-folder before.
 
 ```ini
 ensure oxmysql
@@ -32,64 +37,7 @@ ensure sd-multijob
 Three database tables (`saved_jobs`, `boss_menus`, `sd_multijob_settings`) are created automatically on first start. No manual SQL required.
 :::
 
-## Step 2: Configure Jobs
-
-Open `config.lua` and define your jobs in `Config.Jobs`. Each job needs:
-
-- A label and icon
-- Boss grades (which grade levels can access the boss menu)
-- Salary display values per grade
-- Grade labels
-
-```lua
-Config.Jobs = {
-    police = {
-        label = 'Police',
-        icon = 'shield',
-        bossGrades = { 4 },
-        salaries = {
-            [0] = 50, [1] = 75, [2] = 100, [3] = 125, [4] = 150,
-        },
-        gradeLabels = {
-            [0] = 'Recruit', [1] = 'Officer', [2] = 'Sergeant',
-            [3] = 'Lieutenant', [4] = 'Chief',
-        },
-        stash = {
-            enabled = true,
-            slots = 50,
-            weight = 100000,
-        },
-    },
-}
-```
-
-## Step 3: Configure Duty & Boss Locations
-
-Define duty toggle and boss menu locations per job in `Config.Zones`:
-
-```lua
-Config.Zones = {
-    police = {
-        duty = {
-            enabled = true,
-            interactionType = 'marker',  -- 'marker', 'textui', or 'target'
-            locations = {
-                {
-                    coords = vec3(440.48, -976.02, 29.69),
-                    distance = 3.0,
-                },
-            },
-        },
-        bossMenu = {
-            enabled = true,
-            interactionType = 'target',
-            locations = { ... },
-        },
-    },
-}
-```
-
-## Step 4: Start and Verify
+## Step 2: Start and Verify
 
 1. Start your server
 2. Check the server console for any errors
@@ -105,3 +53,7 @@ Three tables are created automatically:
 | `saved_jobs` | Stores player job rosters, grades, and stats |
 | `boss_menus` | Stores society data, applications, transactions, and messages |
 | `sd_multijob_settings` | Stores system settings (e.g., last weekly reset timestamp) |
+
+## Configuration
+
+Configure the resource to fit your server's needs. See the [Configuration](./configuration) page for detailed explanations of each setting, or edit the config files directly in the resource's `configs/` folder.

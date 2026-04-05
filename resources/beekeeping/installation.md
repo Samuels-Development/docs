@@ -4,7 +4,7 @@
 
 | Inventory | Status |
 |---|---|
-| `ox_inventory` | Fully supported |
+| `ox_inventory` | Supported |
 | `tgiann-inventory` | Supported |
 | `jaksam_inventory` | Supported |
 | `qs-inventory` | Supported |
@@ -14,27 +14,31 @@
 | `lj-inventory` | Supported |
 | `codem-inventory` | Supported |
 
+::: tip Recommendation
+We heavily recommend using `ox_inventory` — it's the best inventory system available and more importantly, it's completely free and open source! You won't be missing out on any features in our scripts if you use a different inventory, this is simply a recommendation.
+:::
+
 ## Dependencies
 
-Ensure the following resources are installed and running **before** sd-beekeeping:
+Ensure the following dependencies are installed and running on your server before starting:
 
-| Dependency | Options |
-|---|---|
-| **Framework** | `qb-core` / `qbx_core` / `es_extended` |
-| **Library** | `ox_lib` |
-| **Database** | `oxmysql` |
-| **Target System** | `ox_target` / `qb-target` / `qtarget` |
-| **Inventory** | Any of the 9 supported inventories listed above |
+| Dependency | Required | Notes |
+|---|---|---|
+| **Framework** | Yes | `qb-core` / `qbx_core` / `es_extended` |
+| **ox_lib** | Yes | |
+| **oxmysql** | Yes | |
+| **Target System** | Yes | `ox_target` / `qb-target` / `qtarget` |
+| **Inventory** | Yes | Any of the supported inventories listed above |
 
 ::: tip
-Framework, inventory, and target system are all auto-detected. The database table `sd_beekeeping` is created automatically on first start.
+Framework, target system, and inventory are all automatically detected and used — you don't need to configure any of it.
 :::
 
 ## Step 1: Add the Resource
 
 1. Download `sd-beekeeping` from [Keymaster](https://keymaster.fivem.net)
 2. Extract it into your server's `resources` directory
-3. Add `ensure sd-beekeeping` to your `server.cfg` **after** all dependencies
+3. Add the following to your `server.cfg` (or `resources.cfg`, in case you load resources differently). Simply ensuring the sub-folder (i.e. `ensure [sd]`) will work too, provided dependencies are started in a separate sub-folder before.
 
 ```ini
 ensure oxmysql
@@ -253,3 +257,6 @@ CREATE TABLE IF NOT EXISTS `sd_beekeeping` (
 ```
 :::
 
+## Configuration
+
+Configure the resource to fit your server's needs. See the [Configuration](./configuration) page for detailed explanations of each setting, or edit the config files directly in the resource's `configs/` folder.

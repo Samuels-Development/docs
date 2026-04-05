@@ -4,7 +4,7 @@
 
 | Inventory | Status |
 |---|---|
-| `ox_inventory` | Fully supported |
+| `ox_inventory` | Supported |
 | `tgiann-inventory` | Supported |
 | `jaksam_inventory` | Supported |
 | `qs-inventory` | Supported |
@@ -15,25 +15,31 @@
 | `lj-inventory` | Supported |
 | `codem-inventory` | Supported |
 
+::: tip Recommendation
+We heavily recommend using `ox_inventory` — it's the best inventory system available and more importantly, it's completely free and open source! You won't be missing out on any features in our scripts if you use a different inventory, this is simply a recommendation.
+:::
+
 ## Dependencies
 
-| Dependency | Options | Required |
+Ensure the following dependencies are installed and running on your server before starting:
+
+| Dependency | Required | Notes |
 |---|---|---|
-| **Framework** | `qb-core` / `qbx_core` / `es_extended` | Yes |
-| **Library** | `ox_lib` | Yes |
-| **Database** | `oxmysql` | Yes |
-| **Target System** | `ox_target` / `qb-target` / `qtarget` | Yes |
-| **Inventory** | Any of the 10 supported inventories listed above | Yes |
-| **Placement** | `object_gizmo` (optional) | No |
+| **Framework** | Yes | `qb-core` / `qbx_core` / `es_extended` |
+| **ox_lib** | Yes | |
+| **oxmysql** | Yes | |
+| **Target System** | Yes | `ox_target` / `qb-target` / `qtarget` |
+| **Inventory** | Yes | Any of the supported inventories listed above |
+| **object_gizmo** | Optional | For gizmo-based placement with full rotation control |
 
 ::: tip
-The framework and inventory system are auto-detected at startup. Database tables are created automatically on first boot -- no manual SQL imports are required.
+Framework, target system, and inventory are all automatically detected and used — you don't need to configure any of it.
 :::
 
 ## Step 1: Add the Resource
 
 1. Download **sd-crafting** from your purchase and extract it into your server's `resources` folder.
-2. Add the following to your `server.cfg`:
+2. Add the following to your `server.cfg` (or `resources.cfg`, in case you load resources differently). Simply ensuring the sub-folder (i.e. `ensure [sd]`) will work too, provided dependencies are started in a separate sub-folder before.
 
 ```ini
 ensure sd-crafting
@@ -151,17 +157,7 @@ Copy the workbench images from `sd-crafting/images/` to your inventory's image f
 If you are using a custom inventory, place the images wherever your inventory loads item icons from.
 :::
 
-## Step 4: Configure Placement Method
-
-By default, workbench placement uses **raycast placement** (point-and-place). For gizmo-based placement with full rotation control, install `object_gizmo` and set `useGizmo = true` in `configs/config.lua`.
-
-```lua
-useGizmo = false,          -- true = object_gizmo, false = raycast placement
-raycastDistance = 10.0,     -- Max distance for raycast placement
-raycastFlags = -1,          -- Raycast collision flags (-1 = everything)
-```
-
-## Step 5: Restart
+## Step 4: Restart
 
 Restart your server or start the resource. On first boot you will see log output confirming:
 
@@ -173,11 +169,6 @@ Restart your server or start the resource. On first boot you will see log output
 
 If anything is missing, check your server console for error messages. Enable `Debug = true` in `configs/config.lua` for verbose logging.
 
-## Admin Commands
+## Configuration
 
-The script registers two commands (customizable in `configs/config.lua`):
-
-| Command | Default | Description |
-|---|---|---|
-| Place Workbench | `/placeworkbench` | Place a workbench prop and print config coordinates to the F8 console |
-| Craft Admin | `/craftadmin` | Open the in-game admin panel for managing players, queues, stations, recipes, and tech trees |
+Configure the resource to fit your server's needs. See the [Configuration](./config-main) pages for detailed explanations of each setting, or edit the files directly in the `configs/` folder.

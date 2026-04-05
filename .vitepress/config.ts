@@ -7,7 +7,7 @@ const globalSidebar = [
     ],
   },
   {
-    text: 'Resources',
+    text: 'Economy & Jobs',
     items: [
       {
         text: 'Shops Pro',
@@ -46,46 +46,6 @@ const globalSidebar = [
               { text: 'Server Hooks', link: '/resources/shops/hooks-server' },
             ],
           },
-        ],
-      },
-      {
-        text: 'Horde Mission',
-        collapsed: true,
-        items: [
-          { text: 'Overview', link: '/resources/horde/' },
-          { text: 'Installation', link: '/resources/horde/installation' },
-          { text: 'Configuration', link: '/resources/horde/configuration' },
-          {
-            text: 'Maps',
-            collapsed: true,
-            items: [
-              { text: 'Server Farm', link: '/resources/horde/maps-server-farm' },
-              { text: 'Cayo Estate', link: '/resources/horde/maps-cayo-estate' },
-              { text: 'Doomsday Bunker', link: '/resources/horde/maps-doomsday-bunker' },
-              { text: 'Gunrunning Bunker', link: '/resources/horde/maps-gunrunning-bunker' },
-            ],
-          },
-          {
-            text: 'Full Config Files',
-            collapsed: true,
-            items: [
-              { text: 'config.lua', link: '/resources/horde/full-config' },
-              { text: 'logs.lua', link: '/resources/horde/full-config-logs' },
-              { text: 'server_farm.lua', link: '/resources/horde/full-config-map-server-farm' },
-              { text: 'cayo_estate.lua', link: '/resources/horde/full-config-map-cayo-estate' },
-              { text: 'doomsday_bunker.lua', link: '/resources/horde/full-config-map-doomsday-bunker' },
-              { text: 'gunrunning_bunker.lua', link: '/resources/horde/full-config-map-gunrunning-bunker' },
-            ],
-          },
-          {
-            text: 'Exports',
-            collapsed: true,
-            items: [
-              { text: 'Client Exports', link: '/resources/horde/exports-client' },
-              { text: 'Server Exports', link: '/resources/horde/exports-server' },
-            ],
-          },
-          { text: 'Creating New Maps', link: '/resources/horde/creating-maps' },
         ],
       },
       {
@@ -148,6 +108,28 @@ const globalSidebar = [
         ],
       },
       {
+        text: 'Multijob & Boss Menu',
+        collapsed: true,
+        items: [
+          { text: 'Overview', link: '/resources/multijob/' },
+          { text: 'Installation', link: '/resources/multijob/installation' },
+          { text: 'Configuration', link: '/resources/multijob/configuration' },
+          {
+            text: 'Full Config Files',
+            collapsed: true,
+            items: [
+              { text: 'config.lua', link: '/resources/multijob/full-config' },
+              { text: 'logs.lua', link: '/resources/multijob/full-config-logs' },
+            ],
+          },
+        ],
+      },
+    ],
+  },
+  {
+    text: 'Heists',
+    items: [
+      {
         text: 'Bobcat Security Heist',
         collapsed: true,
         items: [
@@ -161,6 +143,117 @@ const globalSidebar = [
               { text: 'config.lua', link: '/resources/bobcat/full-config' },
             ],
           },
+        ],
+      },
+      {
+        text: 'Pacific Bank Heist',
+        collapsed: true,
+        items: [
+          { text: 'Overview', link: '/resources/pacificbank/' },
+          { text: 'Installation', link: '/resources/pacificbank/installation' },
+          { text: 'Configuration', link: '/resources/pacificbank/configuration' },
+          {
+            text: 'Full Config Files',
+            collapsed: true,
+            items: [
+              { text: 'config.lua', link: '/resources/pacificbank/full-config' },
+              { text: 'logs.lua', link: '/resources/pacificbank/full-config-logs' },
+            ],
+          },
+        ],
+      },
+      {
+        text: 'Warehouse Heist',
+        collapsed: true,
+        items: [
+          { text: 'Overview', link: '/resources/warehouse/' },
+          { text: 'Installation', link: '/resources/warehouse/installation' },
+          { text: 'Configuration', link: '/resources/warehouse/configuration' },
+          {
+            text: 'Full Config Files',
+            collapsed: true,
+            items: [
+              { text: 'config.lua', link: '/resources/warehouse/full-config' },
+            ],
+          },
+        ],
+      },
+      {
+        text: 'Yacht Heist',
+        collapsed: true,
+        items: [
+          { text: 'Overview', link: '/resources/yacht/' },
+          { text: 'Installation', link: '/resources/yacht/installation' },
+          { text: 'Configuration', link: '/resources/yacht/configuration' },
+          {
+            text: 'Full Config Files',
+            collapsed: true,
+            items: [
+              { text: 'config.lua', link: '/resources/yacht/full-config' },
+            ],
+          },
+        ],
+      },
+      {
+        text: 'Traphouse Robbery',
+        collapsed: true,
+        items: [
+          { text: 'Overview', link: '/resources/traphouse/' },
+          { text: 'Installation', link: '/resources/traphouse/installation' },
+          { text: 'Configuration', link: '/resources/traphouse/configuration' },
+          {
+            text: 'Full Config Files',
+            collapsed: true,
+            items: [
+              { text: 'config.lua', link: '/resources/traphouse/full-config' },
+              { text: 'logs.lua', link: '/resources/traphouse/full-config-logs' },
+            ],
+          },
+        ],
+      },
+    ],
+  },
+  {
+    text: 'Crime & Missions',
+    items: [
+      {
+        text: 'Horde Mission',
+        collapsed: true,
+        items: [
+          { text: 'Overview', link: '/resources/horde/' },
+          { text: 'Installation', link: '/resources/horde/installation' },
+          { text: 'Configuration', link: '/resources/horde/configuration' },
+          {
+            text: 'Maps',
+            collapsed: true,
+            items: [
+              { text: 'Server Farm', link: '/resources/horde/maps-server-farm' },
+              { text: 'Cayo Estate', link: '/resources/horde/maps-cayo-estate' },
+              { text: 'Doomsday Bunker', link: '/resources/horde/maps-doomsday-bunker' },
+              { text: 'Gunrunning Bunker', link: '/resources/horde/maps-gunrunning-bunker' },
+            ],
+          },
+          {
+            text: 'Full Config Files',
+            collapsed: true,
+            items: [
+              { text: 'config.lua', link: '/resources/horde/full-config' },
+              { text: 'logs.lua', link: '/resources/horde/full-config-logs' },
+              { text: 'server_farm.lua', link: '/resources/horde/full-config-map-server-farm' },
+              { text: 'cayo_estate.lua', link: '/resources/horde/full-config-map-cayo-estate' },
+              { text: 'doomsday_bunker.lua', link: '/resources/horde/full-config-map-doomsday-bunker' },
+              { text: 'gunrunning_bunker.lua', link: '/resources/horde/full-config-map-gunrunning-bunker' },
+            ],
+          },
+          {
+            text: 'Exports',
+            collapsed: true,
+            items: [
+              { text: 'Client Exports', link: '/resources/horde/exports-client' },
+              { text: 'Server Exports', link: '/resources/horde/exports-server' },
+            ],
+          },
+          { text: 'Creating New Maps', link: '/resources/horde/creating-maps' },
         ],
       },
       {
@@ -197,23 +290,6 @@ const globalSidebar = [
         ],
       },
       {
-        text: 'Multijob & Boss Menu',
-        collapsed: true,
-        items: [
-          { text: 'Overview', link: '/resources/multijob/' },
-          { text: 'Installation', link: '/resources/multijob/installation' },
-          { text: 'Configuration', link: '/resources/multijob/configuration' },
-          {
-            text: 'Full Config Files',
-            collapsed: true,
-            items: [
-              { text: 'config.lua', link: '/resources/multijob/full-config' },
-              { text: 'logs.lua', link: '/resources/multijob/full-config-logs' },
-            ],
-          },
-        ],
-      },
-      {
         text: 'Oxy Run',
         collapsed: true,
         items: [
@@ -225,72 +301,6 @@ const globalSidebar = [
             collapsed: true,
             items: [
               { text: 'config.lua', link: '/resources/oxyrun/full-config' },
-            ],
-          },
-        ],
-      },
-      {
-        text: 'Pacific Bank Heist',
-        collapsed: true,
-        items: [
-          { text: 'Overview', link: '/resources/pacificbank/' },
-          { text: 'Installation', link: '/resources/pacificbank/installation' },
-          { text: 'Configuration', link: '/resources/pacificbank/configuration' },
-          {
-            text: 'Full Config Files',
-            collapsed: true,
-            items: [
-              { text: 'config.lua', link: '/resources/pacificbank/full-config' },
-              { text: 'logs.lua', link: '/resources/pacificbank/full-config-logs' },
-            ],
-          },
-        ],
-      },
-      {
-        text: 'Traphouse Robbery',
-        collapsed: true,
-        items: [
-          { text: 'Overview', link: '/resources/traphouse/' },
-          { text: 'Installation', link: '/resources/traphouse/installation' },
-          { text: 'Configuration', link: '/resources/traphouse/configuration' },
-          {
-            text: 'Full Config Files',
-            collapsed: true,
-            items: [
-              { text: 'config.lua', link: '/resources/traphouse/full-config' },
-              { text: 'logs.lua', link: '/resources/traphouse/full-config-logs' },
-            ],
-          },
-        ],
-      },
-      {
-        text: 'Warehouse Heist',
-        collapsed: true,
-        items: [
-          { text: 'Overview', link: '/resources/warehouse/' },
-          { text: 'Installation', link: '/resources/warehouse/installation' },
-          { text: 'Configuration', link: '/resources/warehouse/configuration' },
-          {
-            text: 'Full Config Files',
-            collapsed: true,
-            items: [
-              { text: 'config.lua', link: '/resources/warehouse/full-config' },
-            ],
-          },
-        ],
-      },
-      {
-        text: 'Yacht Heist',
-        collapsed: true,
-        items: [
-          { text: 'Overview', link: '/resources/yacht/' },
-          { text: 'Installation', link: '/resources/yacht/installation' },
-          { text: 'Configuration', link: '/resources/yacht/configuration' },
-          {
-            text: 'Full Config Files',
-            collapsed: true,
-            items: [
-              { text: 'config.lua', link: '/resources/yacht/full-config' },
             ],
           },
         ],
@@ -328,21 +338,13 @@ export default defineConfig({
     nav: [
       { text: 'Home', link: '/' },
       { text: 'Store', link: 'https://fivem.samueldev.shop' },
-      { text: 'Discord', link: 'https://discord.gg/Tu94MCDDEa' },
     ],
 
     sidebar: globalSidebar,
 
     socialLinks: [
-      { icon: 'discord', link: 'https://discord.gg/Tu94MCDDEa' },
-      { icon: 'github', link: 'https://github.com/samuelsdevelopment' },
-      {
-        icon: {
-          svg: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>',
-        },
-        link: 'https://fivem.samueldev.shop',
-        ariaLabel: 'Store',
-      },
+      { icon: 'discord', link: 'https://discord.gg/FzPehMQaBQ' },
+      { icon: 'github', link: 'https://github.com/Samuels-Development' },
     ],
 
     footer: {
@@ -355,7 +357,7 @@ export default defineConfig({
     },
 
     editLink: {
-      pattern: 'https://github.com/samuelsdevelopment/docs/edit/main/:path',
+      pattern: 'https://github.com/Samuels-Development/docs/edit/main/:path',
       text: 'Suggest changes to this page',
     },
 

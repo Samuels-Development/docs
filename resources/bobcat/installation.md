@@ -4,7 +4,7 @@
 
 | Inventory | Status |
 |---|---|
-| `ox_inventory` | Fully supported |
+| `ox_inventory` | Supported |
 | `tgiann-inventory` | Supported |
 | `jaksam_inventory` | Supported |
 | `qs-inventory` | Supported |
@@ -14,27 +14,49 @@
 | `lj-inventory` | Supported |
 | `codem-inventory` | Supported |
 
+::: tip Recommendation
+We heavily recommend using `ox_inventory` — it's the best inventory system available and more importantly, it's completely free and open source! You won't be missing out on any features in our scripts if you use a different inventory, this is simply a recommendation.
+:::
+
+## Supported Minigames
+
+You only need **one** of the following minigame resources installed. Pick whichever you prefer.
+
+| Resource | Minigames |
+|---|---|
+| `ps-ui` | ps-circle, ps-maze, ps-varhack, ps-thermite, ps-scrambler |
+| `memorygame` | memorygame-thermite |
+| `ran-minigames` | ran-memorycard, ran-openterminal |
+| `hacking` | hacking-opengame |
+| `howdy-hackminigame` | howdy-begin |
+| `SN-Hacking` | sn-memorygame, sn-skillcheck, sn-thermite, sn-keypad, sn-colorpicker |
+| `rm_minigames` | rm-typinggame, rm-timedlockpick, rm-timedaction, rm-quicktimeevent, rm-combinationlock, rm-buttonmashing, rm-angledlockpick, rm-fingerprint, rm-hotwirehack, rm-hackerminigame, rm-safecrack |
+| `ox_lib` | lib.skillCheck |
+| `bl_ui` | bl-circlesum, bl-digitdazzle, bl-lightsout, bl-minesweeper, bl-pathfind, bl-printlock, bl-untangle, bl-wavematch, bl-wordwiz |
+| `glitch-minigames` | gl-firewall-pulse, gl-backdoor-sequence, gl-circuit-rhythm, gl-surge-override, gl-circuit-breaker, gl-data-crack, gl-brute-force, gl-var-hack |
+
 ## Dependencies
 
-Ensure the following resources are installed and running **before** sd-bobcat:
+Ensure the following dependencies are installed and running on your server before starting:
 
-| Dependency | Options |
-|---|---|
-| **Framework** | `qb-core` / `qbx_core` / `es_extended` |
-| **Library** | `sd_lib` (required) |
-| **Target System** | `ox_target` / `qb-target` / `qtarget` / TextUI fallback |
-| **Doorlock** | `ox_doorlock` / `qb-nui_doorlock` / `cd_doorlock` |
-| **Minigame** | Any one of 20+ supported minigame resources |
+| Dependency | Required | Notes |
+|---|---|---|
+| **Framework** | Yes | `qb-core` / `qbx_core` / `es_extended` |
+| **sd_lib** | Yes | |
+| **Target System** | Yes | `ox_target` / `qb-target` / `qtarget` / TextUI fallback |
+| **Doorlock** | Yes | `ox_doorlock` / `qb-nui_doorlock` / `cd_doorlock` |
+| **Minigame** | Yes | Any of the supported minigames listed above |
+| **Inventory** | Yes | Any of the supported inventories listed above |
 
-::: info
-Framework, inventory, and target system are all auto-detected via sd_lib.
+::: tip
+Framework, target system, doorlock, and inventory are all automatically detected and used — you don't need to configure any of it.
 :::
 
 ## Step 1: Add the Resource
 
 1. Download `sd-bobcat` from [Keymaster](https://keymaster.fivem.net)
 2. Extract it into your server's `resources` directory
-3. Add `ensure sd-bobcat` to your `server.cfg` **after** all dependencies
+3. Add the following to your `server.cfg` (or `resources.cfg`, in case you load resources differently). Simply ensuring the sub-folder (i.e. `ensure [sd]`) will work too, provided dependencies are started in a separate sub-folder before.
 
 ```ini
 ensure sd_lib
@@ -44,17 +66,7 @@ ensure ox_doorlock
 ensure sd-bobcat
 ```
 
-## Step 2: Select Your MLO
-
-Open `config.lua` and set `Config.MLOType` to match your installed MLO:
-
-```lua
-Config.MLOType = 'gabz'     -- Options: 'gabz', 'nopixel', 'k4mb1'
-```
-
-All coordinates, doorlocks, and guard spawns will automatically adjust to your selected map.
-
-## Step 3: Import Doorlock Data
+## Step 2: Import Doorlock Data
 
 Choose the doorlock system you use and import the corresponding config:
 
@@ -77,7 +89,7 @@ Choose the doorlock system you use and import the corresponding config:
 
 :::
 
-## Step 4: Add Items
+## Step 3: Add Items
 
 Register the required items in your inventory system:
 
@@ -131,7 +143,7 @@ INSERT INTO `items` (`name`, `label`, `weight`) VALUES
 
 :::
 
-## Step 5: Copy Item Images
+## Step 4: Copy Item Images
 
 Copy the item images from `sd-bobcat/images/` to your inventory's image folder:
 
@@ -157,7 +169,7 @@ Copy the item images from `sd-bobcat/images/` to your inventory's image folder:
 If you are using a custom inventory, place the images wherever your inventory loads item icons from.
 :::
 
-## Step 6: Start and Verify
+## Step 5: Start and Verify
 
 1. Start your server
 2. Check the server console for any errors
@@ -167,3 +179,7 @@ If you are using a custom inventory, place the images wherever your inventory lo
 ::: warning
 Make sure `sd_lib` is started **before** sd-bobcat in your server.cfg, or the resource will fail to load.
 :::
+
+## Configuration
+
+Configure the resource to fit your server's needs. See the [Configuration](./configuration) page for detailed explanations of each setting, or edit the config files directly in the resource's `configs/` folder.

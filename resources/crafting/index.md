@@ -65,6 +65,15 @@ Placed workbenches track a **crafting history** showing who crafted what, with c
 ### Admin Panel
 A full in-game admin panel accessible via command, allowing management of players, queues, stations, recipes, and tech trees. Admins can create/edit/delete recipes, tech trees, and stations live -- changes persist to the database.
 
+### Admin Commands
+
+The script registers two commands (customizable in `configs/config.lua`):
+
+| Command | Default | Description |
+|---|---|---|
+| Place Workbench | `/placeworkbench` | Place a workbench prop and print config coordinates to the F8 console |
+| Craft Admin | `/craftadmin` | Open the in-game admin panel for managing players, queues, stations, recipes, and tech trees |
+
 ### Logging
 Comprehensive logging system supporting **Discord webhooks**, **Fivemanage**, **Fivemerr**, **Loki**, and **Grafana Cloud**. Every crafting event is configurable with custom messages, fields, and colors.
 

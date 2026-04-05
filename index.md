@@ -10,7 +10,7 @@ aside: false
   <p class="header-desc">Documentation for installing, configuring, and maintaining our premium FiveM resources.</p>
   <div class="header-links">
     <a href="https://fivem.samueldev.shop" target="_blank" class="home-link brand">Visit Store</a>
-    <a href="https://discord.gg/Tu94MCDDEa" target="_blank" class="home-link alt">Discord</a>
+    <a href="https://discord.gg/FzPehMQaBQ" target="_blank" class="home-link alt">Discord</a>
   </div>
 </div>
 
@@ -19,79 +19,154 @@ aside: false
 <div class="res-section">
   <div class="res-group" style="--cat-color: #94DD0C;">
     <div class="res-group-head">
-      <div class="res-marker"></div>
-      <div class="res-head-text">
-        <strong>Economy & Jobs</strong>
-        <span class="res-sub">Shops, crafting, farming, and jobs</span>
-      </div>
+      <span class="res-tag">Economy & Jobs</span>
+      <span class="res-sub">Shops, crafting, farming, and jobs</span>
     </div>
-    <div class="res-links">
-      <a href="/resources/shops/" class="res-link"><span class="res-link-name">Shops Pro</span><span class="res-desc">Ownership, employees, stock, loyalty, coupons</span><svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
-      <a href="/resources/crafting/" class="res-link"><span class="res-link-name">Advanced Crafting</span><span class="res-desc">Workbenches, blueprints, tech trees, durability</span><svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
-      <a href="/resources/dumpsters/" class="res-link"><span class="res-link-name">Dumpster Diving</span><span class="res-desc">Rat companions, expeditions, Hobo King, recycler</span><svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
-      <a href="/resources/beekeeping/" class="res-link"><span class="res-link-name">Beekeeping</span><span class="res-desc">Hive management, 3 honey types, infections</span><svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
-      <a href="/resources/multijob/" class="res-link"><span class="res-link-name">Multijob & Boss Menu</span><span class="res-desc">Multiple jobs with configurable limits</span><svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
+    <div class="res-grid">
+      <a href="/resources/shops/" class="res-card">
+        <div class="res-card-top">
+          <span class="res-card-name">Shops Pro</span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="res-card-arrow"><path d="M7 17l9.2-9.2M17 17V7.8H7.8"/></svg>
+        </div>
+        <span class="res-card-desc">Ownership, employees, stock, loyalty, coupons</span>
+      </a>
+      <a href="/resources/crafting/" class="res-card">
+        <div class="res-card-top">
+          <span class="res-card-name">Advanced Crafting</span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="res-card-arrow"><path d="M7 17l9.2-9.2M17 17V7.8H7.8"/></svg>
+        </div>
+        <span class="res-card-desc">Workbenches, blueprints, tech trees, durability</span>
+      </a>
+      <a href="/resources/dumpsters/" class="res-card">
+        <div class="res-card-top">
+          <span class="res-card-name">Dumpster Diving</span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="res-card-arrow"><path d="M7 17l9.2-9.2M17 17V7.8H7.8"/></svg>
+        </div>
+        <span class="res-card-desc">Rat companions, expeditions, Hobo King, recycler</span>
+      </a>
+      <a href="/resources/beekeeping/" class="res-card">
+        <div class="res-card-top">
+          <span class="res-card-name">Beekeeping</span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="res-card-arrow"><path d="M7 17l9.2-9.2M17 17V7.8H7.8"/></svg>
+        </div>
+        <span class="res-card-desc">Hive management, 3 honey types, infections</span>
+      </a>
+      <a href="/resources/multijob/" class="res-card">
+        <div class="res-card-top">
+          <span class="res-card-name">Multijob & Boss Menu</span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="res-card-arrow"><path d="M7 17l9.2-9.2M17 17V7.8H7.8"/></svg>
+        </div>
+        <span class="res-card-desc">Multiple jobs with configurable limits</span>
+      </a>
     </div>
   </div>
   <div class="res-group" style="--cat-color: #FF6B6B;">
     <div class="res-group-head">
-      <div class="res-marker"></div>
-      <div class="res-head-text">
-        <strong>Heists</strong>
-        <span class="res-sub">Robberies, raids, and break-ins</span>
-      </div>
+      <span class="res-tag">Heists</span>
+      <span class="res-sub">Robberies, raids, and break-ins</span>
     </div>
-    <div class="res-links">
-      <a href="/resources/bobcat/" class="res-link"><span class="res-link-name">Bobcat Security</span><span class="res-desc">Multi-stage heist with minigames and loot</span><svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
-      <a href="/resources/pacificbank/" class="res-link"><span class="res-link-name">Pacific Bank</span><span class="res-desc">Thermite, hacking, vault drilling</span><svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
-      <a href="/resources/warehouse/" class="res-link"><span class="res-link-name">Warehouse Heist</span><span class="res-desc">Lockpicking, hacking, loot crates</span><svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
-      <a href="/resources/yacht/" class="res-link"><span class="res-link-name">Yacht Heist</span><span class="res-desc">Multiple entry points, guard NPCs</span><svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
-      <a href="/resources/traphouse/" class="res-link"><span class="res-link-name">Traphouse Robbery</span><span class="res-desc">Minigames, NPC guards, cooldowns</span><svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
+    <div class="res-grid">
+      <a href="/resources/bobcat/" class="res-card">
+        <div class="res-card-top">
+          <span class="res-card-name">Bobcat Security</span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="res-card-arrow"><path d="M7 17l9.2-9.2M17 17V7.8H7.8"/></svg>
+        </div>
+        <span class="res-card-desc">Multi-stage heist with minigames and loot</span>
+      </a>
+      <a href="/resources/pacificbank/" class="res-card">
+        <div class="res-card-top">
+          <span class="res-card-name">Pacific Bank</span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="res-card-arrow"><path d="M7 17l9.2-9.2M17 17V7.8H7.8"/></svg>
+        </div>
+        <span class="res-card-desc">Thermite, hacking, vault drilling</span>
+      </a>
+      <a href="/resources/warehouse/" class="res-card">
+        <div class="res-card-top">
+          <span class="res-card-name">Warehouse Heist</span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="res-card-arrow"><path d="M7 17l9.2-9.2M17 17V7.8H7.8"/></svg>
+        </div>
+        <span class="res-card-desc">Lockpicking, hacking, loot crates</span>
+      </a>
+      <a href="/resources/yacht/" class="res-card">
+        <div class="res-card-top">
+          <span class="res-card-name">Yacht Heist</span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="res-card-arrow"><path d="M7 17l9.2-9.2M17 17V7.8H7.8"/></svg>
+        </div>
+        <span class="res-card-desc">Multiple entry points, guard NPCs</span>
+      </a>
+      <a href="/resources/traphouse/" class="res-card">
+        <div class="res-card-top">
+          <span class="res-card-name">Traphouse Robbery</span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="res-card-arrow"><path d="M7 17l9.2-9.2M17 17V7.8H7.8"/></svg>
+        </div>
+        <span class="res-card-desc">Minigames, NPC guards, cooldowns</span>
+      </a>
     </div>
   </div>
   <div class="res-group" style="--cat-color: #60A5FA;">
     <div class="res-group-head">
-      <div class="res-marker"></div>
-      <div class="res-head-text">
-        <strong>Crime & Missions</strong>
-        <span class="res-sub">Deliveries, selling, and survival</span>
-      </div>
+      <span class="res-tag">Crime & Missions</span>
+      <span class="res-sub">Deliveries, selling, and survival</span>
     </div>
-    <div class="res-links">
-      <a href="/resources/horde/" class="res-link"><span class="res-link-name">Horde Mission</span><span class="res-desc">Wave survival, 4 maps, 20-level progression</span><svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
-      <a href="/resources/cokemission/" class="res-link"><span class="res-link-name">Coke Mission</span><span class="res-desc">Processing, delivery routes, police alerts</span><svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
-      <a href="/resources/selling/" class="res-link"><span class="res-link-name">Corner Selling</span><span class="res-desc">Dynamic pricing, police risk, turf zones</span><svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
-      <a href="/resources/oxyrun/" class="res-link"><span class="res-link-name">Oxy Run</span><span class="res-desc">Randomized routes, configurable rewards</span><svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
+    <div class="res-grid">
+      <a href="/resources/horde/" class="res-card">
+        <div class="res-card-top">
+          <span class="res-card-name">Horde Mission</span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="res-card-arrow"><path d="M7 17l9.2-9.2M17 17V7.8H7.8"/></svg>
+        </div>
+        <span class="res-card-desc">Wave survival, 4 maps, 20-level progression</span>
+      </a>
+      <a href="/resources/cokemission/" class="res-card">
+        <div class="res-card-top">
+          <span class="res-card-name">Coke Mission</span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="res-card-arrow"><path d="M7 17l9.2-9.2M17 17V7.8H7.8"/></svg>
+        </div>
+        <span class="res-card-desc">Processing, delivery routes, police alerts</span>
+      </a>
+      <a href="/resources/selling/" class="res-card">
+        <div class="res-card-top">
+          <span class="res-card-name">Corner Selling</span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="res-card-arrow"><path d="M7 17l9.2-9.2M17 17V7.8H7.8"/></svg>
+        </div>
+        <span class="res-card-desc">Dynamic pricing, police risk, turf zones</span>
+      </a>
+      <a href="/resources/oxyrun/" class="res-card">
+        <div class="res-card-top">
+          <span class="res-card-name">Oxy Run</span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="res-card-arrow"><path d="M7 17l9.2-9.2M17 17V7.8H7.8"/></svg>
+        </div>
+        <span class="res-card-desc">Randomized routes, configurable rewards</span>
+      </a>
     </div>
   </div>
 </div>
 
-## Having an issue with a script?
+## Running into a problem?
 
 <div class="timeline">
   <div class="timeline-item">
     <div class="timeline-marker">1</div>
     <div class="timeline-content">
-      <h4>Identify which script is causing the issue</h4>
-      <p>The resource name usually appears in the server console or in your <code>server.cfg</code>. Check the error message to see which resource is concerned.</p>
+      <h4>Find the resource that's causing trouble</h4>
+      <p>Check your server console and in-game console (<code>F8</code>) for any errors — either when the resource starts up or when you perform the action that's bugging out (e.g. buying an item from a shop and not receiving it). The error output will tell you exactly where the problem lies — try to resolve it yourself or include it when opening a ticket.</p>
     </div>
   </div>
   <div class="timeline-item">
     <div class="timeline-marker">2</div>
     <div class="timeline-content">
-      <h4>Open the documentation for that script</h4>
-      <p>Use the sidebar to find the resource and read the Installation and Configuration pages. Many issues are solved by following the setup steps and checking dependencies.</p>
+      <h4>Check the docs for that resource</h4>
+      <p>Navigate to the resource in the sidebar and go through its Installation and Configuration guides. Make sure you're using a compatible inventory, and that all dependencies are installed and updated to their latest versions. Most problems come down to an outdated dependency or a missing setup step.</p>
     </div>
   </div>
   <div class="timeline-item">
     <div class="timeline-marker">3</div>
     <div class="timeline-content">
-      <h4>Still having issues?</h4>
-      <p>Open a ticket on our <a href="https://discord.gg/Tu94MCDDEa" target="_blank">Discord</a> and include the resource name, your script version, the exact error message from your console, and what you have already tried. If you don't have the customer role yet, please provide your <strong>Tebex transaction ID</strong> or <strong>CFX username</strong> so we can verify your purchase.</p>
+      <h4>No luck? Reach out to us</h4>
+      <p>Create a ticket on our <a href="https://discord.gg/FzPehMQaBQ" target="_blank">Discord</a> with the resource name, your script version, the full error output from your server console and <code>F8</code> console, and any steps you've already taken. If you haven't been assigned the customer role, make sure to include your <strong>Tebex transaction ID</strong> or <strong>CFX username</strong> so we can confirm your purchase.</p>
     </div>
   </div>
   <div class="timeline-cta">
-    <a href="https://discord.gg/Tu94MCDDEa" target="_blank" class="timeline-cta-box">
+    <a href="https://discord.gg/FzPehMQaBQ" target="_blank" class="timeline-cta-box">
       <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg>
       <div class="timeline-cta-text">
         <strong>Open a Support Ticket</strong>
@@ -107,7 +182,7 @@ aside: false
 <div class="faq-list">
   <details class="faq-item">
     <summary>Where can I get support?</summary>
-    <p>Join our <a href="https://discord.gg/Tu94MCDDEa" target="_blank">Discord server</a> and open a support ticket. Our team typically responds within a few hours.</p>
+    <p>Join our <a href="https://discord.gg/FzPehMQaBQ" target="_blank">Discord server</a> and open a support ticket. Our team typically responds within a few hours.</p>
   </details>
   <details class="faq-item">
     <summary>Which frameworks are supported?</summary>
@@ -130,19 +205,25 @@ aside: false
 ## More About Us
 
 <div class="about-grid">
-  <a href="https://fivem.samueldev.shop" target="_blank" class="about-card">
-    <div class="about-card-icon store-icon">
-      <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m2 7 4.41-4.41A2 2 0 0 1 7.83 2h8.34a2 2 0 0 1 1.42.59L22 7"/><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><path d="M15 22v-4a2 2 0 0 0-2-2h-2a2 2 0 0 0-2 2v4"/><path d="M2 7h20"/></svg>
+  <a href="https://fivem.samueldev.shop" target="_blank" class="about-card" style="--about-color: #94DD0C;">
+    <div class="about-card-icon">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m2 7 4.41-4.41A2 2 0 0 1 7.83 2h8.34a2 2 0 0 1 1.42.59L22 7"/><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><path d="M15 22v-4a2 2 0 0 0-2-2h-2a2 2 0 0 0-2 2v4"/><path d="M2 7h20"/></svg>
     </div>
-    <strong>Tebex Store</strong>
-    <span>Browse and purchase our scripts</span>
+    <div class="about-card-text">
+      <strong>Tebex Store</strong>
+      <span>Browse and purchase our premium FiveM scripts</span>
+    </div>
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="about-card-arrow"><path d="M7 17l9.2-9.2M17 17V7.8H7.8"/></svg>
   </a>
-  <a href="https://github.com/Samuels-Development" target="_blank" class="about-card">
-    <div class="about-card-icon github-icon">
-      <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+  <a href="https://github.com/Samuels-Development" target="_blank" class="about-card" style="--about-color: #8B5CF6;">
+    <div class="about-card-icon">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
     </div>
-    <strong>GitHub</strong>
-    <span>Open source projects and examples</span>
+    <div class="about-card-text">
+      <strong>GitHub</strong>
+      <span>Open source projects and examples</span>
+    </div>
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="about-card-arrow"><path d="M7 17l9.2-9.2M17 17V7.8H7.8"/></svg>
   </a>
 </div>
 
@@ -335,64 +416,86 @@ aside: false
 .about-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 12px;
+  gap: 10px;
   margin: 20px 0;
 }
 
+@media (max-width: 480px) {
+  .about-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 .about-card {
+  --about-color: var(--vp-c-brand-1);
+  position: relative;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 8px;
-  padding: 28px 20px;
+  gap: 12px;
+  padding: 22px 20px;
   border-radius: 12px;
   background: var(--vp-c-bg-soft);
+  border: 1px solid transparent;
   text-decoration: none !important;
   color: inherit;
-  text-align: center;
   transition: all 0.2s ease;
 }
 
 .about-card:hover {
-  transform: translateY(-2px);
+  border-color: color-mix(in srgb, var(--about-color) 35%, transparent);
+  background: color-mix(in srgb, var(--about-color) 5%, var(--vp-c-bg-soft));
 }
 
 .about-card-icon {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 52px;
-  height: 52px;
-  border-radius: 14px;
-  margin-bottom: 4px;
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  flex-shrink: 0;
+  background: color-mix(in srgb, var(--about-color) 12%, transparent);
+  color: var(--about-color);
+  transition: all 0.2s ease;
 }
 
-.store-icon {
-  background: var(--vp-c-brand-soft);
-  color: var(--vp-c-brand-1);
+.about-card:hover .about-card-icon {
+  background: color-mix(in srgb, var(--about-color) 20%, transparent);
 }
 
-.github-icon {
-  background: rgba(255, 255, 255, 0.08);
+.about-card-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+}
+
+.about-card-text strong {
+  font-size: 14px;
   color: var(--vp-c-text-1);
 }
 
-.about-card:hover .store-icon {
-  background: rgba(148, 221, 12, 0.2);
-}
-
-.about-card:hover .github-icon {
-  background: rgba(255, 255, 255, 0.12);
-}
-
-.about-card strong {
-  font-size: 15px;
-  color: var(--vp-c-text-1);
-}
-
-.about-card span {
+.about-card-text span {
   font-size: 12px;
   color: var(--vp-c-text-3);
+  line-height: 1.4;
+}
+
+.about-card-arrow {
+  position: absolute;
+  top: 18px;
+  right: 16px;
+  color: var(--vp-c-text-3);
+  opacity: 0;
+  transform: translate(-2px, 2px);
+  transition: all 0.2s ease;
+}
+
+.about-card:hover .about-card-arrow {
+  opacity: 1;
+  transform: translate(0, 0);
+  color: var(--about-color);
 }
 
 .vp-doc a.about-card,
@@ -557,50 +660,30 @@ aside: false
 .res-section {
   display: flex;
   flex-direction: column;
-  gap: 28px;
+  gap: 32px;
   margin: 20px 0;
-  padding-left: 20px;
 }
 
 .res-group {
   --cat-color: var(--vp-c-brand-1);
-  position: relative;
 }
 
 .res-group-head {
   display: flex;
   align-items: center;
-  gap: 14px;
-  margin-bottom: 12px;
+  gap: 10px;
+  margin-bottom: 14px;
 }
 
-.res-marker {
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  border: 2.5px solid var(--cat-color);
-  background: transparent;
-  flex-shrink: 0;
-  position: relative;
-}
-
-.res-marker::after {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 4px;
-  height: 4px;
-  border-radius: 50%;
-  background: var(--cat-color);
-}
-
-.res-head-text strong {
-  font-size: 15px;
-  color: var(--vp-c-text-1);
-  display: block;
-  line-height: 1.2;
+.res-tag {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--cat-color);
+  background: color-mix(in srgb, var(--cat-color) 12%, transparent);
+  padding: 4px 10px;
+  border-radius: 6px;
 }
 
 .res-sub {
@@ -608,76 +691,71 @@ aside: false
   color: var(--vp-c-text-3);
 }
 
-.res-links {
+.res-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+}
+
+.res-card {
   display: flex;
   flex-direction: column;
-  gap: 1px;
-  padding-left: 26px;
-  border-left: 2px solid color-mix(in srgb, var(--cat-color) 25%, transparent);
-  margin-left: 5px;
+  gap: 6px;
+  padding: 14px 16px;
+  border-radius: 10px;
+  background: var(--vp-c-bg-soft);
+  border: 1px solid transparent;
+  text-decoration: none !important;
+  color: inherit;
+  transition: all 0.2s ease;
 }
 
-.res-link {
+.res-card:hover {
+  border-color: color-mix(in srgb, var(--cat-color) 40%, transparent);
+  background: color-mix(in srgb, var(--cat-color) 5%, var(--vp-c-bg-soft));
+}
+
+.res-card-top {
   display: flex;
   align-items: center;
-  gap: 6px;
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--vp-c-text-2);
-  text-decoration: none !important;
-  padding: 6px 10px;
-  border-radius: 6px;
-  transition: all 0.15s ease;
+  justify-content: space-between;
+  gap: 8px;
 }
 
-.res-link svg {
-  opacity: 0;
-  transform: translateX(-4px);
-  transition: all 0.15s ease;
-  color: var(--cat-color);
-  flex-shrink: 0;
-}
-
-.res-link:hover {
+.res-card-name {
+  font-size: 14px;
+  font-weight: 650;
   color: var(--vp-c-text-1);
-  background: var(--vp-c-bg-soft);
 }
 
-.res-link:hover svg {
+.res-card-arrow {
+  flex-shrink: 0;
+  color: var(--vp-c-text-3);
+  opacity: 0;
+  transform: translate(-2px, 2px);
+  transition: all 0.2s ease;
+}
+
+.res-card:hover .res-card-arrow {
   opacity: 1;
-  transform: translateX(0);
+  transform: translate(0, 0);
+  color: var(--cat-color);
 }
 
-.res-link-name {
-  white-space: nowrap;
-  font-weight: 600;
-}
-
-.res-desc {
-  flex: 1;
+.res-card-desc {
   font-size: 12px;
   color: var(--vp-c-text-3);
-  font-weight: 400;
+  line-height: 1.5;
 }
 
-.res-desc::before {
-  content: '·';
-  margin-right: 6px;
-  color: var(--vp-c-text-3);
-  font-weight: 700;
-}
-
-.vp-doc a.res-link,
-.vp-doc a.res-link:hover {
+.vp-doc a.res-card,
+.vp-doc a.res-card:hover {
   text-decoration: none !important;
 }
 
 @media (max-width: 640px) {
-  .res-section {
-    padding-left: 12px;
-  }
-  .res-links {
-    padding-left: 18px;
+  .res-grid {
+    grid-template-columns: 1fr;
   }
 }
 

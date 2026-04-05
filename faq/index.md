@@ -10,7 +10,7 @@ All scripts are sold exclusively on [fivem.samueldev.shop](https://fivem.samueld
 
 ### How do I get support?
 
-Join our [Discord server](https://discord.gg/Tu94MCDDEa) and open a support ticket. We offer assistance for all of our scripts.
+Join our [Discord server](https://discord.gg/FzPehMQaBQ) and open a support ticket. We offer assistance for all of our scripts.
 
 ### What frameworks are supported?
 

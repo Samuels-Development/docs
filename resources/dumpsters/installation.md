@@ -6,27 +6,48 @@ Follow these steps to install sd-dumpsters on your FiveM server.
 
 | Inventory | Status |
 |---|---|
-| `ox_inventory` | Fully supported |
+| `ox_inventory` | Supported |
 | `codem-inventory` | Supported |
 | `tgiann-inventory` | Supported |
 | `jaksam_inventory` | Supported |
 | `qs-inventory-pro` | Supported |
 | `origen_inventory` | Supported |
 
+::: tip Recommendation
+We heavily recommend using `ox_inventory` — it's the best inventory system available and more importantly, it's completely free and open source! You won't be missing out on any features in our scripts if you use a different inventory, this is simply a recommendation.
+:::
+
+## Supported Minigames
+
+You only need **one** of the following minigame resources installed. Pick whichever you prefer.
+
+| Resource | Minigames |
+|---|---|
+| `ps-ui` | ps-circle, ps-maze, ps-varhack, ps-thermite, ps-scrambler |
+| `memorygame` | memorygame-thermite |
+| `ran-minigames` | ran-memorycard, ran-openterminal |
+| `hacking` | hacking-opengame |
+| `howdy-hackminigame` | howdy-begin |
+| `SN-Hacking` | sn-memorygame, sn-skillcheck, sn-thermite, sn-keypad, sn-colorpicker |
+| `rm_minigames` | rm-typinggame, rm-timedlockpick, rm-timedaction, rm-quicktimeevent, rm-combinationlock, rm-buttonmashing, rm-angledlockpick, rm-fingerprint, rm-hotwirehack, rm-hackerminigame, rm-safecrack |
+| `ox_lib` | lib.skillCheck |
+| `bl_ui` | bl-circlesum, bl-digitdazzle, bl-lightsout, bl-minesweeper, bl-pathfind, bl-printlock, bl-untangle, bl-wavematch, bl-wordwiz |
+| `glitch-minigames` | gl-firewall-pulse, gl-backdoor-sequence, gl-circuit-rhythm, gl-surge-override, gl-circuit-breaker, gl-data-crack, gl-brute-force, gl-var-hack |
+
 ## Dependencies
 
-Ensure the following resources are installed and running **before** sd-dumpsters:
+Ensure the following dependencies are installed and running on your server before starting:
 
-| Dependency | Options |
-|---|---|
-| **Framework** | `qb-core` / `qbx_core` / `es_extended` |
-| **Library** | `ox_lib` |
-| **Database** | `oxmysql` |
-| **Target System** | `ox_target` / `qb-target` / `qtarget` (or built-in TextUI fallback) |
-| **Inventory** | Any of the 6 supported inventories listed above (or framework default) |
+| Dependency | Required | Notes |
+|---|---|---|
+| **Framework** | Yes | `qb-core` / `qbx_core` / `es_extended` |
+| **ox_lib** | Yes | |
+| **oxmysql** | Yes | |
+| **Target System** | Yes | `ox_target` / `qb-target` / `qtarget` (or built-in TextUI fallback) |
+| **Inventory** | Yes | Any of the supported inventories listed above |
 
-::: info
-The framework is auto-detected at startup. Target and inventory systems are also auto-detected from running resources. If no target resource is found, the script falls back to a built-in TextUI interaction system.
+::: tip
+Framework, target system, and inventory are all automatically detected and used — you don't need to configure any of it.
 :::
 
 ### Optional Integrations
@@ -36,13 +57,13 @@ The framework is auto-detected at startup. Target and inventory systems are also
 | **ox_inventory** | Required for stash mode and loot-to-stash mode |
 | **lation_ui** | Alternative notification and progress bar provider |
 | **cd_drawtextui** | Alternative TextUI provider |
-| **Minigame scripts** | ps-ui, memorygame, ran-minigames, hacking, howdy-hackminigame, SN-Hacking, rm_minigames, bl_ui, glitch-minigames |
+| **Minigame scripts** | Any of the supported minigames listed above |
 
 ## Step 1: Drag and Drop
 
 1. Download the latest release of `sd-dumpsters`
 2. Extract the folder into your server's `resources` directory
-3. Add `ensure sd-dumpsters` to your `server.cfg`
+3. Add the following to your `server.cfg` (or `resources.cfg`, in case you load resources differently). Simply ensuring the sub-folder (i.e. `ensure [sd]`) will work too, provided dependencies are started in a separate sub-folder before.
 
 ::: tip
 The script runs auto-setup on first start. The database tables will be created automatically via oxmysql.
@@ -160,38 +181,6 @@ ensure sd-dumpsters
 The ensure order matters. sd-dumpsters must load after all of its dependencies. The framework and target system are auto-detected -- no manual configuration is needed for basic setup.
 :::
 
-## File Structure
+## Configuration
 
-The script organizes its files as follows:
-
-```
-sd-dumpsters/
-├── fxmanifest.lua
-├── configs/
-│   ├── config.lua          -- Main configuration
-│   ├── rats.lua            -- Rat companion configuration
-│   └── recycler.lua        -- Recycler configuration
-├── bridge/
-│   ├── init.lua            -- Framework auto-detection
-│   ├── shared.lua          -- Locale system and utilities
-│   ├── client.lua          -- Client-side bridge (notifications, progress, target, inventory, minigames)
-│   └── server.lua          -- Server-side bridge (player functions, logging)
-├── client/
-│   ├── main.lua            -- Core client logic
-│   ├── rats.lua            -- Rat companion client
-│   └── recyclers.lua       -- Recycler client
-├── server/
-│   ├── main.lua            -- Core server logic
-│   ├── rats.lua            -- Rat companion server
-│   ├── recyclers.lua       -- Recycler server
-│   └── logs.lua            -- Logging configuration
-├── locales/
-│   ├── en.json             -- English
-│   ├── es.json             -- Spanish
-│   ├── de.json             -- German
-│   ├── fr.json             -- French
-│   └── ar.json             -- Arabic
-└── images/
-    ├── bottle_cap.png
-    └── powersaw.png
-```
+Configure the resource to fit your server's needs. See the [Configuration](./configuration) page for detailed explanations of each setting, or edit the config files directly in the resource's `configs/` folder.

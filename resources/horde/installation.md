@@ -6,7 +6,7 @@ Getting Horde Mission up and running on your server is straightforward. The scri
 
 | Inventory | Status |
 |---|---|
-| `ox_inventory` | Fully supported |
+| `ox_inventory` | Supported |
 | `tgiann-inventory` | Supported |
 | `jaksam_inventory` | Supported |
 | `qs-inventory` | Supported |
@@ -14,6 +14,10 @@ Getting Horde Mission up and running on your server is straightforward. The scri
 | `origen_inventory` | Supported |
 | `qb-inventory` | Supported |
 | `codem-inventory` | Supported |
+
+::: tip Recommendation
+We heavily recommend using `ox_inventory` — it's the best inventory system available and more importantly, it's completely free and open source! You won't be missing out on any features in our scripts if you use a different inventory, this is simply a recommendation.
+:::
 
 ## Dependencies
 
@@ -25,10 +29,11 @@ Before installing, make sure you have the following resources running on your se
 | **Library** | Yes | `ox_lib` |
 | **Database** | Yes | `oxmysql` |
 | **Voice** | Optional | `pma-voice` (required for radio sync) |
-| **Inventory** | Recommended | `ox_inventory` (required for inventory restrictions) |
+| **Target System** | Yes | `ox_target` / `qb-target` / `qtarget` |
+| **Inventory** | Yes | Any of the supported inventories listed above |
 
-::: info
-The framework is auto-detected on startup. Target interactions use `ox_target` via `ox_lib`.
+::: tip
+Framework, target system, and inventory are all automatically detected and used — you don't need to configure any of it.
 :::
 
 ## Step-by-Step Installation
@@ -49,7 +54,7 @@ You can place the resource in any folder within your resources directory. The su
 
 ### 2. Add to Server Configuration
 
-Add the following line to your `server.cfg`:
+Add the following to your `server.cfg` (or `resources.cfg`, in case you load resources differently). Simply ensuring the sub-folder (i.e. `ensure [sd]`) will work too, provided dependencies are started in a separate sub-folder before.
 
 ```ini
 ensure sd-horde
@@ -111,4 +116,8 @@ To update Horde Mission:
 ::: tip
 Configuration files are preserved during updates as long as you do not overwrite them. Always compare your config with the new version's defaults to check for new options.
 :::
+
+## Configuration
+
+Configure the resource to fit your server's needs. See the [Configuration](./configuration) page for detailed explanations of each setting, or edit the config files directly in the resource's `configs/` folder.
 

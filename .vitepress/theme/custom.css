@@ -155,6 +155,11 @@
   overflow: hidden;
 }
 
+.vp-doc table td:first-child,
+.vp-doc table th:first-child {
+  white-space: nowrap;
+}
+
 /* ---- Scrollbar (dark mode) ---- */
 
 .dark ::-webkit-scrollbar {
