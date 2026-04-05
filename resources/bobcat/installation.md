@@ -49,55 +49,46 @@ Ensure the following dependencies are installed and running on your server befor
 | **Inventory** | Yes | Any of the supported inventories listed above |
 
 ::: tip
-Framework, target system, doorlock, and inventory are all automatically detected and used — you don't need to configure any of it.
+Framework, target system, doorlock, and inventory are all automatically detected — no configuration needed.
 :::
 
-## Step 1: Add the Resource
+## <span class="step-num">1</span> Add the Resource
 
-1. Download `sd-bobcat` from [Keymaster](https://keymaster.fivem.net)
+1. Download the latest version of `sd-bobcat` from the [CFX Portal](https://portal.cfx.re/assets/granted-assets)
 2. Extract it into your server's `resources` directory
-3. Add the following to your `server.cfg` (or `resources.cfg`, in case you load resources differently). Simply ensuring the sub-folder (i.e. `ensure [sd]`) will work too, provided dependencies are started in a separate sub-folder before.
+3. Ensure the resource is started in your `server.cfg` (or `resources.cfg`, in case you load resources differently). Simply ensuring the sub-folder (i.e. `ensure [sd]`) will work too, provided dependencies are started in a separate sub-folder before. Here's an example:
 
-```ini
+```cfg
 ensure sd_lib
 ensure ox_lib
 ensure ox_target
 ensure ox_doorlock
+ensure qb-core
+
 ensure sd-bobcat
 ```
 
-## Step 2: Import Doorlock Data
+## <span class="step-num">2</span> Import Doorlock Data
 
-Choose the doorlock system you use and import the corresponding config:
+Import the doorlock config that matches your doorlock system from the `sd-bobcat/doorlock/` folder:
 
-::: code-group
+| Doorlock System | What to do |
+|---|---|
+| `ox_doorlock` | Import the `.sql` file from `doorlock/ox_doorlock/` into your database |
+| `qb-doorlock` / `nui_doorlock` | Place the `.lua` file from `doorlock/qb-nui_doorlock/` into your doorlock resource's configs folder, or copy its contents into your main doorlock config |
+| `cd_doorlock` | Place the `.json` file from `doorlock/cd_doorlock/` into your cd_doorlock JSON files folder, or copy its contents into your `door_data.json` |
 
-```sql [ox_doorlock]
--- Import sd-bobcat/doorlock/ox_doorlock/*.sql into your database
--- This creates 4 door entries: bobcatfirst, bobcatsecond, bobcatthird, bobcatfourth
-```
-
-```lua [qb-nui_doorlock]
--- Copy the contents of sd-bobcat/doorlock/qb-nui_doorlock/*.lua
--- into your qb-nui_doorlock config file
-```
-
-```json [cd_doorlock]
--- Import sd-bobcat/doorlock/cd_doorlock/*.json
--- into your cd_doorlock configuration
-```
-
+::: tip
+Bobcat includes configs for three MLO variants (Gabz, NoPIxel, K4MB1) — make sure to import the one that matches your installed MLO.
 :::
 
-## Step 3: Add Items
+## <span class="step-num">3</span> Add Items
 
 Register the required items in your inventory system:
 
 ::: code-group
 
 ```lua [ox_inventory]
--- Add to ox_inventory/data/items.lua
-
 ['bobcatkeycard'] = {
     label = 'Bobcat Security Card',
     weight = 1000,
@@ -125,16 +116,12 @@ Register the required items in your inventory system:
 ```
 
 ```lua [qb-core]
--- Add to qb-core/shared/items.lua
-
 ['bobcatkeycard']  = { name = 'bobcatkeycard',  label = 'Bobcat Security Card', weight = 1000, type = 'item', image = 'bobcatkeycard.png', unique = false, useable = true,  shouldClose = true, description = 'A keycard used at the Bobcat Security Deposit.' },
 ['c4_bomb']        = { name = 'c4_bomb',        label = 'C4 Brick',            weight = 1000, type = 'item', image = 'c4_bomb.png',       unique = true,  useable = false, shouldClose = true, description = 'Very Dangerous! High Yield Explosive.' },
 ['thermite_h']     = { name = 'thermite_h',     label = 'Thermite',            weight = 1000, type = 'item', image = 'thermite_h.png',    unique = true,  useable = true,  shouldClose = true, description = 'A low-yield thermite charge.' },
 ```
 
 ```sql [ESX]
--- Import sd-bobcat/[SQL]/ESX/items.sql or run manually:
-
 INSERT INTO `items` (`name`, `label`, `weight`) VALUES
   ('bobcatkeycard', 'Bobcat Security Card', 1),
   ('c4_bomb', 'C4 Brick', 10),
@@ -143,17 +130,9 @@ INSERT INTO `items` (`name`, `label`, `weight`) VALUES
 
 :::
 
-## Step 4: Copy Item Images
+## <span class="step-num">4</span> Add Item Images
 
-Copy the item images from `sd-bobcat/images/` to your inventory's image folder:
-
-| Inventory | Image Path |
-|---|---|
-| ox_inventory | `ox_inventory/web/images/` |
-| qb-inventory / ps-inventory | `<inventory>/html/images/` |
-| qs-inventory | `qs-inventory/html/images/` |
-| codem-inventory | `codem-inventory/html/itemimages/` |
-| origen_inventory | `origen_inventory/ui/images/` |
+Copy the item images from `sd-bobcat/images/` to your inventory's image folder. You can also download them directly from the container below.
 
 <ItemImageGrid
   title="Bobcat Item Images"
@@ -165,20 +144,17 @@ Copy the item images from `sd-bobcat/images/` to your inventory's image folder:
   ]"
 />
 
-::: tip
-If you are using a custom inventory, place the images wherever your inventory loads item icons from.
-:::
+## <span class="step-num">5</span> Start the Resource
 
-## Step 5: Start and Verify
+To load the resource, you can either:
 
-1. Start your server
-2. Check the server console for any errors
-3. Look for the **Bobcat Security** blip on the map (if enabled)
-4. Ensure the minimum police requirement is met before attempting the heist
+- **Restart your server** entirely, or
+- Run the following commands in your **server console** (F8 or txAdmin live console):
 
-::: warning
-Make sure `sd_lib` is started **before** sd-bobcat in your server.cfg, or the resource will fail to load.
-:::
+```cfg
+refresh
+ensure sd-bobcat
+```
 
 ## Configuration
 

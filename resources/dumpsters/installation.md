@@ -44,32 +44,28 @@ Ensure the following dependencies are installed and running on your server befor
 | **ox_lib** | Yes | |
 | **oxmysql** | Yes | |
 | **Target System** | Yes | `ox_target` / `qb-target` / `qtarget` (or built-in TextUI fallback) |
+| **Minigame** | Optional | Any of the supported minigames listed above, can be disabled |
 | **Inventory** | Yes | Any of the supported inventories listed above |
 
 ::: tip
-Framework, target system, and inventory are all automatically detected and used — you don't need to configure any of it.
+Framework, target system, and inventory are all automatically detected — no configuration needed. Any required database tables are also created automatically on first start.
 :::
 
-### Optional Integrations
+## <span class="step-num">1</span> Add the Resource
 
-| Integration | Purpose |
-|---|---|
-| **ox_inventory** | Required for stash mode and loot-to-stash mode |
-| **lation_ui** | Alternative notification and progress bar provider |
-| **cd_drawtextui** | Alternative TextUI provider |
-| **Minigame scripts** | Any of the supported minigames listed above |
+1. Download the latest version of `sd-dumpsters` from the [CFX Portal](https://portal.cfx.re/assets/granted-assets)
+2. Extract it into your server's `resources` directory
+3. Ensure the resource is started in your `server.cfg` (or `resources.cfg`, in case you load resources differently). Simply ensuring the sub-folder (i.e. `ensure [sd]`) will work too, provided dependencies are started in a separate sub-folder before. Here's an example:
 
-## Step 1: Drag and Drop
+```cfg
+ensure ox_lib
+ensure oxmysql
+ensure qb-core
 
-1. Download the latest release of `sd-dumpsters`
-2. Extract the folder into your server's `resources` directory
-3. Add the following to your `server.cfg` (or `resources.cfg`, in case you load resources differently). Simply ensuring the sub-folder (i.e. `ensure [sd]`) will work too, provided dependencies are started in a separate sub-folder before.
+ensure sd-dumpsters
+```
 
-::: tip
-The script runs auto-setup on first start. The database tables will be created automatically via oxmysql.
-:::
-
-## Step 2: Add Items
+## <span class="step-num">2</span> Add Items
 
 You must register two core items in your inventory system: **powersaw** and **bottle_cap**. These correspond to the config keys `Config.Items.Grinder` (`'powersaw'`) and `Config.Items.BottleCap` (`'bottle_cap'`).
 
@@ -78,8 +74,6 @@ The power saw is used to open locked dumpsters. Bottle caps are the alternative 
 ::: code-group
 
 ```lua [ox_inventory]
--- Add to ox_inventory/data/items.lua
-
 ['powersaw'] = {
     label = 'Power Saw',
     weight = 2500,
@@ -98,8 +92,6 @@ The power saw is used to open locked dumpsters. Bottle caps are the alternative 
 ```
 
 ```lua [qb-core]
--- Add to qb-core/shared/items.lua
-
 ['powersaw'] = {
     name = 'powersaw',
     label = 'Power Saw',
@@ -135,19 +127,13 @@ INSERT INTO `items` (`name`, `label`, `weight`, `rare`, `can_remove`) VALUES
 
 :::
 
-::: warning
-You also need to register **all loot table items** that appear in `Config.DumpsterLoot`, `Config.Bags.Loot`, `Config.HoboCamps.Loot`, `Config.HoboLoot`, `Config.Shop`, and `Config.Recycling.Items` in your inventory system. The default config uses items like `metalscrap`, `plastic`, `glass`, `rubber`, `steel`, `garbage`, `paperbag`, `cleaningkit`, `walkstick`, `lighter`, `toaster`, `lockpick`, `10kgoldchain`, `ruby_earring_silver`, `goldearring`, `antique_coin`, `rims`, `md_silverearings`, `weapon_bottle`, `low_quality_meth`, `weapon_knuckle`, `weapon_switchblade`, and all recycled output items. Refer to `Config.ItemsMetadata` in `configs/config.lua` for the full list with labels.
+::: info
+All reward items in the default config are **placeholders**. We recommend modifying the loot tables to use items that already exist on your server. You can find the full list of configurable loot tables in the [Configuration](./configuration) page, or directly in the `configs/` folder.
 :::
 
-## Step 3: Copy Item Images
+## <span class="step-num">3</span> Add Item Images
 
-Copy the provided item images from the `sd-dumpsters/images/` folder into your inventory resource's image directory:
-
-- **ox_inventory:** `ox_inventory/web/images/`
-- **qb-inventory:** `qb-inventory/html/images/`
-- **qs-inventory:** `qs-inventory/html/images/`
-
-The script includes images for `bottle_cap.png` and `powersaw.png`. Click any image to download it, or use **Download All** to grab them all at once.
+Copy the item images from `sd-dumpsters/images/` to your inventory's image folder. You can also download them directly from the container below.
 
 <ItemImageGrid
   title="Dumpster Diving Item Images"
@@ -158,28 +144,17 @@ The script includes images for `bottle_cap.png` and `powersaw.png`. Click any im
   ]"
 />
 
-::: warning
-If the images are not copied, items will display without icons in the player's inventory. Make sure to restart your inventory resource after adding images.
-:::
+## <span class="step-num">4</span> Start the Resource
 
-## Step 4: Start the Server
+To load the resource, you can either:
 
-1. Ensure all dependencies start **before** sd-dumpsters in your `server.cfg`
-2. Start or restart your server
-3. The script will auto-detect your framework and create the required database tables on first boot
+- **Restart your server** entirely, or
+- Run the following commands in your **server console** (F8 or txAdmin live console):
 
-```
-ensure oxmysql
-ensure ox_lib
-ensure qb-core
-ensure ox_target
-ensure ox_inventory
+```cfg
+refresh
 ensure sd-dumpsters
 ```
-
-::: info
-The ensure order matters. sd-dumpsters must load after all of its dependencies. The framework and target system are auto-detected -- no manual configuration is needed for basic setup.
-:::
 
 ## Configuration
 

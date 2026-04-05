@@ -31,32 +31,32 @@ Ensure the following dependencies are installed and running on your server befor
 | **Inventory** | Yes | Any of the supported inventories listed above |
 
 ::: tip
-Framework, target system, and inventory are all automatically detected and used — you don't need to configure any of it.
+Framework, target system, and inventory are all automatically detected — no configuration needed.
 :::
 
-## Step 1: Add the Resource
+## <span class="step-num">1</span> Add the Resource
 
-1. Download `sd-cokemission` from [Keymaster](https://keymaster.fivem.net)
+1. Download the latest version of `sd-cokemission` from the [CFX Portal](https://portal.cfx.re/assets/granted-assets)
 2. Extract it into your server's `resources` directory
-3. Add the following to your `server.cfg` (or `resources.cfg`, in case you load resources differently). Simply ensuring the sub-folder (i.e. `ensure [sd]`) will work too, provided dependencies are started in a separate sub-folder before.
+3. Ensure the resource is started in your `server.cfg` (or `resources.cfg`, in case you load resources differently). Simply ensuring the sub-folder (i.e. `ensure [sd]`) will work too, provided dependencies are started in a separate sub-folder before. Here's an example:
 
-```ini
+```cfg
 ensure sd_lib
 ensure ox_lib
 ensure PolyZone
 ensure ox_target
+ensure qb-core
+
 ensure sd-cokemission
 ```
 
-## Step 2: Add Items
+## <span class="step-num">2</span> Add Items
 
 If using the sealed cache system (`Config.UsingSealedCache = true`), register these items:
 
 ::: code-group
 
 ```lua [ox_inventory]
--- Add to ox_inventory/data/items.lua
-
 ['sealed_cache'] = {
     label = 'Sealed Cache',
     weight = 15000,
@@ -77,15 +77,11 @@ If using the sealed cache system (`Config.UsingSealedCache = true`), register th
 ```
 
 ```lua [qb-core]
--- Add to qb-core/shared/items.lua
-
 ['sealed_cache'] = { name = 'sealed_cache', label = 'Sealed Cache', weight = 15000, type = 'item', image = 'sealed_cache.png', unique = true, useable = true, shouldClose = false, description = 'A heavy and resilient lockbox' },
 ['cache_key']    = { name = 'cache_key',    label = 'Cache Key',    weight = 500,   type = 'item', image = 'cache_key.png',    unique = true, useable = true, shouldClose = true,  description = 'Key used for lock boxes' },
 ```
 
 ```sql [ESX]
--- Import sd-cokemission/[SQL]/ESX/items.sql or run manually:
-
 INSERT INTO `items` (`name`, `label`, `weight`) VALUES
   ('sealed_cache', 'Sealed Cache', 150),
   ('cache_key', 'Cache Key', 5);
@@ -95,17 +91,9 @@ INSERT INTO `items` (`name`, `label`, `weight`) VALUES
 
 Also ensure your reward items exist (default: `coke_brick`, `weed_brick`).
 
-## Step 3: Copy Item Images
+## <span class="step-num">3</span> Add Item Images
 
-Copy the item images from `sd-cokemission/images/` to your inventory's image folder:
-
-| Inventory | Image Path |
-|---|---|
-| ox_inventory | `ox_inventory/web/images/` |
-| qb-inventory / ps-inventory | `<inventory>/html/images/` |
-| qs-inventory | `qs-inventory/html/images/` |
-| codem-inventory | `codem-inventory/html/itemimages/` |
-| origen_inventory | `origen_inventory/ui/images/` |
+Copy the item images from `sd-cokemission/images/` to your inventory's image folder. You can also download them directly from the container below.
 
 <ItemImageGrid
   title="Coke Mission Item Images"
@@ -116,24 +104,17 @@ Copy the item images from `sd-cokemission/images/` to your inventory's image fol
   ]"
 />
 
-::: tip
-If you are using a custom inventory, place the images wherever your inventory loads item icons from.
-:::
+## <span class="step-num">4</span> Start the Resource
 
-## Step 4: Start and Verify
+To load the resource, you can either:
 
-1. Start your server
-2. Check the server console for any errors
-3. The Boss NPC spawns at one of 3 random locations
-4. If `Config.Blip.Enable` is true, look for the blip on the map
+- **Restart your server** entirely, or
+- Run the following commands in your **server console** (F8 or txAdmin live console):
 
-::: warning
-Make sure `sd_lib` is started **before** sd-cokemission in your server.cfg, or the resource will fail to load.
-:::
-
-::: tip
-No database tables are required. All state is managed in memory.
-:::
+```cfg
+refresh
+ensure sd-cokemission
+```
 
 ## Configuration
 

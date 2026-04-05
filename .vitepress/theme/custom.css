@@ -160,6 +160,39 @@
   white-space: nowrap;
 }
 
+/* Step heading badges */
+.vp-doc h2 .step-num,
+.vp-doc h3 .step-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: var(--vp-c-brand-1);
+  color: #0f1014;
+  font-size: 17px;
+  font-weight: 800;
+  margin-right: 12px;
+  vertical-align: middle;
+  position: relative;
+  top: -2px;
+}
+
+/* Code block copy button */
+.vp-doc div[class*='language-'] > button.copy,
+.vp-code-group div[class*='language-'] > button.copy {
+  border: none;
+  border-radius: 6px;
+  background-color: var(--vp-code-copy-code-bg);
+  transition: opacity 0.2s ease, background-color 0.2s ease;
+}
+
+.vp-doc div[class*='language-'] > button.copy:hover,
+.vp-code-group div[class*='language-'] > button.copy:hover {
+  background-color: var(--vp-c-default-soft);
+}
+
 /* ---- Scrollbar (dark mode) ---- */
 
 .dark ::-webkit-scrollbar {
@@ -191,6 +224,15 @@
   margin: 0;
   border-radius: 0;
   min-height: 100%;
+}
+
+.vp-code-group .blocks div[class*="language-"].active {
+  display: flex !important;
+  flex-direction: column;
+}
+
+.vp-code-group .blocks div[class*="language-"].active > pre {
+  flex: 1;
 }
 
 /* ---- Download link (full config pages) ---- */

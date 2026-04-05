@@ -31,36 +31,31 @@ Ensure the following dependencies are installed and running on your server befor
 | **Inventory** | Yes | Any of the supported inventories listed above |
 
 ::: tip
-Framework, target system, and inventory are all automatically detected and used — you don't need to configure any of it.
+Framework, target system, and inventory are all automatically detected — no configuration needed. Any required database tables are also created automatically on first start.
 :::
 
-## Step 1: Add the Resource
+## <span class="step-num">1</span> Add the Resource
 
-1. Download `sd-beekeeping` from [Keymaster](https://keymaster.fivem.net)
+1. Download the latest version of `sd-beekeeping` from the [CFX Portal](https://portal.cfx.re/assets/granted-assets)
 2. Extract it into your server's `resources` directory
-3. Add the following to your `server.cfg` (or `resources.cfg`, in case you load resources differently). Simply ensuring the sub-folder (i.e. `ensure [sd]`) will work too, provided dependencies are started in a separate sub-folder before.
+3. Ensure the resource is started in your `server.cfg` (or `resources.cfg`, in case you load resources differently). Simply ensuring the sub-folder (i.e. `ensure [sd]`) will work too, provided dependencies are started in a separate sub-folder before. Here's an example:
 
-```ini
+```cfg
 ensure oxmysql
 ensure ox_lib
 ensure qb-core
 ensure ox_target
+
 ensure sd-beekeeping
 ```
 
-::: tip
-The database table `sd_beekeeping` is created automatically on first start. No manual SQL required.
-:::
-
-## Step 2: Add Items
+## <span class="step-num">2</span> Add Items
 
 Register **11 items** in your inventory system. Item names use **hyphens** (e.g., `bee-hive`, not `bee_hive`).
 
 ::: code-group
 
 ```lua [ox_inventory]
--- Add to ox_inventory/data/items.lua
-
 ['bee-hive'] = {
     label = 'Bee Hive',
     weight = 1000,
@@ -149,8 +144,6 @@ Register **11 items** in your inventory system. Item names use **hyphens** (e.g.
 ```
 
 ```lua [qb-core / qbx_core]
--- Add to qb-core/shared/items.lua
-
 ['bee-hive']          = { name = 'bee-hive',          label = 'Bee Hive',          weight = 1000, type = 'item', image = 'bee-hive.png',          unique = true,  useable = true,  shouldClose = true, description = 'A placeable bee hive' },
 ['bee-house']         = { name = 'bee-house',         label = 'Bee House',         weight = 1000, type = 'item', image = 'bee-house.png',         unique = true,  useable = true,  shouldClose = true, description = 'A placeable bee house' },
 ['bee-queen']         = { name = 'bee-queen',         label = 'Bee Queen',         weight = 1000, type = 'item', image = 'bee-queen.png',         unique = true,  useable = true,  shouldClose = true, description = 'A queen bee' },
@@ -165,8 +158,6 @@ Register **11 items** in your inventory system. Item names use **hyphens** (e.g.
 ```
 
 ```sql [ESX]
--- Import sd-beekeeping/[SQL]/items.sql or run manually:
-
 INSERT INTO `items` (`name`, `label`, `weight`) VALUES
   ('bee-hive', 'Bee Hive', 1000),
   ('bee-house', 'Bee House', 1000),
@@ -183,18 +174,9 @@ INSERT INTO `items` (`name`, `label`, `weight`) VALUES
 
 :::
 
-## Step 3: Copy Item Images
+## <span class="step-num">3</span> Add Item Images
 
-Copy all images from `sd-beekeeping/images/` to your inventory's image folder:
-
-| Inventory | Image Path |
-|---|---|
-| ox_inventory | `ox_inventory/web/images/` |
-| qb-inventory | `qb-inventory/html/images/` |
-| ps-inventory | `ps-inventory/html/images/` |
-| qs-inventory | `qs-inventory/html/images/` |
-
-You can also download them directly below. Click any image to download it, or use **Download All** to grab them all at once.
+Copy the item images from `sd-beekeeping/images/` to your inventory's image folder. You can also download them directly from the container below.
 
 <ItemImageGrid
   title="Beekeeping Item Images"
@@ -214,17 +196,17 @@ You can also download them directly below. Click any image to download it, or us
   ]"
 />
 
-::: warning
-Missing images won't break the script, but items will display without icons in the inventory UI.
-:::
+## <span class="step-num">4</span> Start the Resource
 
-## Step 4: Start and Verify
+To load the resource, you can either:
 
-1. Start your server
-2. The script auto-detects your framework and target system
-3. The `sd_beekeeping` database table is created on first boot
-4. Check your server console for any errors
-5. Visit the Beekeeper NPC (blip on map) to buy your first hive
+- **Restart your server** entirely, or
+- Run the following commands in your **server console** (F8 or txAdmin live console):
+
+```cfg
+refresh
+ensure sd-beekeeping
+```
 
 ## Database Table
 
@@ -241,7 +223,8 @@ The `sd_beekeeping` table stores all facility data and is created automatically 
 | `collaborators` | JSON | Array of collaborator objects |
 | `durability` | int | 0–100 health percentage |
 
-::: details Manual SQL (only if the table was not auto-created)
+Manual SQL (only if the table was not auto-created):
+
 ```sql
 CREATE TABLE IF NOT EXISTS `sd_beekeeping` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
@@ -255,7 +238,6 @@ CREATE TABLE IF NOT EXISTS `sd_beekeeping` (
   PRIMARY KEY (`id`)
 );
 ```
-:::
 
 ## Configuration
 

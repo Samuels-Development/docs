@@ -33,31 +33,30 @@ Ensure the following dependencies are installed and running on your server befor
 | **object_gizmo** | Optional | For gizmo-based placement with full rotation control |
 
 ::: tip
-Framework, target system, and inventory are all automatically detected and used — you don't need to configure any of it.
+Framework, target system, and inventory are all automatically detected — no configuration needed. Any required database tables are also created automatically on first start.
 :::
 
-## Step 1: Add the Resource
+## <span class="step-num">1</span> Add the Resource
 
-1. Download **sd-crafting** from your purchase and extract it into your server's `resources` folder.
-2. Add the following to your `server.cfg` (or `resources.cfg`, in case you load resources differently). Simply ensuring the sub-folder (i.e. `ensure [sd]`) will work too, provided dependencies are started in a separate sub-folder before.
+1. Download the latest version of `sd-crafting` from the [CFX Portal](https://portal.cfx.re/assets/granted-assets)
+2. Extract it into your server's `resources` directory
+3. Ensure the resource is started in your `server.cfg` (or `resources.cfg`, in case you load resources differently). Simply ensuring the sub-folder (i.e. `ensure [sd]`) will work too, provided dependencies are started in a separate sub-folder before. Here's an example:
 
-```ini
+```cfg
+ensure ox_lib
+ensure oxmysql
+ensure qb-core
+
 ensure sd-crafting
 ```
 
-::: tip
-The database tables and framework detection are fully automatic. On first start the script will create all required tables via **oxmysql** and detect whether you are running `qb-core` or `es_extended`.
-:::
-
-## Step 2: Add Workbench Items to Your Inventory
+## <span class="step-num">2</span> Add Workbench Items to Your Inventory
 
 Placeable workbenches are inventory items that players use to deploy a crafting station. The default items defined in `configs/config.lua` under `PlaceableWorkbenches` are `workbench` and `advanced_workbench`.
 
 ::: code-group
 
 ```lua [ox_inventory]
--- Add to ox_inventory/data/items.lua
-
 ['workbench'] = {
     label = 'Workbench',
     weight = 10000,
@@ -90,8 +89,6 @@ Placeable workbenches are inventory items that players use to deploy a crafting 
 ```
 
 ```lua [qb-core]
--- Add to qb-core/shared/items.lua
-
 ['workbench'] = {
     name = 'workbench',
     label = 'Workbench',
@@ -118,8 +115,6 @@ Placeable workbenches are inventory items that players use to deploy a crafting 
 ```
 
 ```sql [ESX]
--- Run in your database or import from [SQL] folder
-
 INSERT INTO `items` (`name`, `label`, `weight`, `rare`, `can_remove`)
 VALUES
     ('workbench', 'Workbench', 10, 0, 1),
@@ -128,21 +123,10 @@ VALUES
 
 :::
 
-::: warning
-ESX stores weight in different units depending on your setup. Adjust the weight values to match your server's weight system.
-:::
 
-## Step 3: Copy Workbench Images
+## <span class="step-num">3</span> Add Item Images
 
-Copy the workbench images from `sd-crafting/images/` to your inventory's image folder. You can also download them directly below.
-
-| Inventory | Image Path |
-|---|---|
-| ox_inventory | `ox_inventory/web/images/` |
-| qb-inventory / ps-inventory | `<inventory>/html/images/` |
-| qs-inventory | `qs-inventory/html/images/` |
-| codem-inventory | `codem-inventory/html/itemimages/` |
-| origen_inventory | `origen_inventory/ui/images/` |
+Copy the item images from `sd-crafting/images/` to your inventory's image folder. You can also download them directly from the container below.
 
 <ItemImageGrid
   title="Crafting Item Images"
@@ -153,21 +137,17 @@ Copy the workbench images from `sd-crafting/images/` to your inventory's image f
   ]"
 />
 
-::: tip
-If you are using a custom inventory, place the images wherever your inventory loads item icons from.
-:::
+## <span class="step-num">4</span> Start the Resource
 
-## Step 4: Restart
+To load the resource, you can either:
 
-Restart your server or start the resource. On first boot you will see log output confirming:
+- **Restart your server** entirely, or
+- Run the following commands in your **server console** (F8 or txAdmin live console):
 
-1. Framework detected (QB / ESX)
-2. Inventory system detected
-3. Target system detected
-4. Database tables created
-5. Locale loaded
-
-If anything is missing, check your server console for error messages. Enable `Debug = true` in `configs/config.lua` for verbose logging.
+```cfg
+refresh
+ensure sd-crafting
+```
 
 ## Configuration
 

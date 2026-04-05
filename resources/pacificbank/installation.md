@@ -51,50 +51,41 @@ Ensure the following dependencies are installed and running on your server befor
 | **Inventory** | Yes | Any of the supported inventories listed above |
 
 ::: tip
-Framework, target system, doorlock, and inventory are all automatically detected and used — you don't need to configure any of it.
+Framework, target system, doorlock, and inventory are all automatically detected — no configuration needed.
 :::
 
-## Step 1: Add the Resource
+## <span class="step-num">1</span> Add the Resource
 
-1. Download `sd-pacificbank` from [Keymaster](https://keymaster.fivem.net)
+1. Download the latest version of `sd-pacificbank` from the [CFX Portal](https://portal.cfx.re/assets/granted-assets)
 2. Extract it into your server's `resources` directory
-3. Add the following to your `server.cfg` (or `resources.cfg`, in case you load resources differently). Simply ensuring the sub-folder (i.e. `ensure [sd]`) will work too, provided dependencies are started in a separate sub-folder before.
+3. Ensure the resource is started in your `server.cfg` (or `resources.cfg`, in case you load resources differently). Simply ensuring the sub-folder (i.e. `ensure [sd]`) will work too, provided dependencies are started in a separate sub-folder before. Here's an example:
 
-```ini
+```cfg
 ensure sd_lib
 ensure ox_lib
 ensure ox_doorlock
 ensure mka-lasers
+ensure qb-core
+
 ensure sd-pacificbank
 ```
 
-## Step 2: Import Doorlock Data
+## <span class="step-num">2</span> Import Doorlock Data
 
-The Pacific Bank uses **13 security doors**. Import the config for your doorlock system:
+The Pacific Bank uses **13 security doors**. Import the doorlock config that matches your doorlock system from the `sd-pacificbank/doorlock/` folder:
 
-::: code-group
+| Doorlock System | What to do |
+|---|---|
+| `ox_doorlock` | Import `doorlock/ox_doorlock/oxDoorlock.sql` into your database |
+| `qb-doorlock` / `nui_doorlock` | Place `doorlock/qb-nui_doorlock/pacificbank.lua` into your doorlock resource's configs folder, or copy its contents into your main doorlock config |
 
-```sql [ox_doorlock]
--- Import sd-pacificbank/doorlock/ox_doorlock/oxDoorlock.sql into your database
--- This creates entries for securitydoor1 through securitydoor13
-```
-
-```lua [qb-nui_doorlock]
--- Copy the contents of sd-pacificbank/doorlock/qb-nui_doorlock/pacificbank.lua
--- into your qb-nui_doorlock config file
-```
-
-:::
-
-## Step 3: Add Items
+## <span class="step-num">3</span> Add Items
 
 Register the required heist items in your inventory system:
 
 ::: code-group
 
 ```lua [ox_inventory]
--- Add to ox_inventory/data/items.lua
-
 ['laptop_pink'] = {
     label = 'Pink Laptop',
     weight = 5000,
@@ -122,8 +113,6 @@ Register the required heist items in your inventory system:
 ```
 
 ```lua [qb-core]
--- Add to qb-core/shared/items.lua
-
 ['laptop_pink'] = { name = 'laptop_pink', label = 'Pink Laptop',  weight = 5000,  type = 'item', image = 'laptop_pink.png', unique = true,  useable = true,  shouldClose = true, description = 'A pink security Laptop' },
 ['laptop_gold'] = { name = 'laptop_gold', label = 'Gold Laptop',  weight = 5000,  type = 'item', image = 'laptop_gold.png', unique = true,  useable = true,  shouldClose = true, description = 'A gold security Laptop' },
 ['c4_bomb']     = { name = 'c4_bomb',     label = 'C4 Brick',     weight = 1000,  type = 'item', image = 'c4_bomb.png',     unique = true,  useable = false, shouldClose = true, description = 'Very Dangerous! High-Yield Explosive.' },
@@ -131,8 +120,6 @@ Register the required heist items in your inventory system:
 ```
 
 ```sql [ESX]
--- Import sd-pacificbank/[SQL]/ESX/items.sql or run manually:
-
 INSERT INTO `items` (`name`, `label`, `weight`) VALUES
   ('laptop_pink', 'Pink Laptop', 50),
   ('laptop_gold', 'Gold Laptop', 50),
@@ -142,17 +129,9 @@ INSERT INTO `items` (`name`, `label`, `weight`) VALUES
 
 :::
 
-## Step 4: Copy Item Images
+## <span class="step-num">4</span> Add Item Images
 
-Copy the item images from `sd-pacificbank/images/` to your inventory's image folder:
-
-| Inventory | Image Path |
-|---|---|
-| ox_inventory | `ox_inventory/web/images/` |
-| qb-inventory / ps-inventory | `<inventory>/html/images/` |
-| qs-inventory | `qs-inventory/html/images/` |
-| codem-inventory | `codem-inventory/html/itemimages/` |
-| origen_inventory | `origen_inventory/ui/images/` |
+Copy the item images from `sd-pacificbank/images/` to your inventory's image folder. You can also download them directly from the container below.
 
 <ItemImageGrid
   title="Pacific Bank Item Images"
@@ -165,20 +144,17 @@ Copy the item images from `sd-pacificbank/images/` to your inventory's image fol
   ]"
 />
 
-::: tip
-If you are using a custom inventory, place the images wherever your inventory loads item icons from.
-:::
+## <span class="step-num">5</span> Start the Resource
 
-## Step 5: Start and Verify
+To load the resource, you can either:
 
-1. Start your server
-2. Check the server console for any errors
-3. Ensure all 13 doorlock entries are loaded
-4. Ensure the minimum police requirement is met before attempting the heist
+- **Restart your server** entirely, or
+- Run the following commands in your **server console** (F8 or txAdmin live console):
 
-::: warning
-Make sure `sd_lib` is started **before** sd-pacificbank in your server.cfg, or the resource will fail to load.
-:::
+```cfg
+refresh
+ensure sd-pacificbank
+```
 
 ## Configuration
 

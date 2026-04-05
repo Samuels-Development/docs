@@ -33,89 +33,36 @@ Before installing, make sure you have the following resources running on your se
 | **Inventory** | Yes | Any of the supported inventories listed above |
 
 ::: tip
-Framework, target system, and inventory are all automatically detected and used — you don't need to configure any of it.
+Framework, target system, and inventory are all automatically detected — no configuration needed. Any required database tables are also created automatically on first start.
 :::
 
 ## Step-by-Step Installation
 
-### 1. Download and Extract
+### <span class="step-num">1</span> Add the Resource
 
-Download the `sd-horde` resource and place it in your server's resources directory:
+1. Download the latest version of `sd-horde` from the [CFX Portal](https://portal.cfx.re/assets/granted-assets)
+2. Extract it into your server's `resources` directory
+3. Ensure the resource is started in your `server.cfg` (or `resources.cfg`, in case you load resources differently). Simply ensuring the sub-folder (i.e. `ensure [sd]`) will work too, provided dependencies are started in a separate sub-folder before. Here's an example:
 
-```
-resources/
-  [standalone]/
-    sd-horde/
-```
-
-::: tip
-You can place the resource in any folder within your resources directory. The subfolder name does not matter.
-:::
-
-### 2. Add to Server Configuration
-
-Add the following to your `server.cfg` (or `resources.cfg`, in case you load resources differently). Simply ensuring the sub-folder (i.e. `ensure [sd]`) will work too, provided dependencies are started in a separate sub-folder before.
-
-```ini
-ensure sd-horde
-```
-
-Make sure it starts **after** all dependencies:
-
-```ini
-ensure qb-core       # or es_extended
+```cfg
 ensure ox_lib
 ensure oxmysql
-ensure pma-voice      # optional, for radio sync
-ensure ox_inventory   # optional, for inventory restrictions
+ensure qb-core
 
 ensure sd-horde
 ```
 
-### 3. Start the Server
+### <span class="step-num">2</span> Start the Resource
 
-Start (or restart) your server. On first boot, Horde Mission will:
+To load the resource, you can either:
 
-1. **Auto-detect your framework** (`qb-core` or `es_extended`) via the bridge system
-2. **Create database tables** automatically via `oxmysql`
-3. **Load locale files** based on the `Locale` setting in config (defaults to `en`)
-4. **Load all map configs** from `configs/maps/`
+- **Restart your server** entirely, or
+- Run the following commands in your **server console** (F8 or txAdmin live console):
 
-::: info
-No manual database setup is needed. All required tables are created on first start. If you need to reset data, you can safely drop the horde-related tables and they will be recreated.
-:::
-
-## Verifying Installation
-
-After starting the server, check your server console for:
-
+```cfg
+refresh
+ensure sd-horde
 ```
-[SD-HORDE] Framework detected: qb
-[sd-horde] Loaded map: server_farm
-[sd-horde] Loaded map: cayo_estate
-[sd-horde] Loaded map: doomsday_bunker
-[sd-horde] Loaded map: gunrunning_bunker
-[sd-horde] Map loader complete - 4 maps loaded
-[SD-HORDE] Loaded locale: en
-```
-
-If you see errors, verify that:
-
-- All dependencies are started before `sd-horde`
-- Your `oxmysql` connection string is configured correctly
-- The `configs/maps/` directory contains valid map files matching the names in `Config.Maps`
-
-## Updating
-
-To update Horde Mission:
-
-1. Back up your current `sd-horde` folder (especially `configs/config.lua`, `configs/logs.lua`, and any customized map files)
-2. Replace the resource files with the new version
-3. Restart the resource or the server
-
-::: tip
-Configuration files are preserved during updates as long as you do not overwrite them. Always compare your config with the new version's defaults to check for new options.
-:::
 
 ## Configuration
 

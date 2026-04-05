@@ -45,54 +45,45 @@ Ensure the following dependencies are installed and running on your server befor
 | **sd_lib** | Yes | |
 | **Target System** | Yes | `ox_target` / `qb-target` / `qtarget` |
 | **Doorlock** | Yes | `ox_doorlock` / `qb-nui_doorlock` |
-| **Minigame** | Yes | Any of the supported minigames listed above |
+| **Minigame** | Optional | Any of the supported minigames listed above, can be disabled |
 | **Inventory** | Yes | Any of the supported inventories listed above |
 
 ::: tip
-Framework, target system, doorlock, and inventory are all automatically detected and used — you don't need to configure any of it.
+Framework, target system, doorlock, and inventory are all automatically detected — no configuration needed.
 :::
 
-## Step 1: Add the Resource
+## <span class="step-num">1</span> Add the Resource
 
-1. Download `sd-traphouse` from [Keymaster](https://keymaster.fivem.net)
+1. Download the latest version of `sd-traphouse` from the [CFX Portal](https://portal.cfx.re/assets/granted-assets)
 2. Extract it into your server's `resources` directory
-3. Add the following to your `server.cfg` (or `resources.cfg`, in case you load resources differently). Simply ensuring the sub-folder (i.e. `ensure [sd]`) will work too, provided dependencies are started in a separate sub-folder before.
+3. Ensure the resource is started in your `server.cfg` (or `resources.cfg`, in case you load resources differently). Simply ensuring the sub-folder (i.e. `ensure [sd]`) will work too, provided dependencies are started in a separate sub-folder before. Here's an example:
 
-```ini
+```cfg
 ensure sd_lib
 ensure ox_lib
 ensure ox_target
 ensure ox_doorlock
+ensure qb-core
+
 ensure sd-traphouse
 ```
 
-## Step 2: Import Doorlock Data
+## <span class="step-num">2</span> Import Doorlock Data
 
-Import the front door entry for your doorlock system:
+Import the doorlock config that matches your doorlock system from the `sd-traphouse/doorlock/` folder:
 
-::: code-group
+| Doorlock System | What to do |
+|---|---|
+| `ox_doorlock` | Import `doorlock/ox_doorlock/traphouse.sql` into your database |
+| `qb-doorlock` / `nui_doorlock` | Place `doorlock/qb-nui_doorlock/traphouse.lua` into your doorlock resource's configs folder, or copy its contents into your main doorlock config |
 
-```sql [ox_doorlock]
--- Import sd-traphouse/doorlock/ox_doorlock/traphouse.sql into your database
--- This creates 1 door entry: traphouse-front
-```
-
-```lua [qb-nui_doorlock]
--- Copy the contents of sd-traphouse/doorlock/qb-nui_doorlock/traphouse.lua
--- into your qb-nui_doorlock config file
-```
-
-:::
-
-## Step 3: Add Items
+## <span class="step-num">3</span> Add Items
 
 Register the required items in your inventory system:
 
 ::: code-group
 
 ```lua [ox_inventory]
--- Add to ox_inventory/data/items.lua
-
 ['gang-keychain'] = {
     label = 'Keychain',
     weight = 50,
@@ -110,25 +101,15 @@ Register the required items in your inventory system:
 ```
 
 ```lua [qb-core]
--- Add to qb-core/shared/items.lua
-
 ['gang-keychain'] = { name = 'gang-keychain', label = 'Gang Keychain', weight = 20,  type = 'item', image = 'gang-keychain.png', unique = true,  useable = false, shouldClose = true, description = 'A keychain with a load of oddly labelled keys' },
 ['safecracker']   = { name = 'safecracker',   label = 'Safe Cracker',  weight = 500, type = 'item', image = 'safecracker.png',   unique = true,  useable = false, shouldClose = true, description = 'A specialized tool used for breaking into safes.' },
 ```
 
 :::
 
-## Step 4: Copy Item Images
+## <span class="step-num">4</span> Add Item Images
 
-Copy the item images from `sd-traphouse/images/` to your inventory's image folder:
-
-| Inventory | Image Path |
-|---|---|
-| ox_inventory | `ox_inventory/web/images/` |
-| qb-inventory / ps-inventory | `<inventory>/html/images/` |
-| qs-inventory | `qs-inventory/html/images/` |
-| codem-inventory | `codem-inventory/html/itemimages/` |
-| origen_inventory | `origen_inventory/ui/images/` |
+Copy the item images from `sd-traphouse/images/` to your inventory's image folder. You can also download them directly from the container below.
 
 <ItemImageGrid
   title="Traphouse Item Images"
@@ -139,24 +120,17 @@ Copy the item images from `sd-traphouse/images/` to your inventory's image folde
   ]"
 />
 
-::: tip
-If you are using a custom inventory, place the images wherever your inventory loads item icons from.
-:::
+## <span class="step-num">5</span> Start the Resource
 
-## Step 5: Start and Verify
+To load the resource, you can either:
 
-1. Start your server
-2. Check the server console for any errors
-3. If `Config.Blip.Enable` is true, look for the **Vagos Traphouse** blip on the map
-4. Ensure the minimum police requirement is met before attempting the robbery
+- **Restart your server** entirely, or
+- Run the following commands in your **server console** (F8 or txAdmin live console):
 
-::: warning
-Make sure `sd_lib` is started **before** sd-traphouse in your server.cfg, or the resource will fail to load.
-:::
-
-::: tip
-No database tables are required. All robbery state is managed in memory and resets on server restart.
-:::
+```cfg
+refresh
+ensure sd-traphouse
+```
 
 ## Configuration
 

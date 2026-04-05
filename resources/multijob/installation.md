@@ -13,36 +13,38 @@ Ensure the following dependencies are installed and running on your server befor
 | **Inventory** | Yes | Any of the supported inventories listed above |
 
 ::: tip
-Framework, target system, and inventory are all automatically detected and used — you don't need to configure any of it.
+Framework, target system, and inventory are all automatically detected — no configuration needed. Any required database tables are also created automatically on first start.
 :::
 
 ::: tip Recommendation
 We heavily recommend using `ox_inventory` — it's the best inventory system available and more importantly, it's completely free and open source! You won't be missing out on any features in our scripts if you use a different inventory, this is simply a recommendation.
 :::
 
-## Step 1: Add the Resource
+## <span class="step-num">1</span> Add the Resource
 
-1. Download `sd-multijob` from [Keymaster](https://keymaster.fivem.net)
+1. Download the latest version of `sd-multijob` from the [CFX Portal](https://portal.cfx.re/assets/granted-assets)
 2. Extract it into your server's `resources` directory
-3. Add the following to your `server.cfg` (or `resources.cfg`, in case you load resources differently). Simply ensuring the sub-folder (i.e. `ensure [sd]`) will work too, provided dependencies are started in a separate sub-folder before.
+3. Ensure the resource is started in your `server.cfg` (or `resources.cfg`, in case you load resources differently). Simply ensuring the sub-folder (i.e. `ensure [sd]`) will work too, provided dependencies are started in a separate sub-folder before. Here's an example:
 
-```ini
+```cfg
 ensure oxmysql
 ensure ox_lib
 ensure qb-core
+
 ensure sd-multijob
 ```
 
-::: tip
-Three database tables (`saved_jobs`, `boss_menus`, `sd_multijob_settings`) are created automatically on first start. No manual SQL required.
-:::
+## <span class="step-num">2</span> Start the Resource
 
-## Step 2: Start and Verify
+To load the resource, you can either:
 
-1. Start your server
-2. Check the server console for any errors
-3. Use `/multijob` or press **F5** to open the job menu
-4. Test duty toggle and boss menu locations
+- **Restart your server** entirely, or
+- Run the following commands in your **server console** (F8 or txAdmin live console):
+
+```cfg
+refresh
+ensure sd-multijob
+```
 
 ## Database Tables
 

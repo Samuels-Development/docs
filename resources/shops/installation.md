@@ -38,50 +38,32 @@ Ensure the following dependencies are installed and running on your server befor
 | **Target System** | Yes | `ox_target` / `qb-target` / `qtarget` |
 | **Inventory** | Yes | Any of the supported inventories listed above |
 
-## Step 1 -- Add the Resource
+## <span class="step-num">1</span> Add the Resource
 
-Drag and drop the `sd-shops` folder into your server's `resources` directory.
+1. Download the latest version of `sd-shops` from the [CFX Portal](https://portal.cfx.re/assets/granted-assets)
+2. Extract it into your server's `resources` directory
+3. Ensure the resource is started in your `server.cfg` (or `resources.cfg`, in case you load resources differently). Simply ensuring the sub-folder (i.e. `ensure [sd]`) will work too, provided dependencies are started in a separate sub-folder before. Here's an example:
 
-```
-resources/
-  [standalone]/
-  [qb]/
-  sd-shops/        <-- place here
-```
-
-::: tip
-Framework, target system, and inventory are all automatically detected and used — you don't need to configure any of it.
-:::
-
-Add the following to your `server.cfg` (or `resources.cfg`, in case you load resources differently). Simply ensuring the sub-folder (i.e. `ensure [sd]`) will work too, provided dependencies are started in a separate sub-folder before.
-
-```ini
+```cfg
 ensure oxmysql
 ensure ox_lib
-ensure qb-core       # or es_extended
-ensure ox_target      # or qb-target / qtarget
-ensure ox_inventory   # or any other supported inventory
+ensure qb-core
+ensure ox_target
+ensure ox_inventory
 
 ensure sd-shops
 ```
 
-## Step 2 -- Start Your Server
+## <span class="step-num">2</span> Start the Resource
 
-Start your server. On the first boot, Shops Pro will:
+To load the resource, you can either:
 
-1. Detect your framework automatically (QBCore or ESX)
-2. Detect your inventory system automatically
-3. Detect your target system automatically
-4. Create all required database tables
-5. Spawn shop peds and blips at configured locations
-6. Initialize the shop system
+- **Restart your server** entirely, or
+- Run the following commands in your **server console** (F8 or txAdmin live console):
 
-Check your server console for startup messages. You should see:
-```
-[SD-SHOPS] Framework detected: qb
-[SD-SHOPS] Loaded locale: en
-[SD-SHOPS] Server hooks system loaded
-[SD-SHOPS] Client hooks system loaded
+```cfg
+refresh
+ensure sd-shops
 ```
 
 ## Configuration

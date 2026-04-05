@@ -50,31 +50,31 @@ Ensure the following dependencies are installed and running on your server befor
 | **Inventory** | Yes | Any of the supported inventories listed above |
 
 ::: tip
-Framework, target system, and inventory are all automatically detected and used — you don't need to configure any of it.
+Framework, target system, and inventory are all automatically detected — no configuration needed.
 :::
 
-## Step 1: Add the Resource
+## <span class="step-num">1</span> Add the Resource
 
-1. Download `sd-yacht` from [Keymaster](https://keymaster.fivem.net)
+1. Download the latest version of `sd-yacht` from the [CFX Portal](https://portal.cfx.re/assets/granted-assets)
 2. Extract it into your server's `resources` directory
-3. Add the following to your `server.cfg` (or `resources.cfg`, in case you load resources differently). Simply ensuring the sub-folder (i.e. `ensure [sd]`) will work too, provided dependencies are started in a separate sub-folder before.
+3. Ensure the resource is started in your `server.cfg` (or `resources.cfg`, in case you load resources differently). Simply ensuring the sub-folder (i.e. `ensure [sd]`) will work too, provided dependencies are started in a separate sub-folder before. Here's an example:
 
-```ini
+```cfg
 ensure sd_lib
 ensure ox_lib
 ensure ox_target
+ensure qb-core
+
 ensure sd-yacht
 ```
 
-## Step 2: Add Items
+## <span class="step-num">2</span> Add Items
 
 Register the required items in your inventory system:
 
 ::: code-group
 
 ```lua [ox_inventory]
--- Add to ox_inventory/data/items.lua
-
 ['yachtcodes'] = {
     label = 'Yacht Access Codes',
     weight = 200,
@@ -135,8 +135,6 @@ Register the required items in your inventory system:
 ```
 
 ```lua [qb-core]
--- Add to qb-core/shared/items.lua
-
 ['yachtcodes']               = { name = 'yachtcodes',               label = 'Yacht Access Codes',  weight = 200,  type = 'item', image = 'yachtcodes.png',               unique = true,  useable = true,  shouldClose = true,  description = 'The first half of codes for the Yacht' },
 ['casinocodes']              = { name = 'casinocodes',              label = 'Casino Access Codes', weight = 200,  type = 'item', image = 'casinocodes.png',              unique = true,  useable = true,  shouldClose = true,  description = 'The first half of codes for the Casino' },
 ['secured_safe']             = { name = 'secured_safe',             label = 'Safe',                weight = 200,  type = 'item', image = 'secured_safe.png',             unique = true,  useable = true,  shouldClose = true,  description = 'Meant to protect valuables' },
@@ -146,8 +144,6 @@ Register the required items in your inventory system:
 ```
 
 ```sql [ESX]
--- Import sd-yacht/[SQL]/ESX/items.sql or run manually:
-
 INSERT INTO `items` (`name`, `label`, `weight`) VALUES
   ('yachtcodes', 'Yacht Access Codes', 2),
   ('casinocodes', 'Casino Access Codes', 2),
@@ -159,17 +155,9 @@ INSERT INTO `items` (`name`, `label`, `weight`) VALUES
 
 :::
 
-## Step 3: Copy Item Images
+## <span class="step-num">3</span> Add Item Images
 
-Copy the item images from `sd-yacht/images/` to your inventory's image folder:
-
-| Inventory | Image Path |
-|---|---|
-| ox_inventory | `ox_inventory/web/images/` |
-| qb-inventory / ps-inventory | `<inventory>/html/images/` |
-| qs-inventory | `qs-inventory/html/images/` |
-| codem-inventory | `codem-inventory/html/itemimages/` |
-| origen_inventory | `origen_inventory/ui/images/` |
+Copy the item images from `sd-yacht/images/` to your inventory's image folder. You can also download them directly from the container below.
 
 <ItemImageGrid
   title="Yacht Item Images"
@@ -184,25 +172,17 @@ Copy the item images from `sd-yacht/images/` to your inventory's image folder:
   ]"
 />
 
-::: tip
-If you are using a custom inventory, place the images wherever your inventory loads item icons from.
-:::
+## <span class="step-num">4</span> Start the Resource
 
-## Step 4: Start and Verify
+To load the resource, you can either:
 
-1. Start your server
-2. Check the server console for any errors
-3. Look for the **Secured Yacht** blip on the map (if enabled)
-4. Ensure the minimum police requirement is met (default: 4 cops)
-5. You need `yachtcodes` item to start the heist
+- **Restart your server** entirely, or
+- Run the following commands in your **server console** (F8 or txAdmin live console):
 
-::: warning
-Make sure `sd_lib` is started **before** sd-yacht in your server.cfg, or the resource will fail to load.
-:::
-
-::: tip
-No database tables are required. All heist state is managed in memory and resets on server restart.
-:::
+```cfg
+refresh
+ensure sd-yacht
+```
 
 ## Configuration
 

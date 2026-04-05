@@ -32,37 +32,33 @@ Ensure the following dependencies are installed and running on your server befor
 | **Inventory** | Yes | Any of the supported inventories listed above |
 
 ::: tip
-Framework, target system, and inventory are all automatically detected and used — you don't need to configure any of it.
+Framework, target system, and inventory are all automatically detected — no configuration needed. Any required database tables are also created automatically on first start.
 :::
 
-## Step 1: Add the Resource
+## <span class="step-num">1</span> Add the Resource
 
-1. Download `sd-oxyrun` from [Keymaster](https://keymaster.fivem.net)
+1. Download the latest version of `sd-oxyrun` from the [CFX Portal](https://portal.cfx.re/assets/granted-assets)
 2. Extract it into your server's `resources` directory
-3. Add the following to your `server.cfg` (or `resources.cfg`, in case you load resources differently). Simply ensuring the sub-folder (i.e. `ensure [sd]`) will work too, provided dependencies are started in a separate sub-folder before.
+3. Ensure the resource is started in your `server.cfg` (or `resources.cfg`, in case you load resources differently). Simply ensuring the sub-folder (i.e. `ensure [sd]`) will work too, provided dependencies are started in a separate sub-folder before. Here's an example:
 
-```ini
+```cfg
 ensure sd_lib
 ensure ox_lib
 ensure PolyZone
 ensure oxmysql
 ensure ox_target
+ensure qb-core
+
 ensure sd-oxyrun
 ```
 
-::: tip
-The `sd_oxyrun` database table is created automatically on first start. No manual SQL required.
-:::
-
-## Step 2: Add Items
+## <span class="step-num">2</span> Add Items
 
 Register the package item and reward items in your inventory system:
 
 ::: code-group
 
 ```lua [ox_inventory]
--- Add to ox_inventory/data/items.lua
-
 ['bands'] = {
     label = 'Band Of Notes',
     weight = 100,
@@ -98,8 +94,6 @@ Register the package item and reward items in your inventory system:
 ```
 
 ```lua [qb-core]
--- Add to qb-core/shared/items.lua
-
 ['bands']   = { name = 'bands',   label = 'Band Of Notes',       weight = 100,   type = 'item', image = 'bands.png',   unique = false, useable = false, shouldClose = false, description = 'A band of small notes..' },
 ['rolls']   = { name = 'rolls',   label = 'Roll Of Small Notes', weight = 100,   type = 'item', image = 'rolls.png',   unique = false, useable = false, shouldClose = false, description = 'A roll of small notes..' },
 ['package'] = { name = 'package', label = 'Suspicious Package',  weight = 10000, type = 'item', image = 'package.png', unique = true,  useable = true,  shouldClose = false, description = 'A mysterious package.. Scary!' },
@@ -107,8 +101,6 @@ Register the package item and reward items in your inventory system:
 ```
 
 ```sql [ESX]
--- Import sd-oxyrun/[SQL]/ESX/items.sql or run manually:
-
 INSERT INTO `items` (`name`, `label`, `weight`) VALUES
   ('bands', 'Band Of Notes', 1),
   ('rolls', 'Roll Of Small Notes', 1),
@@ -120,17 +112,9 @@ INSERT INTO `items` (`name`, `label`, `weight`) VALUES
 
 Also ensure any rare items configured in the level rewards exist in your inventory system.
 
-## Step 3: Copy Item Images
+## <span class="step-num">3</span> Add Item Images
 
-Copy the item images from `sd-oxyrun/images/` to your inventory's image folder:
-
-| Inventory | Image Path |
-|---|---|
-| ox_inventory | `ox_inventory/web/images/` |
-| qb-inventory / ps-inventory | `<inventory>/html/images/` |
-| qs-inventory | `qs-inventory/html/images/` |
-| codem-inventory | `codem-inventory/html/itemimages/` |
-| origen_inventory | `origen_inventory/ui/images/` |
+Copy the item images from `sd-oxyrun/images/` to your inventory's image folder. You can also download them directly from the container below.
 
 <ItemImageGrid
   title="Oxy Run Item Images"
@@ -143,20 +127,17 @@ Copy the item images from `sd-oxyrun/images/` to your inventory's image folder:
   ]"
 />
 
-::: tip
-If you are using a custom inventory, place the images wherever your inventory loads item icons from.
-:::
+## <span class="step-num">4</span> Start the Resource
 
-## Step 4: Start and Verify
+To load the resource, you can either:
 
-1. Start your server
-2. Check the server console for any errors
-3. The Boss NPC spawns at one of 3 random locations
-4. Ensure the minimum police requirement is met before starting a run
+- **Restart your server** entirely, or
+- Run the following commands in your **server console** (F8 or txAdmin live console):
 
-::: warning
-Make sure `sd_lib` is started **before** sd-oxyrun in your server.cfg, or the resource will fail to load.
-:::
+```cfg
+refresh
+ensure sd-oxyrun
+```
 
 ## Database Table
 
@@ -167,7 +148,8 @@ The `sd_oxyrun` table stores player reputation and is created automatically on f
 | `Identifier` | VARCHAR(255) | Player identifier (license, steam, etc.) |
 | `XP` | INT | Total reputation experience points |
 
-::: details Manual SQL (only if the table was not auto-created)
+Manual SQL (only if the table was not auto-created):
+
 ```sql
 CREATE TABLE IF NOT EXISTS `sd_oxyrun` (
   `Identifier` VARCHAR(255) NOT NULL,
@@ -175,7 +157,6 @@ CREATE TABLE IF NOT EXISTS `sd_oxyrun` (
   PRIMARY KEY (`Identifier`)
 );
 ```
-:::
 
 ## Configuration
 
