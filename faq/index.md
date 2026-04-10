@@ -14,7 +14,7 @@ Join our [Discord server](https://discord.gg/FzPehMQaBQ) and open a support tick
 
 ### What frameworks are supported?
 
-All scripts support **QBCore** (`qb-core` / `qbx_core`) and **ESX** (`es_extended`). Framework detection is automatic — just drop the resource into your server.
+All scripts support **QBCore** (`qb-core`), **Qbox** (`qbx_core`), and **ESX** (`es_extended`). Framework detection is automatic — just drop the resource into your server.
 
 ### What inventory systems are supported?
 
