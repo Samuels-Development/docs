@@ -357,7 +357,7 @@ export default defineConfig({
     },
 
     editLink: {
-      pattern: 'https://github.com/Samuels-Development/docs/edit/main/:path',
+      pattern: 'https://github.com/Samuels-Development/docs/edit/master/:path',
       text: 'Suggest changes to this page',
     },
 
