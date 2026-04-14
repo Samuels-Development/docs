@@ -137,6 +137,13 @@ aside: false
         </div>
         <span class="res-card-desc">Randomized routes, configurable rewards</span>
       </a>
+      <a href="/resources/vehhack/" class="res-card">
+        <div class="res-card-top">
+          <span class="res-card-name">Vehicle Hacking Device</span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="res-card-arrow"><path d="M7 17l9.2-9.2M17 17V7.8H7.8"/></svg>
+        </div>
+        <span class="res-card-desc">16 Watch Dogs-style vehicle hacks with secure validation</span>
+      </a>
     </div>
   </div>
 </div>

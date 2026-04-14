@@ -24,7 +24,9 @@
       "Bash(npx playwright:*)",
       "Bash([ -d \"$SRC/$r\" ])",
       "Bash(gh api:*)",
-      "Bash(gh auth:*)"
+      "Bash(gh auth:*)",
+      "Bash(cp \"C:/Fivem/resources/[standalone]/[SD]/sd-vehhack/configs/config.lua\" \"C:/Fivem/resources/[standalone]/[SD]/docs/public/configs/sd-vehhack.lua\")",
+      "Bash(cp \"C:/Fivem/resources/[standalone]/[SD]/sd-vehhack/configs/logs.lua\" \"C:/Fivem/resources/[standalone]/[SD]/docs/public/configs/sd-vehhack-logs.lua\")"
     ]
   }
 }

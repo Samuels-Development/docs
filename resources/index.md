@@ -46,6 +46,9 @@ A Vagos gang traphouse robbery with 22 lootable props, vault cracking, NPC guard
 ### [Warehouse Heist](/resources/warehouse/)
 A secured warehouse heist with thermite breaching, interior exploration, laptop hacking, six loot crates, optional NPC guards, and a two-exit escape system.
 
+### [Vehicle Hacking Device](/resources/vehhack/)
+A Watch Dogs-style vehicle hacking tool with 16 configurable hacks across sabotage, control, chaos, and intel categories. Targets cars, bikes, and helicopters, with secure server-side validation and Discord / Fivemanage / Loki logging.
+
 ---
 
 ## Common Dependencies

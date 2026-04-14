@@ -305,6 +305,23 @@ const globalSidebar = [
           },
         ],
       },
+      {
+        text: 'Vehicle Hacking Device',
+        collapsed: true,
+        items: [
+          { text: 'Overview', link: '/resources/vehhack/' },
+          { text: 'Installation', link: '/resources/vehhack/installation' },
+          { text: 'Configuration', link: '/resources/vehhack/configuration' },
+          {
+            text: 'Full Config Files',
+            collapsed: true,
+            items: [
+              { text: 'config.lua', link: '/resources/vehhack/full-config' },
+              { text: 'logs.lua', link: '/resources/vehhack/full-config-logs' },
+            ],
+          },
+        ],
+      },
     ],
   },
   {
