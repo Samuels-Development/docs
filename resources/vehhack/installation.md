@@ -60,7 +60,7 @@ Register the two required items in your inventory system:
     consume = 0,
     description = "One-shot exploit script loaded onto your hacking device. Burned on execution.",
     client = {
-        image = "simcard.png",
+        image = "hacking_script.png",
     },
 },
 
@@ -81,7 +81,7 @@ Register the two required items in your inventory system:
 ```
 
 ```lua [qb-core]
-['hacking_script']         = { name = 'hacking_script',         label = 'Hack Script',            weight = 10,  type = 'item', image = 'simcard.png',                unique = false, useable = false, shouldClose = true, combinable = nil, description = 'One-shot exploit script loaded onto your hacking device. Burned on execution.' },
+['hacking_script']         = { name = 'hacking_script',         label = 'Hack Script',            weight = 10,  type = 'item', image = 'hacking_script.png',         unique = false, useable = false, shouldClose = true, combinable = nil, description = 'One-shot exploit script loaded onto your hacking device. Burned on execution.' },
 ['vehicle_hacking_device'] = { name = 'vehicle_hacking_device', label = 'Vehicle Hacking Device', weight = 500, type = 'item', image = 'vehicle_hacking_device.png', unique = false, useable = true,  shouldClose = true, combinable = nil, description = 'Use Scripts to execute hacks on marked vehicles. Plug it in, aim, exploit.' },
 ```
 
@@ -93,11 +93,20 @@ INSERT INTO items (name, label, weight, rare, can_remove) VALUES
 
 :::
 
-::: tip Item Images
-Drop `vehicle_hacking_device.png` and `simcard.png` into your inventory's image folder (e.g. `ox_inventory/web/images/` or `qb-inventory/html/images/`). If you use different filenames, update the `image` field to match.
-:::
+## <span class="step-num">3</span> Add Item Images
 
-## <span class="step-num">3</span> Start the Resource
+Copy the item images from `sd-vehhack/images/` to your inventory's image folder. You can also download them directly from the container below.
+
+<ItemImageGrid
+  title="Vehicle Hacking Device Item Images"
+  zipName="sd-vehhack-images"
+  :images="[
+    { src: '/items/vehhack/vehicle_hacking_device.png', name: 'vehicle_hacking_device.png', alt: 'Vehicle Hacking Device' },
+    { src: '/items/vehhack/hacking_script.png', name: 'hacking_script.png', alt: 'Hack Script' },
+  ]"
+/>
+
+## <span class="step-num">4</span> Start the Resource
 
 To load the resource, you can either:
 
@@ -109,7 +118,7 @@ refresh
 ensure sd-vehhack
 ```
 
-## <span class="step-num">4</span> Give Yourself the Items
+## <span class="step-num">5</span> Give Yourself the Items
 
 Grant yourself both items to test:
 
