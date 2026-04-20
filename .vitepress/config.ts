@@ -340,6 +340,7 @@ export default defineConfig({
   title: "Samuel's Development",
   description: 'Documentation for FiveM scripts by Samuel\'s Development',
   lang: 'en-US',
+  cleanUrls: true,
 
   head: [
     ['link', { rel: 'icon', type: 'image/png', href: '/logo.png' }],
