@@ -13,10 +13,10 @@ All top-level tunables live in `configs/config.lua`. The hack table lives in `co
 
 | Option | Default | Description |
 |---|---|---|
-| `HackingItem` | `'phone_plug'` | The device item — triggers the UI when used. Set to `nil` to gate entry to `/testhackui` only. |
-| `ConsumeOnUse` | `false` | `true` = device deleted on every use. Keep `false` for a reusable dongle where SIMs are the real consumable. |
-| `CurrencyItem` | `'hacking_sim'` | Stackable item spent per hack. Set to `nil` to use the player's **cash** balance instead. |
-| `CurrencyLabel` | `'SIMS'` | Short text shown in the UI next to the balance. Change to `'$'` when using cash. |
+| `HackingItem` | `'vehicle_hacking_device'` | The device item — triggers the UI when used. Set to `nil` to gate entry to `/testhackui` only. |
+| `ConsumeOnUse` | `false` | `true` = device deleted on every use. Keep `false` for a reusable dongle where Scripts are the real consumable. |
+| `CurrencyItem` | `'hacking_script'` | Stackable item spent per hack. Set to `nil` to use the player's **cash** balance instead. |
+| `CurrencyLabel` | `'SCRIPTS'` | Short text shown in the UI next to the balance. Change to `'$'` when using cash. |
 
 ## Targeting
 

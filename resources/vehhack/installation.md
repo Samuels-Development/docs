@@ -52,41 +52,49 @@ Register the two required items in your inventory system:
 ::: code-group
 
 ```lua [ox_inventory]
-['phone_plug'] = {
-    label = 'Phone Plug',
-    weight = 80,
+["hacking_script"] = {
+    label = "Script",
+    weight = 10,
+    stack = true,
+    close = true,
+    consume = 0,
+    description = "One-shot exploit script loaded onto your hacking device. Burned on execution.",
+    client = {
+        image = "simcard.png",
+    },
+},
+
+["vehicle_hacking_device"] = {
+    label = "Vehicle Hacking Device",
+    weight = 500,
     stack = false,
     close = true,
-    description = 'An OTG breakout dongle. Plugs into your phone to run vehicle exploits — needs a burner SIM to fire.',
+    consume = 0,
+    description = "Use Scripts to execute hacks on marked vehicles. Plug it in, aim, exploit.",
     client = {
-        image = 'usb_device.png',
-        export = 'sd-vehhack.useHackingDevice'
+        image = "vehicle_hacking_device.png",
+    },
+    server = {
+        export = 'sd-vehhack.useVehicle_hacking_device'
     }
-},
-['hacking_sim'] = {
-    label = 'Hacking SIM',
-    weight = 5,
-    stack = true,
-    description = 'A pre-loaded burner SIM. One shot of exploit credits.',
-    client = { image = 'tunerchip.png' },
 },
 ```
 
 ```lua [qb-core]
-['phone_plug']  = { name = 'phone_plug',  label = 'Phone Plug',  weight = 80, type = 'item', image = 'phone_plug.png',  unique = false, useable = true,  shouldClose = true,  combinable = nil, description = 'Plugs into your phone to run vehicle exploits.' },
-['hacking_sim'] = { name = 'hacking_sim', label = 'Hacking SIM', weight = 5,  type = 'item', image = 'hacking_sim.png', unique = false, useable = false, shouldClose = false, combinable = nil, description = 'A pre-loaded burner SIM.' },
+['hacking_script']         = { name = 'hacking_script',         label = 'Script',                 weight = 10,  type = 'item', image = 'simcard.png',                unique = false, useable = false, shouldClose = true, combinable = nil, description = 'One-shot exploit script loaded onto your hacking device. Burned on execution.' },
+['vehicle_hacking_device'] = { name = 'vehicle_hacking_device', label = 'Vehicle Hacking Device', weight = 500, type = 'item', image = 'vehicle_hacking_device.png', unique = false, useable = true,  shouldClose = true, combinable = nil, description = 'Use Scripts to execute hacks on marked vehicles. Plug it in, aim, exploit.' },
 ```
 
 ```sql [ESX]
 INSERT INTO items (name, label, weight, rare, can_remove) VALUES
-('phone_plug',  'Phone Plug',  5, 0, 1),
-('hacking_sim', 'Hacking SIM', 1, 0, 1);
+('hacking_script',         'Script',                 10,  0, 1),
+('vehicle_hacking_device', 'Vehicle Hacking Device', 500, 0, 1);
 ```
 
 :::
 
 ::: tip Item Images
-The `ox_inventory` example above reuses existing icons (`usb_device.png`, `tunerchip.png`). For custom art, drop your PNGs into your inventory's image folder and update the `image` field.
+Drop `vehicle_hacking_device.png` and `simcard.png` into your inventory's image folder (e.g. `ox_inventory/web/images/` or `qb-inventory/html/images/`). If you use different filenames, update the `image` field to match.
 :::
 
 ## <span class="step-num">3</span> Start the Resource
@@ -106,11 +114,11 @@ ensure sd-vehhack
 Grant yourself both items to test:
 
 ```cfg
-/giveitem <yourId> phone_plug 1
-/giveitem <yourId> hacking_sim 20
+/giveitem <yourId> vehicle_hacking_device 1
+/giveitem <yourId> hacking_script 20
 ```
 
-Use the phone plug from your inventory, aim at a vehicle, and click.
+Use the hacking device from your inventory, aim at a vehicle, and click.
 
 ## Configuration
 

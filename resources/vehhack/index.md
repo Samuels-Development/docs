@@ -79,8 +79,8 @@ Two items by default:
 
 | Item | Role |
 |---|---|
-| `phone_plug` | The device — reusable, triggers the UI on use |
-| `hacking_sim` | The consumable currency spent per hack |
+| `vehicle_hacking_device` | The device — reusable, triggers the UI on use |
+| `hacking_script` | The consumable currency spent per hack |
 
 Set `Config.CurrencyItem = nil` to use **cash** instead of an item.
 

@@ -36,7 +36,7 @@
 --    label       (string)  Text shown on the button.
 --    icon        (string)  Lucide icon name. See web/src/App.tsx iconMap for
 --                          the supported list (add new imports there to extend).
---    cost        (number)  SIMs (or cash) spent on success.
+--    cost        (number)  Scripts (or cash) spent on success.
 --    duration    (number)  Effect length in ms. 0 = instant / permanent.
 --    executeTime (number?) Optional progress-bar duration in ms. Falls back
 --                          to Config.ProgressDuration when omitted. Ignored

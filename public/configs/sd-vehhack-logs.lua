@@ -18,7 +18,7 @@
         {hackId}        Internal id (e.g. 'explode_car')
         {hackLabel}     Display label (e.g. 'EXPLODE_VEHICLE')
         {hackCategory}  'sabotage' / 'control' / 'chaos' / 'intel'
-        {hackCost}      Cost in SIMs (or cash)
+        {hackCost}      Cost in Scripts (or cash)
         {plate}         Target vehicle plate
         {vehicleClass}  'car' / 'heli' / 'bike'
         {ownerFirstName}   (owner_scan only) owner's first name
@@ -70,7 +70,7 @@ return {
                     { name = 'Character',  value = '{charName}',      inline = true },
                     { name = 'Hack',       value = '{hackLabel}',     inline = true },
                     { name = 'Category',   value = '{hackCategory}',  inline = true },
-                    { name = 'Cost',       value = '{hackCost} SIMs', inline = true },
+                    { name = 'Cost',       value = '{hackCost} Scripts', inline = true },
                     { name = 'Target',     value = '{plate}',         inline = true },
                     { name = 'Class',      value = '{vehicleClass}',  inline = true },
                 },
@@ -87,7 +87,7 @@ return {
                     { name = 'Plate',         value = '{plate}',             inline = true },
                     { name = 'Scan Result',   value = '{ownerStatus}',       inline = true },
                     { name = 'Resolved Name', value = '{ownerFirstName} {ownerLastName}', inline = true },
-                    { name = 'Cost',          value = '{hackCost} SIMs',     inline = true },
+                    { name = 'Cost',          value = '{hackCost} Scripts',     inline = true },
                 },
             },
 

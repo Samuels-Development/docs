@@ -14,19 +14,19 @@ return {
     -- Enable console debug prints for validation steps
     DebugPrints = false,
 
-    -- The hacking device item that triggers the UI when used (e.g. phone plug).
+    -- The hacking device item that triggers the UI when used.
     -- Set to nil to gate entry to /testhackui only.
-    HackingItem = 'phone_plug',
+    HackingItem = 'vehicle_hacking_device',
 
     -- When true, the hacking item is consumed every use. Keep false for a
-    -- reusable dongle where SIMs are the real consumable.
+    -- reusable dongle where Scripts are the real consumable.
     ConsumeOnUse = false,
 
     -- Stackable item spent per hack. Set to nil to use cash instead.
-    CurrencyItem = 'hacking_sim',
+    CurrencyItem = 'hacking_script',
 
     -- Short text shown in the UI next to the balance
-    CurrencyLabel = 'SIMS',
+    CurrencyLabel = 'SCRIPTS',
 
     -- Camera raycast reach (maximum distance to detect vehicles). Must be
     -- >= the largest per-class limit below, otherwise heli targeting can't
@@ -101,7 +101,7 @@ return {
     --   'custom' -> in-house NUI progress card (distance sub-bar, countdown)
     --   'native' -> bridge StartProgress (ox_lib / QBCore / ESX native bar)
     -- Both paths still validate distance during the progress; if the player
-    -- walks out of range the hack aborts and no SIMs are deducted. Native-
+    -- walks out of range the hack aborts and no Scripts are deducted. Native-
     -- path cancellation relies on ox_lib.cancelProgress when available.
     ProgressBarStyle = 'custom',
 
