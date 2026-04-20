@@ -1,15 +1,15 @@
 # Vehicle Hacking Device <VersionBadge repo="sd-vehhack" fallback="1.0.0" />
 
-**Vehicle Hacking Device** (`sd-vehhack`) is a Watch Dogs–style hacking tool for FiveM. Plug a dongle into your phone, load a hacking SIM, aim at a nearby vehicle, and run one of **27 exploits** — from honking a taxi's horn to arming a speed bomb on a rival's supercar. Clean NUI, server-authoritative validation, and a fully config-driven hack table.
+**Vehicle Hacking Device** (`sd-vehhack`) is a Watch Dogs–style hacking tool for FiveM. Plug a dongle into your phone, load a hacking SIM, aim at a nearby vehicle, and run one of **28 exploits** — from honking a taxi's horn to arming a speed bomb on a rival's supercar. Clean NUI, server-authoritative validation, and a fully config-driven hack table.
 
 ## Key Features
 
-### 27 Hacks Across 4 Categories
+### 28 Hacks Across 4 Categories
 
 | Category | Focus | Example Hacks |
 |---|---|---|
 | **Sabotage** | Permanent / damaging | `POP_TIRES`, `FUEL_LEAK`, `FUEL_PURGE`, `DISABLE_ENGINE`, `DISABLE_ROTOR`, `SPEED_BOMB` |
-| **Control** | Hijack inputs / movement | `STEER_LEFT/RIGHT`, `LOCK_STEERING`, `LOCK_DOORS`, `DEPLOY_BRAKES`, `DRIFT_MODE`, `SPEED_LIMITER`, `PULL_UP`, `OPEN_HOOD`, `OPEN_DOORS` |
+| **Control** | Hijack inputs / movement | `STEER_LEFT/RIGHT`, `LOCK_STEERING`, `LOCK_DOORS`, `UNLOCK_DOORS`, `DEPLOY_BRAKES`, `DRIFT_MODE`, `SPEED_LIMITER`, `PULL_UP`, `OPEN_HOOD`, `OPEN_DOORS` |
 | **Chaos** | Loud / destructive | `HONK_HORN`, `TRIGGER_ALARM`, `SMOKE_SCREEN`, `EJECT_OCCUPANT`, `FLASHBANG`, `REVERSE_CAMERA`, `LOCAL_CHAOS`, `EXPLODE_VEHICLE` |
 | **Intel** | Recon | `OWNER_SCAN`, `GPS_PING` |
 
