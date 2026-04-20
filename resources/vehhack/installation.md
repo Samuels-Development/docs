@@ -53,7 +53,7 @@ Register the two required items in your inventory system:
 
 ```lua [ox_inventory]
 ["hacking_script"] = {
-    label = "Script",
+    label = "Hack Script",
     weight = 10,
     stack = true,
     close = true,
@@ -81,13 +81,13 @@ Register the two required items in your inventory system:
 ```
 
 ```lua [qb-core]
-['hacking_script']         = { name = 'hacking_script',         label = 'Script',                 weight = 10,  type = 'item', image = 'simcard.png',                unique = false, useable = false, shouldClose = true, combinable = nil, description = 'One-shot exploit script loaded onto your hacking device. Burned on execution.' },
+['hacking_script']         = { name = 'hacking_script',         label = 'Hack Script',            weight = 10,  type = 'item', image = 'simcard.png',                unique = false, useable = false, shouldClose = true, combinable = nil, description = 'One-shot exploit script loaded onto your hacking device. Burned on execution.' },
 ['vehicle_hacking_device'] = { name = 'vehicle_hacking_device', label = 'Vehicle Hacking Device', weight = 500, type = 'item', image = 'vehicle_hacking_device.png', unique = false, useable = true,  shouldClose = true, combinable = nil, description = 'Use Scripts to execute hacks on marked vehicles. Plug it in, aim, exploit.' },
 ```
 
 ```sql [ESX]
 INSERT INTO items (name, label, weight, rare, can_remove) VALUES
-('hacking_script',         'Script',                 10,  0, 1),
+('hacking_script',         'Hack Script',            10,  0, 1),
 ('vehicle_hacking_device', 'Vehicle Hacking Device', 500, 0, 1);
 ```
 
