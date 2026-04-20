@@ -54,6 +54,22 @@ Highlights = {
 }
 ```
 
+### Progress Highlights
+
+Which highlights keep rendering on the locked vehicle **while the hack's progress bar is active**. Only applies when `UseProgressBar = true`.
+
+```lua
+ProgressHighlights = {
+    outline  = true,
+    brackets = false,
+    arrow    = false,
+}
+```
+
+::: tip
+A key is only honoured when the matching `Highlights.<key>` above is also `true` — you can't re-enable a highlight here that's globally disabled. Setting everything to `false` reproduces the old behaviour where all visuals drop the moment the progress bar appears.
+:::
+
 ## Hack Execution
 
 | Option | Default | Description |

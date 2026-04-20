@@ -69,6 +69,18 @@ return {
         arrow    = false,
     },
 
+    -- Which highlights keep rendering on the locked vehicle while the hack's
+    -- progress bar is active. Only applies when UseProgressBar = true. A key
+    -- is only honoured when the matching Highlights.<key> above is also true
+    -- -- you can't enable a highlight here that's globally disabled. Set all
+    -- to false to preserve the pre-existing behaviour (all visuals drop the
+    -- moment the progress bar appears).
+    ProgressHighlights = {
+        outline  = true,
+        brackets = false,
+        arrow    = false,
+    },
+
     -- Cooldowns (server-authoritative). Set either to 0 to disable.
     -- HackCooldown    -> per-user, seconds a player must wait after any hack.
     -- VehicleCooldown -> per-plate, seconds a specific licence plate is
