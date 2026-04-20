@@ -33,45 +33,35 @@
 
 return {
     logs = {
-        -- ============================================
-        -- SERVICE
-        -- ============================================
-        -- 'discord' | 'fivemanage' | 'fivemerr' | 'loki' | 'grafana' | 'none'
+        -- Active logging backend. One of:
+        -- 'discord' | 'fivemanage' | 'fivemerr' | 'loki' | 'grafana' | 'none'.
         service = 'none',
 
         screenshots = false,
 
-        -- ============================================
-        -- DISCORD
-        -- ============================================
+        -- Discord webhook configuration (used when service = 'discord').
         discord = {
             webhook       = '',
             botName       = 'SD-Vehhack',
             botAvatar     = '',
             footerText    = 'SD-Vehhack Logging',
             footerIcon    = '',
-            flushInterval = 5,      -- seconds between batched Discord posts
+            flushInterval = 5,      -- Seconds between batched Discord posts
             tagEveryone   = false,  -- @everyone on high-impact hacks
         },
 
-        -- ============================================
-        -- FIVEMANAGE / FIVEMERR / LOKI / GRAFANA
-        -- ============================================
+        -- Alternative logging backends -- Fivemanage, Fivemerr, Loki, Grafana.
         fivemanage = { dataset = 'sd-vehhack' },
         loki       = { endpoint = '', user = '', password = '', tenant = '', server = '' },
         grafana    = { endpoint = '', apiKey   = '',            tenant = '', server = '' },
 
-        -- ============================================
-        -- EVENT TEMPLATES
-        -- ============================================
-        -- Set `enabled = false` to stop logging a specific event.
-        -- Edit titles, descriptions, and fields to taste.
-
+        -- Per-event templates. Set `enabled = false` to stop logging a specific
+        -- event. Edit titles, descriptions, and fields to taste.
         events = {
 
             hack_executed = {
                 enabled = true,
-                title = '🔧 Hack Executed',
+                title = 'Hack Executed',
                 description = 'A vehicle hack was successfully executed.',
                 color = 16776960, -- Yellow
                 fields = {
@@ -86,24 +76,9 @@ return {
                 },
             },
 
-            hack_executed_high_impact = {
-                enabled = true,
-                title = '⚠️ High-Impact Hack',
-                description = 'A destructive or long-duration hack was executed.',
-                color = 15548997, -- Red
-                fields = {
-                    { name = 'Player',     value = '{player}',        inline = true },
-                    { name = 'Identifier', value = '{identifier}',    inline = true },
-                    { name = 'Character',  value = '{charName}',      inline = true },
-                    { name = 'Hack',       value = '{hackLabel}',     inline = true },
-                    { name = 'Cost',       value = '{hackCost} SIMs', inline = true },
-                    { name = 'Target',     value = '{plate}',         inline = true },
-                },
-            },
-
             owner_scan_performed = {
                 enabled = true,
-                title = '🔍 Owner Scan',
+                title = 'Owner Scan',
                 description = 'A player scanned a vehicle for its registered owner.',
                 color = 5763719, -- Green
                 fields = {

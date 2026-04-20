@@ -317,6 +317,7 @@ const globalSidebar = [
             collapsed: true,
             items: [
               { text: 'config.lua', link: '/resources/vehhack/full-config' },
+              { text: 'hacks.lua', link: '/resources/vehhack/full-config-hacks' },
               { text: 'logs.lua', link: '/resources/vehhack/full-config-logs' },
             ],
           },
