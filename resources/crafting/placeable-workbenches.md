@@ -109,7 +109,49 @@ Add a `'medical'` table to `configs/recipes.lua`:
 
 ### Step 3: Register the Inventory Item
 
-Add the item to your inventory system (see the [installation guide](/resources/crafting/installation#step-2-add-workbench-items-to-your-inventory)).
+Add the item to your inventory system following the same format shown in the [installation guide](/resources/crafting/installation#step-2-add-workbench-items-to-your-inventory).
+
+::: tip ox_inventory export naming
+For `ox_inventory`, the `server.export` value must follow the pattern:
+
+```
+sd-crafting.use<ItemKey>
+```
+
+The item key is used **verbatim** with **only the first letter capitalized** — underscores and remaining casing are preserved. The resource auto-generates one export per entry in `PlaceableWorkbenches`, so as long as the export name matches the item key, no extra code is required on your side.
+
+| Item key (in `PlaceableWorkbenches`) | `server.export` value |
+|---|---|
+| `workbench` | `sd-crafting.useWorkbench` |
+| `advanced_workbench` | `sd-crafting.useAdvanced_workbench` |
+| `medical_workbench` | `sd-crafting.useMedical_workbench` |
+| `workbenchtest1` | `sd-crafting.useWorkbenchtest1` |
+:::
+
+#### Example (ox_inventory)
+
+For a new workbench keyed as `workbenchtest1`, add the following to your `ox_inventory/data/items.lua`:
+
+```lua
+['workbenchtest1'] = {
+    label = 'Workbench Test 1',
+    weight = 10000,
+    stack = false,
+    close = true,
+    description = 'A portable workbench for testing.',
+    consume = 0,
+    client = {
+        image = 'workbenchtest1.png',
+    },
+    server = {
+        export = 'sd-crafting.useWorkbenchtest1',
+    },
+},
+```
+
+::: warning
+The item key in `ox_inventory` items, the key in `PlaceableWorkbenches`, and the suffix in `sd-crafting.use<...>` must all reference the same identifier. A mismatch (e.g. registering `Workbenchtest1` in items but `workbenchtest1` in `PlaceableWorkbenches`) will cause the export to be missing at runtime and the item will silently do nothing when used.
+:::
 
 ### Step 4: (Optional) Add Leveling Config
 
