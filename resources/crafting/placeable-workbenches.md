@@ -149,10 +149,6 @@ For a new workbench keyed as `workbenchtest1`, add the following to your `ox_inv
 },
 ```
 
-::: warning
-The item key in `ox_inventory` items, the key in `PlaceableWorkbenches`, and the suffix in `sd-crafting.use<...>` must all reference the same identifier. A mismatch (e.g. registering `Workbenchtest1` in items but `workbenchtest1` in `PlaceableWorkbenches`) will cause the export to be missing at runtime and the item will silently do nothing when used.
-:::
-
 ### Step 4: (Optional) Add Leveling Config
 
 If you want custom leveling for the new type, add it to `Leveling.workbenchTypes`:
