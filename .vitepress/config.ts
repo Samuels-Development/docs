@@ -39,6 +39,14 @@ const globalSidebar = [
             ],
           },
           {
+            text: 'Exports',
+            collapsed: true,
+            items: [
+              { text: 'Client Exports', link: '/resources/shops/exports-client' },
+              { text: 'Server Exports', link: '/resources/shops/exports-server' },
+            ],
+          },
+          {
             text: 'Hooks',
             collapsed: true,
             items: [
@@ -71,6 +79,14 @@ const globalSidebar = [
               { text: 'recipes.lua', link: '/resources/crafting/full-config-recipes' },
               { text: 'techtrees.lua', link: '/resources/crafting/full-config-techtrees' },
               { text: 'logs.lua', link: '/resources/crafting/full-config-logs' },
+            ],
+          },
+          {
+            text: 'Hooks',
+            collapsed: true,
+            items: [
+              { text: 'Client Hooks', link: '/resources/crafting/hooks-client' },
+              { text: 'Server Hooks', link: '/resources/crafting/hooks-server' },
             ],
           },
           { text: 'Blueprint Image Creator', link: '/resources/crafting/blueprint-creator' },
@@ -195,6 +211,22 @@ const globalSidebar = [
         ],
       },
       {
+        text: 'Oil Rig Heist',
+        collapsed: true,
+        items: [
+          { text: 'Overview', link: '/resources/oilrig/' },
+          { text: 'Installation', link: '/resources/oilrig/installation' },
+          { text: 'Configuration', link: '/resources/oilrig/configuration' },
+          {
+            text: 'Full Config Files',
+            collapsed: true,
+            items: [
+              { text: 'config.lua', link: '/resources/oilrig/full-config' },
+            ],
+          },
+        ],
+      },
+      {
         text: 'Traphouse Robbery',
         collapsed: true,
         items: [
@@ -216,6 +248,45 @@ const globalSidebar = [
   {
     text: 'Crime & Missions',
     items: [
+      {
+        text: 'Petty Crimes',
+        collapsed: true,
+        items: [
+          { text: 'Overview', link: '/resources/pettycrime/' },
+          { text: 'Installation', link: '/resources/pettycrime/installation' },
+          { text: 'Configuration', link: '/resources/pettycrime/configuration' },
+          { text: 'Minigames', link: '/resources/pettycrime/minigames' },
+          {
+            text: 'Full Config Files',
+            collapsed: true,
+            items: [
+              { text: 'config.lua', link: '/resources/pettycrime/full-config' },
+              { text: 'mailbox.lua', link: '/resources/pettycrime/full-config-mailbox' },
+              { text: 'payphone.lua', link: '/resources/pettycrime/full-config-payphone' },
+              { text: 'parkingmeter.lua', link: '/resources/pettycrime/full-config-parkingmeter' },
+              { text: 'newsrack.lua', link: '/resources/pettycrime/full-config-newsrack' },
+              { text: 'vending.lua', link: '/resources/pettycrime/full-config-vending' },
+              { text: 'signrob.lua', link: '/resources/pettycrime/full-config-signrob' },
+              { text: 'pickpocket.lua', link: '/resources/pettycrime/full-config-pickpocket' },
+              { text: 'robaped.lua', link: '/resources/pettycrime/full-config-robaped' },
+              { text: 'shoplift.lua', link: '/resources/pettycrime/full-config-shoplift' },
+              { text: 'catalytic.lua', link: '/resources/pettycrime/full-config-catalytic' },
+              { text: 'tiretheft.lua', link: '/resources/pettycrime/full-config-tiretheft' },
+              { text: 'wheelloose.lua', link: '/resources/pettycrime/full-config-wheelloose' },
+              { text: 'tireslash.lua', link: '/resources/pettycrime/full-config-tireslash' },
+              { text: 'brakecut.lua', link: '/resources/pettycrime/full-config-brakecut' },
+              { text: 'fuelsabotage.lua', link: '/resources/pettycrime/full-config-fuelsabotage' },
+              { text: 'brickgas.lua', link: '/resources/pettycrime/full-config-brickgas' },
+              { text: 'smashgrab.lua', link: '/resources/pettycrime/full-config-smashgrab' },
+              { text: 'acstrip.lua', link: '/resources/pettycrime/full-config-acstrip' },
+              { text: 'atmskimmer.lua', link: '/resources/pettycrime/full-config-atmskimmer' },
+              { text: 'parceltheft.lua', link: '/resources/pettycrime/full-config-parceltheft' },
+              { text: 'speedbomb.lua', link: '/resources/pettycrime/full-config-speedbomb' },
+              { text: 'cardoor.lua', link: '/resources/pettycrime/full-config-cardoor' },
+            ],
+          },
+        ],
+      },
       {
         text: 'Horde Mission',
         collapsed: true,
@@ -321,6 +392,37 @@ const globalSidebar = [
               { text: 'logs.lua', link: '/resources/vehhack/full-config-logs' },
             ],
           },
+        ],
+      },
+    ],
+  },
+  {
+    text: 'Phone',
+    items: [
+      {
+        text: 'Phone',
+        collapsed: true,
+        items: [
+          { text: 'Overview', link: '/resources/phone/' },
+          { text: 'Installation', link: '/resources/phone/installation' },
+          { text: 'Configuration', link: '/resources/phone/configuration' },
+          {
+            text: 'Exports',
+            collapsed: true,
+            items: [
+              { text: 'Client Exports', link: '/resources/phone/exports-client' },
+              { text: 'Server Exports', link: '/resources/phone/exports-server' },
+            ],
+          },
+          {
+            text: 'Events',
+            collapsed: true,
+            items: [
+              { text: 'Client Events', link: '/resources/phone/events-client' },
+              { text: 'Server Events', link: '/resources/phone/events-server' },
+            ],
+          },
+          { text: 'lb-phone Compatibility', link: '/resources/phone/lb-phone-compatibility' },
         ],
       },
     ],

@@ -1,6 +1,6 @@
 return {
     -- Item Name Fallbacks
-    -- The script will attempt to retrieve item names from your inventory system (see bridge/server.lua - Inventory.GetItemLabel)
+    -- The script will attempt to retrieve item names from your inventory system (see bridge/server/inventory.lua - Inventory.GetItemLabel)
     -- These fallback names are only used if the inventory system doesn't provide a name/label for the item
     -- If both inventory and fallback fail, the script will convert the spawn name to a readable format (e.g., "twerks_candy" → "Twerks Candy")
     ItemNameFallbacks = {
@@ -94,7 +94,7 @@ return {
     },
 
     -- Item Description Fallbacks
-    -- The script will attempt to retrieve item descriptions from your inventory system (see bridge/server.lua - Inventory.GetItemDescription)
+    -- The script will attempt to retrieve item descriptions from your inventory system (see bridge/server/inventory.lua - Inventory.GetItemDescription)
     -- These fallback descriptions are only used if the inventory system doesn't provide a description for the item
     -- This ensures all items have user-friendly descriptions even if your inventory doesn't define them
     ItemDescriptionFallbacks = {

@@ -2,10 +2,12 @@ return { -- Shop locations and configuration
     -- You can add an "illegal" parameter to any shop, and that shop will then exclusively use dirty money. See the bottom of this list for an example of an illegal shop.
     -- You can add "itemOverride = true" to any shop to use the shop's specific items instead of BaseProducts, even when BaseProducts is enabled.
     -- Per-shop UI toggles (all default to false): disableTransactionHistory, disableLoyalty, disablePresets, disableCoupons (see police armory at the bottom as an example)
-    -- You can set a blip sprite to 0 to disable the blip entirely. Blips use the ped coords as their position.
+    -- Set blip.enabled = false to completely skip blip creation for a shop. Blips use the ped coords as their position.
     -- ROTATING PED LOCATIONS: Use ped.locations (array) instead of ped.coords/heading to randomize the ped's
     --   spawn point each server start. See the illegal_dealer_1 example at the bottom. Format:
     --   locations = { { coords = vector3(...), heading = 0.0 }, { coords = vector3(...), heading = 90.0 } }
+    --   Add ped.spawnAll = true to spawn a ped (and a blip) at EVERY location at once,
+    --   instead of one random location. Leave it false/unset to keep the random-one behaviour.
     --
     -- OPENING HOURS: Set default opening hours for any shop (owned shops set their own time).
     --   openingHours = { enabled = true, open = '08:00', close = '22:00' }
@@ -17,6 +19,32 @@ return { -- Shop locations and configuration
     -- targetDistance: The distance from which players can interact with the shop ped (default: 3.0)
     -- targetLabel: Custom label for the ped interaction (optional, defaults to locale 'target.open_shop')
     -- targetIcon: Custom icon for the ped interaction (optional, defaults to 'fas fa-shopping-basket')
+    --
+    -- STANDALONE TARGET ZONE (target):
+    -- Open a shop from a fixed set of coordinates WITHOUT spawning a ped and WITHOUT
+    -- using the register system. Creates an ox_target zone at the given coords. A shop
+    -- can use this on its own, or alongside a ped/registers. Honours opening hours and
+    -- all access restrictions (job/gang/ban) just like the ped does.
+    --   target = {
+    --       enabled = true,                    -- omit or set false to disable (default: enabled when block present)
+    --       coords  = vec3(25.7, -1347.3, 29.5),
+    --       type    = 'box',                   -- 'box' (default) or 'sphere'
+    --       -- box options:
+    --       size     = vec3(1.5, 1.5, 2.0),    -- box dimensions (default 1.5 x 1.5 x 2.0)
+    --       rotation = 0.0,                    -- box heading (default 0.0)
+    --       -- sphere option (when type = 'sphere'):
+    --       radius   = 1.0,                    -- sphere radius (default 1.0)
+    --       -- shared (all optional):
+    --       distance = 2.5,                    -- interaction distance (default 2.5)
+    --       label    = 'Open Shop',            -- defaults to locale 'target.open_shop'
+    --       icon     = 'fas fa-shopping-basket',
+    --       debug    = false,                  -- draw the zone outline for placement
+    --   }
+    -- NOTE: a target-only shop still shows a blip if blip.enabled = true — the blip is
+    --   positioned at target.coords when no ped exists.
+    --
+    -- OPEN A SHOP FROM ANOTHER RESOURCE (export):
+    --   exports['sd-shops']:OpenShop('247store_1')   -- client-side; runs all access checks
     --
     -- SHOP-LEVEL JOB RESTRICTIONS (jobRestrictions):
     -- Restrict who can ACCESS the shop. Player needs ONE of the jobs to enter (OR logic).
@@ -153,7 +181,8 @@ return { -- Shop locations and configuration
         targetDistance = 3.0, -- Distance from which players can interact with the shop ped
         openingHours = { enabled = true, open = '08:00', close = '22:00' }, -- Set default opening hours (owner can override for owned shops)
         blip = {
-            sprite = 52, -- set to 0 to disable the blip
+            enabled = true,
+            sprite = 52,
             color = 2,
             scale = 0.7,
             display = 4
@@ -172,6 +201,19 @@ return { -- Shop locations and configuration
                 vector3(24.95, -1344.95, 29.61)
             }
         },
+        --[[ -- STANDALONE TARGET ZONE EXAMPLE: open this shop from coordinates with no ped/register.
+        target = {
+            enabled = true,
+            coords  = vec3(25.7, -1347.3, 29.5),
+            type    = 'box',                -- 'box' (default) or 'sphere'
+            size    = vec3(1.5, 1.5, 2.0),
+            rotation = 0.0,
+            distance = 2.5,
+            label = 'Open Shop', 
+            icon = 'fas fa-shopping-basket', 
+            debug = true,
+        },
+        ]]
         items = { -- This item table is used if: Config.BaseProducts.enabled is false, OR itemOverride = true for this shop
             -- Food & Drinks
             { item = 'water', price = 5 },
@@ -224,6 +266,7 @@ return { -- Shop locations and configuration
         itemOverride = false, -- Set to true to use this shop's items instead of BaseProducts (if BaseProducts is enabled to begin with)
         targetDistance = 3.0, -- Distance from which players can interact with the shop ped
         blip = {
+            enabled = true,
             sprite = 52,
             color = 2,
             scale = 0.7,
@@ -272,6 +315,7 @@ return { -- Shop locations and configuration
         itemOverride = false, -- Set to true to use this shop's items instead of BaseProducts (if BaseProducts is enabled to begin with)
         targetDistance = 3.0, -- Distance from which players can interact with the shop ped
         blip = {
+            enabled = true,
             sprite = 52,
             color = 2,
             scale = 0.7,
@@ -320,6 +364,7 @@ return { -- Shop locations and configuration
         itemOverride = false, -- Set to true to use this shop's items instead of BaseProducts (if BaseProducts is enabled to begin with)
         targetDistance = 3.0, -- Distance from which players can interact with the shop ped
         blip = {
+            enabled = true,
             sprite = 52,
             color = 2,
             scale = 0.7,
@@ -368,6 +413,7 @@ return { -- Shop locations and configuration
         itemOverride = false, -- Set to true to use this shop's items instead of BaseProducts (if BaseProducts is enabled to begin with)
         targetDistance = 3.0, -- Distance from which players can interact with the shop ped
         blip = {
+            enabled = true,
             sprite = 52,
             color = 2,
             scale = 0.7,
@@ -416,6 +462,7 @@ return { -- Shop locations and configuration
         itemOverride = false, -- Set to true to use this shop's items instead of BaseProducts (if BaseProducts is enabled to begin with)
         targetDistance = 3.0, -- Distance from which players can interact with the shop ped
         blip = {
+            enabled = true,
             sprite = 52,
             color = 2,
             scale = 0.7,
@@ -464,6 +511,7 @@ return { -- Shop locations and configuration
         itemOverride = false, -- Set to true to use this shop's items instead of BaseProducts (if BaseProducts is enabled to begin with)
         targetDistance = 3.0, -- Distance from which players can interact with the shop ped
         blip = {
+            enabled = true,
             sprite = 52,
             color = 2,
             scale = 0.7,
@@ -512,6 +560,7 @@ return { -- Shop locations and configuration
         itemOverride = false, -- Set to true to use this shop's items instead of BaseProducts (if BaseProducts is enabled to begin with)
         targetDistance = 3.0, -- Distance from which players can interact with the shop ped
         blip = {
+            enabled = true,
             sprite = 52,
             color = 2,
             scale = 0.7,
@@ -560,6 +609,7 @@ return { -- Shop locations and configuration
         itemOverride = false, -- Set to true to use this shop's items instead of BaseProducts (if BaseProducts is enabled to begin with)
         targetDistance = 3.0, -- Distance from which players can interact with the shop ped
         blip = {
+            enabled = true,
             sprite = 52,
             color = 2,
             scale = 0.7,
@@ -608,6 +658,7 @@ return { -- Shop locations and configuration
         itemOverride = false, -- Set to true to use this shop's items instead of BaseProducts (if BaseProducts is enabled to begin with)
         targetDistance = 3.0, -- Distance from which players can interact with the shop ped
         blip = {
+            enabled = true,
             sprite = 52,
             color = 2,
             scale = 0.7,
@@ -656,6 +707,7 @@ return { -- Shop locations and configuration
         itemOverride = false, -- Set to true to use this shop's items instead of BaseProducts (if BaseProducts is enabled to begin with)
         targetDistance = 3.0, -- Distance from which players can interact with the shop ped
         blip = {
+            enabled = true,
             sprite = 93,
             color = 69,
             scale = 0.7,
@@ -695,6 +747,7 @@ return { -- Shop locations and configuration
         itemOverride = false, -- Set to true to use this shop's items instead of BaseProducts (if BaseProducts is enabled to begin with)
         targetDistance = 3.0, -- Distance from which players can interact with the shop ped
         blip = {
+            enabled = true,
             sprite = 93,
             color = 69,
             scale = 0.7,
@@ -734,6 +787,7 @@ return { -- Shop locations and configuration
         itemOverride = false, -- Set to true to use this shop's items instead of BaseProducts (if BaseProducts is enabled to begin with)
         targetDistance = 3.0, -- Distance from which players can interact with the shop ped
         blip = {
+            enabled = true,
             sprite = 93,
             color = 69,
             scale = 0.7,
@@ -773,6 +827,7 @@ return { -- Shop locations and configuration
         itemOverride = false, -- Set to true to use this shop's items instead of BaseProducts (if BaseProducts is enabled to begin with)
         targetDistance = 3.0, -- Distance from which players can interact with the shop ped
         blip = {
+            enabled = true,
             sprite = 93,
             color = 69,
             scale = 0.7,
@@ -812,6 +867,7 @@ return { -- Shop locations and configuration
         itemOverride = false, -- Set to true to use this shop's items instead of BaseProducts (if BaseProducts is enabled to begin with)
         targetDistance = 3.0, -- Distance from which players can interact with the shop ped
         blip = {
+            enabled = true,
             sprite = 93,
             color = 69,
             scale = 0.7,
@@ -848,9 +904,10 @@ return { -- Shop locations and configuration
         name = 'Hardware Store',
         subtitle = 'Open 24/7 - Fast Service',
         shopType = 'hardware',
-        itemOverride = false, -- Set to true to use this shop's items instead of BaseProducts (if BaseProducts is enabled to begin with)
+        itemOverride = true, -- Set to true to use this shop's items instead of BaseProducts (if BaseProducts is enabled to begin with)
         targetDistance = 3.0, -- Distance from which players can interact with the shop ped
         blip = {
+            enabled = true,
             sprite = 402,
             color = 47,
             scale = 0.7,
@@ -889,6 +946,7 @@ return { -- Shop locations and configuration
         itemOverride = false, -- Set to true to use this shop's items instead of BaseProducts (if BaseProducts is enabled to begin with)
         targetDistance = 3.0, -- Distance from which players can interact with the shop ped
         blip = {
+            enabled = true,
             sprite = 402,
             color = 47,
             scale = 0.7,
@@ -928,6 +986,7 @@ return { -- Shop locations and configuration
         itemOverride = false, -- Set to true to use this shop's items instead of BaseProducts (if BaseProducts is enabled to begin with)
         targetDistance = 3.0, -- Distance from which players can interact with the shop ped
         blip = {
+            enabled = true,
             sprite = 110,
             color = 1,
             scale = 0.7,
@@ -973,6 +1032,7 @@ return { -- Shop locations and configuration
         itemOverride = false, -- Set to true to use this shop's items instead of BaseProducts (if BaseProducts is enabled to begin with)
         targetDistance = 3.0, -- Distance from which players can interact with the shop ped
         blip = {
+            enabled = true,
             sprite = 110,
             color = 1,
             scale = 0.7,
@@ -1018,6 +1078,7 @@ return { -- Shop locations and configuration
         itemOverride = false, -- Set to true to use this shop's items instead of BaseProducts (if BaseProducts is enabled to begin with)
         targetDistance = 3.0, -- Distance from which players can interact with the shop ped
         blip = {
+            enabled = true,
             sprite = 110,
             color = 1,
             scale = 0.7,
@@ -1063,6 +1124,7 @@ return { -- Shop locations and configuration
         itemOverride = false, -- Set to true to use this shop's items instead of BaseProducts (if BaseProducts is enabled to begin with)
         targetDistance = 3.0, -- Distance from which players can interact with the shop ped
         blip = {
+            enabled = true,
             sprite = 110,
             color = 1,
             scale = 0.7,
@@ -1108,6 +1170,7 @@ return { -- Shop locations and configuration
         itemOverride = false, -- Set to true to use this shop's items instead of BaseProducts (if BaseProducts is enabled to begin with)
         targetDistance = 3.0, -- Distance from which players can interact with the shop ped
         blip = {
+            enabled = true,
             sprite = 110,
             color = 1,
             scale = 0.7,
@@ -1153,6 +1216,7 @@ return { -- Shop locations and configuration
         itemOverride = false, -- Set to true to use this shop's items instead of BaseProducts (if BaseProducts is enabled to begin with)
         targetDistance = 3.0, -- Distance from which players can interact with the shop ped
         blip = {
+            enabled = true,
             sprite = 110,
             color = 1,
             scale = 0.7,
@@ -1198,6 +1262,7 @@ return { -- Shop locations and configuration
         itemOverride = false, -- Set to true to use this shop's items instead of BaseProducts (if BaseProducts is enabled to begin with)
         targetDistance = 3.0, -- Distance from which players can interact with the shop ped
         blip = {
+            enabled = true,
             sprite = 110,
             color = 1,
             scale = 0.7,
@@ -1243,6 +1308,7 @@ return { -- Shop locations and configuration
         itemOverride = false, -- Set to true to use this shop's items instead of BaseProducts (if BaseProducts is enabled to begin with)
         targetDistance = 3.0, -- Distance from which players can interact with the shop ped
         blip = {
+            enabled = true,
             sprite = 110,
             color = 1,
             scale = 0.7,
@@ -1288,6 +1354,7 @@ return { -- Shop locations and configuration
         itemOverride = false, -- Set to true to use this shop's items instead of BaseProducts (if BaseProducts is enabled to begin with)
         targetDistance = 3.0, -- Distance from which players can interact with the shop ped
         blip = {
+            enabled = true,
             sprite = 110,
             color = 1,
             scale = 0.7,
@@ -1340,6 +1407,7 @@ return { -- Shop locations and configuration
         itemOverride = false, -- Set to true to use this shop's items instead of BaseProducts (if BaseProducts is enabled to begin with)
         targetDistance = 3.0, -- Distance from which players can interact with the shop ped
         blip = {
+            enabled = true,
             sprite = 267,  -- Pawn shop blip
             color = 46,    -- Amber color
             scale = 0.7,
@@ -1386,6 +1454,7 @@ return { -- Shop locations and configuration
         disableLoyalty = true,
         disableCoupons = true,
         blip = {
+            enabled = false,
             sprite = 0,
             color = 0,
             scale = 0.0,
@@ -1451,6 +1520,7 @@ return { -- Shop locations and configuration
         illegal = true, -- THIS FLAG FORCES BLACK_MONEY ONLY
         gangRestrictions = { { name = 'ballas', minGrade = 2 }, 'vagos' }, -- Ballas grade 2+ and any Vagos can access
         blip = {
+            enabled = false,
             sprite = 0,
             color = 0,
             scale = 0,
@@ -1459,7 +1529,9 @@ return { -- Shop locations and configuration
         ped = {
             enabled = true,
             model = 'g_m_m_chicold_01',
-            -- Multiple locations: ped randomly spawns at one of these each server start
+            -- Multiple locations: by default the ped randomly spawns at ONE of these each
+            -- server start. Set spawnAll = true to instead spawn a ped (and a blip) at EVERY location.
+            spawnAll = false,
             locations = {
                 { coords = vector3(839.48, 2176.82, 52.29), heading = 154.0 },
                 { coords = vector3(118.34, -3025.31, 6.02), heading = 88.23 },
@@ -1498,6 +1570,7 @@ return { -- Shop locations and configuration
         itemOverride = true,                -- Item shops should always use their own items
         targetDistance = 3.0,
         blip = {
+            enabled = true,
             sprite = 605,
             color = 46,
             scale = 0.7,

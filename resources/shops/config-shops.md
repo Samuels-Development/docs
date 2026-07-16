@@ -132,15 +132,18 @@ ped = {
 | `coords` | `vector3` | Yes* | Ped spawn position |
 | `heading` | `number` | Yes* | Ped facing direction |
 | `scenario` | `string` | No | Ped animation scenario (e.g., `'WORLD_HUMAN_STAND_MOBILE'`, `'WORLD_HUMAN_CLIPBOARD'`) |
+| `locations` | `table` | No | Array of `{ coords, heading }` entries — use instead of fixed `coords`/`heading` (see [Rotating Ped Locations](#rotating-ped-locations)) |
+| `spawnAll` | `boolean` | No | With `locations`: when `true`, spawn a ped at **every** location instead of one random one (default `false`) |
 
 ### Rotating Ped Locations
 
-Instead of fixed `coords`/`heading`, use the `locations` array to randomize the ped's spawn point each server start:
+Instead of fixed `coords`/`heading`, use the `locations` array to control where the ped spawns:
 
 ```lua
 ped = {
     enabled = true,
     model = 'g_m_m_chicold_01',
+    spawnAll = false, -- false = one random location; true = a ped at every location
     locations = {
         { coords = vector3(839.48, 2176.82, 52.29), heading = 154.0 },
         { coords = vector3(118.34, -3025.31, 6.02), heading = 88.23 },
@@ -150,7 +153,14 @@ ped = {
 }
 ```
 
-One location is randomly selected on server start and synced to all clients via GlobalState.
+The `spawnAll` flag chooses between two modes:
+
+- **`spawnAll = false`** *(default)* — one location is randomly selected on server start and synced to all clients via GlobalState. The ped (and its blip) appear at that single spot, rotating each restart.
+- **`spawnAll = true`** — a ped is spawned at **every** location in the array at once, each with its own map blip. Useful for staffing the same shop at multiple spots simultaneously.
+
+::: info
+`spawnAll` only applies when `locations` is set. Shops using a fixed `coords`/`heading` are unaffected.
+:::
 
 ## Register Configuration
 
@@ -368,6 +378,7 @@ Pawn shops **buy items from players**. The `price` is what the player **receives
     ped = {
         enabled = true,
         model = 'g_m_m_chicold_01',
+        spawnAll = false, -- set true to spawn a dealer at every location below
         locations = {
             { coords = vector3(839.48, 2176.82, 52.29), heading = 154.0 },
             { coords = vector3(118.34, -3025.31, 6.02), heading = 88.23 },

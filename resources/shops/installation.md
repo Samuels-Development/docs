@@ -12,6 +12,7 @@ Follow these steps to install Shops Pro on your FiveM server.
 | Inventory | Status |
 |---|---|
 | `ox_inventory` | Supported |
+| `one_inventory` | Supported |
 | `tgiann-inventory` | Supported |
 | `jaksam_inventory` | Supported |
 | `qs-inventory` | Supported |

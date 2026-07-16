@@ -49,6 +49,12 @@ A secured warehouse heist with thermite breaching, interior exploration, laptop 
 ### [Vehicle Hacking Device](/resources/vehhack/)
 A Watch Dogs-style vehicle hacking tool with 16 configurable hacks across sabotage, control, chaos, and intel categories. Targets cars, bikes, and helicopters, with secure server-side validation and Discord / Fivemanage / Loki logging.
 
+### [Petty Crimes](/resources/pettycrime/)
+A modular low-level crime suite with 20 activities — mailbox break-ins, pickpocketing, armed robbery, shoplifting, catalytic-converter theft, tyre/brake/fuel vehicle sabotage, ATM skimming, porch parcel theft, and more. Includes a built-in 21-minigame library, per-crime XP and levels, a black-market shop, police alerts, and a full in-game admin panel.
+
+### [Phone](/resources/phone/)
+An iOS-themed smartphone with 45+ server-backed apps: messages, mail, calls over pma-voice, social apps on a real accounts engine, a live game-view camera, online multiplayer games, ride-hailing, and a newsroom. Ships an extensive export and event surface for developers, plus a drop-in lb-phone compatibility layer with data migration.
+
 ---
 
 ## Common Dependencies

@@ -1,0 +1,11 @@
+﻿# parceltheft.lua
+
+The complete default `parceltheft.lua` for **Petty Crimes** (sd-pettycrime). Use this as a reference or a starting point for your own configuration.
+
+::: tip
+This is the full, unedited config file. For a detailed explanation of each option, see the [Configuration](./configuration) page.
+:::
+
+<a href="/configs/sd-pettycrime-parceltheft.lua" download class="download-link">Download parceltheft.lua</a>
+
+<<< @/public/configs/sd-pettycrime-parceltheft.lua{lua}
