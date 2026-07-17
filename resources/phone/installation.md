@@ -115,7 +115,7 @@ Third-party keys live in `configs/server/apikeys.lua`, which is deliberately exc
 
 <div align="center" style="margin: 2.5rem 0; padding: 2rem 1rem; border: 1px solid var(--vp-c-divider); border-radius: 14px;">
 
-<a href="https://refer.fivemanage.com/samuel" target="_blank" rel="noreferrer"><img src="/fivemanage.png" alt="Fivemanage" width="220" style="border-radius: 12px;" /></a>
+<a href="https://refer.fivemanage.com/samuel" target="_blank" rel="noreferrer"><img src="/fivemanage-banner.png" alt="Fivemanage" width="360" style="border-radius: 10px;" /></a>
 
 <h3 style="border: 0; margin: 0.75rem 0 0.5rem;">Media hosting for the phone</h3>
 
