@@ -17,6 +17,10 @@ Apps written for lb-phone are fully compatible. The registration exports, the in
 
 Call `addCustomApp` from your resource's client script once sd-phone is running.
 
+::: warning Start your resource after sd-phone
+Ensure your app resource **after** sd-phone in `server.cfg` (place its `ensure` line below sd-phone's). The `addCustomApp` export only exists once sd-phone has started, so a resource that starts before the phone can fail to register until it is restarted. Starting after sd-phone avoids this entirely.
+:::
+
 **Syntax**
 ```lua
 local ok, err = exports['sd-phone']:addCustomApp(app)
@@ -79,10 +83,6 @@ Re-registering the same identifier from the same resource replaces it, so callin
 ```lua
 exports['sd-phone']:removeCustomApp('my-app')
 ```
-
-::: warning Start your resource after sd-phone
-Ensure your app resource **after** sd-phone in `server.cfg` (place its `ensure` line below sd-phone's). The `addCustomApp` export only exists once sd-phone has started, so a resource that starts before the phone can fail to register until it is restarted. Starting after sd-phone avoids this entirely.
-:::
 
 ## The app webpage
 
