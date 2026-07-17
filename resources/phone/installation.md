@@ -111,7 +111,11 @@ Third-party keys live in `configs/server/apikeys.lua`, which is deliberately exc
 | Key | Purpose |
 |---|---|
 | `Giphy` | The Messages GIF picker. Free key from developers.giphy.com; left blank the picker shows a setup hint |
-| `FivemanageMedia` | Photo, video, and voice-note uploads via fivemanage.com. Left blank, the uploader falls back to the legacy `sd_fivemanage_key` convar |
+| `FivemanageMedia` | **Required** for the Camera, Photos and Voice Memos apps. Photo, video, and voice-note uploads go through fivemanage.com. Use a Fivemanage token of type **Media**. Left blank, the uploader falls back to the legacy `sd_fivemanage_key` convar; with neither set, capture UI still opens but nothing uploads or saves |
+
+::: warning The media apps need a Fivemanage key
+Camera photos and videos, Photos uploads, and Voice Memos all store their files on Fivemanage. Without a `FivemanageMedia` token, those apps open but captures never upload or save. Create a free token in the [Fivemanage](https://refer.fivemanage.com/samuel) dashboard: open the **Tokens** tab, click Create Token, and pick token type **Media**. The rest of the phone works fine without it.
+:::
 
 <div align="center" style="margin: 2.5rem 0; padding: 2rem 1rem; border: 1px solid var(--vp-c-divider); border-radius: 14px;">
 
@@ -119,7 +123,7 @@ Third-party keys live in `configs/server/apikeys.lua`, which is deliberately exc
 
 <h3 style="border: 0; margin: 0.75rem 0 0.5rem;">Media hosting for the phone</h3>
 
-Photos, camera clips and voice memos upload to **[Fivemanage](https://refer.fivemanage.com/samuel)** and come back as fast CDN URLs, so you never run your own media server. Create a project, grab the token, and drop it into `FivemanageMedia`.
+Photos, camera clips and voice memos upload to **[Fivemanage](https://refer.fivemanage.com/samuel)** and come back as fast CDN URLs, so you never run your own media server. Required for those apps: in the dashboard, open the **Tokens** tab, create a token of type **Media**, and drop it into `FivemanageMedia`.
 
 <a href="https://refer.fivemanage.com/samuel" target="_blank" rel="noreferrer"><img src="https://img.shields.io/badge/Get%20started%20with%20Fivemanage-%E2%86%92-0D0D0D?style=for-the-badge" alt="Get started with Fivemanage" /></a>
 
