@@ -113,6 +113,18 @@ Third-party keys live in `configs/server/apikeys.lua`, which is deliberately exc
 | `Giphy` | The Messages GIF picker. Free key from developers.giphy.com; left blank the picker shows a setup hint |
 | `FivemanageMedia` | Photo, video, and voice-note uploads via fivemanage.com. Left blank, the uploader falls back to the legacy `sd_fivemanage_key` convar |
 
+<div align="center" style="margin: 2.5rem 0; padding: 2rem 1rem; border: 1px solid var(--vp-c-divider); border-radius: 14px;">
+
+<a href="https://refer.fivemanage.com/samuel" target="_blank" rel="noreferrer"><img src="/fivemanage.png" alt="Fivemanage" width="220" style="border-radius: 12px;" /></a>
+
+<h3 style="border: 0; margin: 0.75rem 0 0.5rem;">Media hosting for the phone</h3>
+
+Photos, camera clips and voice memos upload to **[Fivemanage](https://refer.fivemanage.com/samuel)** and come back as fast CDN URLs, so you never run your own media server. Create a project, grab the token, and drop it into `FivemanageMedia`.
+
+<a href="https://refer.fivemanage.com/samuel" target="_blank" rel="noreferrer"><img src="https://img.shields.io/badge/Get%20started%20with%20Fivemanage-%E2%86%92-0D0D0D?style=for-the-badge" alt="Get started with Fivemanage" /></a>
+
+</div>
+
 ## Convars
 
 | Convar | Default | Purpose |
