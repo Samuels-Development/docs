@@ -91,11 +91,12 @@ ui_page 'ui/index.html'
 
 Two rules apply to every app page:
 
-**Keep the body hidden by default.** FiveM renders every resource's `ui_page` as a fullscreen overlay in the game at all times. Your stylesheet must set `visibility: hidden` on `html, body` so that overlay never paints over the game. The phone reveals the body when it loads your page inside the app frame; your dev-mode branch reveals it in a plain browser.
+**Keep the body hidden and transparent by default.** FiveM renders every resource's `ui_page` as a fullscreen overlay in the game at all times. Your stylesheet must set `visibility: hidden` on `html, body` so that overlay never paints over the game, and the body background must stay transparent: a background color on `html` or `body` is painted onto the page canvas even while the element is hidden, which floods the whole game screen with that color. Put your background color on a wrapper element instead (the templates use the `#root` / `#app` mount node). The phone reveals the body when it loads your page inside the app frame; your dev-mode branch reveals it in a plain browser.
 
 ```css
 html, body {
     visibility: hidden;
+    background: transparent;
 }
 ```
 
