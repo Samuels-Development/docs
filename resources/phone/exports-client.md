@@ -148,6 +148,45 @@ Force a re-fetch of the cached active group, for consumers that just performed a
 exports['sd-phone']:refreshActiveGroup()
 ```
 
+## addCustomApp
+
+Registers a third-party app on the phone. The full field table, page requirements and lifecycle live in the [Custom Apps guide](./custom-apps).
+
+**Syntax**
+```lua
+local ok, err = exports['sd-phone']:addCustomApp({
+    identifier = 'my-app',
+    name       = 'My App',
+    ui         = GetCurrentResourceName() .. '/ui/index.html',
+})
+```
+
+| Return | Type | Description |
+|---|---|---|
+| `ok` | `boolean` | Whether the app was registered |
+| `err` | `string?` | Reason when `ok` is false |
+
+## removeCustomApp
+
+Unregisters a custom app. Only the resource that registered the identifier may remove it; apps are also removed automatically when their resource stops.
+
+**Syntax**
+```lua
+local ok, err = exports['sd-phone']:removeCustomApp('my-app')
+```
+
+## sendCustomAppMessage
+
+Pushes a message into a custom app's UI, where `useNuiEvent(action, cb)` receives it. The reserved identifier `'any'` broadcasts to every custom app.
+
+**Syntax**
+```lua
+local ok, err = exports['sd-phone']:sendCustomAppMessage('my-app', {
+    action = 'balanceChanged',
+    data = { balance = 4200 },
+})
+```
+
 ::: tip
 Server-side exports for messages, mail, calls, contacts, and everything else are documented on the [Server Exports](./exports-server) page.
 :::

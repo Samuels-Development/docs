@@ -406,6 +406,7 @@ const globalSidebar = [
           { text: 'Overview', link: '/resources/phone/' },
           { text: 'Installation', link: '/resources/phone/installation' },
           { text: 'Configuration', link: '/resources/phone/configuration' },
+          { text: 'Custom Apps', link: '/resources/phone/custom-apps' },
           {
             text: 'Exports',
             collapsed: true,

@@ -77,9 +77,13 @@ Events other scripts fire AT lb-phone are handled too:
 
 ## Export coverage
 
-Every export lb-phone documents is registered, as a full mapping, a partial one, or a warn-once stub with a type-safe default. The heavily-used surfaces are full or partial: `GetEquippedPhoneNumber`, `GetSourceFromNumber`, `SendMessage`, `SendMail`, `GetEmailAddress`, `SendNotification`, `NotifyEveryone`, `AddContact`, `AddTransaction`, `CreateCall`/`EndCall`/`IsInCall`, `HasPhoneItem`, `HasAirplaneMode`, `ResetSecurity`, and on the client `IsOpen`, `ToggleOpen`, `OpenApp`, `SendNotification`, `GetEquippedPhoneNumber`, `GetFlashlight`, `ToggleDisabled`.
+Every export lb-phone documents is registered, as a full mapping, a partial one, or a warn-once stub with a type-safe default. The heavily-used surfaces are full or partial: `GetEquippedPhoneNumber`, `GetSourceFromNumber`, `SendMessage`, `SendMail`, `GetEmailAddress`, `SendNotification`, `NotifyEveryone`, `AddContact`, `AddTransaction`, `CreateCall`/`EndCall`/`IsInCall`, `HasPhoneItem`, `HasAirplaneMode`, `ResetSecurity`, and on the client `IsOpen`, `ToggleOpen`, `OpenApp`, `SendNotification`, `GetEquippedPhoneNumber`, `GetFlashlight`, `ToggleDisabled`, and the custom app surface `AddCustomApp`/`RemoveCustomApp`/`SendCustomAppMessage`.
 
-Stubbed families (safe defaults, one console breadcrumb naming the caller): crypto, DarkChat, custom apps and trays, battery, camera components, the check hooks, and lb-phone's callback wire (`RegisterCallback` and friends).
+Stubbed families (safe defaults, one console breadcrumb naming the caller): crypto, DarkChat, trays, battery, camera components, the check hooks, and lb-phone's callback wire (`RegisterCallback` and friends).
+
+## Custom apps
+
+Custom apps built for lb-phone run unmodified: `AddCustomApp` registers them for real, the app page gets the same injected globals (both capitalizations), the same `componentsLoaded` handshake, and the same message relay, and `dependency 'lb-phone'` plus `GetResourceState('lb-phone')` boot polls are satisfied. The full mechanism, the field table and templates are covered in the [Custom Apps guide](./custom-apps).
 
 The complete per-export table with per-name notes ships with the resource in `docs/exports.md`.
 
