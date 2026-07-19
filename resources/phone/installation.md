@@ -30,17 +30,17 @@ ensure sd-phone
 
 2. Database tables create themselves on first boot; there is no SQL file to import.
 
-3. Copy the item icons from sd-phone's `images/` folder into `ox_inventory/web/images/`. The files are named after the items (`phone.png`, `phone_blue.png`, ...), so ox_inventory picks them up automatically with no `image` field needed.
+3. Copy the item icons from sd-phone's `images/` folder into `ox_inventory/web/images/`. The files are named after the items (`phone_black.png`, `phone_blue.png`, ...), so ox_inventory picks them up automatically with no `image` field needed.
 
 4. Add the phone items to `ox_inventory/data/items.lua`. Each item maps to a frame colour and matching in-hand prop, and `consume = 0` keeps the item on use:
 
 ```lua
-['phone'] = {
+['phone_black'] = {
     label = 'Phone',
     weight = 190,
     stack = false,
     consume = 0,
-    server = { export = 'sd-phone.usePhone' }
+    server = { export = 'sd-phone.usePhone_black' }
 },
 
 ['phone_blue'] = {
@@ -101,8 +101,23 @@ ensure sd-phone
 ```
 
 ::: info
-The black phone's item name is `phone`, not `phone_black`, and its icon is `phone.png`. The item-to-colour mapping lives in `configs/phone.lua` if you want different item names. Players can also press the open keybind (default F1), which is server-gated on actually owning a phone item. Other inventories register through their own usable-item APIs automatically; only the icons need copying into your inventory's image folder.
+The black phone's item name is `phone_black` and its icon is `phone_black.png`. The item-to-colour mapping lives in `configs/phone.lua` if you want different item names. Players can also press the open keybind (default F1), which is server-gated on actually owning a phone item. Other inventories register through their own usable-item APIs automatically; only the icons need copying into your inventory's image folder.
 :::
+
+### SIM card item (optional)
+
+Only needed if you turn on unique phones in `configs/simcards.lua` (off by default), where phone numbers live on SIM items instead of characters and whichever SIM is in a phone decides whose data it shows. Copy `sim_card.png` from sd-phone's `images/` folder into `ox_inventory/web/images/` like the phone icons, then add the item:
+
+```lua
+['sim_card'] = {
+    label = 'SIM Card',
+    weight = 5,
+    stack = false,
+    close = true,
+    consume = 0, -- required: sd-phone consumes the item itself on install
+    server = { export = 'sd-phone.useSim_card' }
+},
+```
 
 ## API keys
 
