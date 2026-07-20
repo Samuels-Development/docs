@@ -5,6 +5,57 @@ description: Dependencies, database, phone items, and convars for setting up the
 
 # Installation
 
+## Download
+
+There are two ways to get the phone. Pick **one**. If you are not sure, use the Release.
+
+### Recommended: the Release (already built, ready to drop in)
+
+This is what almost everyone should use. It is the phone fully built, with nothing left to compile. Just download, unzip, and drop it in.
+
+1. Go to the [Releases page](https://github.com/Samuels-Development/sd-phone/releases).
+2. Open the latest release, expand **Assets**, and download the file named `sd-phone-<version>.zip` (for example `sd-phone-v1.0.0.zip`).
+3. Unzip it. You get a folder called `sd-phone`. Drop that folder into your server's `resources`.
+4. Skip the rest of this section and continue with [Dependencies](#dependencies) below.
+
+::: danger Download the `sd-phone-...zip`, NOT "Source code (zip)"
+Every release also shows a **Source code (zip)** / **Source code (tar.gz)** link. That one is **not built** and the phone will open to a blank black screen if you use it. Only download the asset named `sd-phone-<version>.zip`. If you genuinely want to edit the code, read the next part.
+:::
+
+### Building from source (only if you want to edit the code)
+
+The **Source code** download and `git clone` give you the raw project. They do **not** include the built phone screen (the `web/build` folder), so if you drop them in as-is the phone opens to a blank screen. You have to build it once yourself. It is easy, just follow these steps exactly.
+
+**First, install Node.js.** Download it from [nodejs.org](https://nodejs.org) and install the **LTS** version (the big green button). This gives you the `npm` command used below. After installing, close and reopen any terminal you had open.
+
+**Then build the phone:**
+
+1. Get the source: either download the ZIP from the [repo](https://github.com/Samuels-Development/sd-phone) (green **Code** button > **Download ZIP**) and unzip it, or run `git clone https://github.com/Samuels-Development/sd-phone.git`.
+2. If you downloaded the ZIP, the folder is named `sd-phone-main`. **Rename it to `sd-phone`**, or the resource will not start in-game.
+3. Open a terminal **inside the `web` folder** of the resource. On Windows, any of these works, pick whatever is easiest:
+   - **Copy the path and `cd` to it (easiest):** find the `web` folder inside `sd-phone`, right-click it and choose **Copy as path** (this copies the path with quotes already added). Open **Command Prompt** or **PowerShell**, type `cd ` (with a space after it), paste the path, and press Enter. Example: `cd "C:\FiveM\resources\sd-phone\web"`.
+   - Or open the `web` folder in File Explorer, click the address bar, type `cmd`, and press Enter.
+   - Or right-click inside the `web` folder and choose **Open in Terminal**.
+
+   You are in the right place when the terminal line ends with `...\sd-phone\web>`.
+4. Run these two commands, one at a time, waiting for each to finish:
+
+```sh
+npm install
+npm run build
+```
+
+5. When the second command prints something like `built in 6.07s`, you are done. A new `web/build` folder has appeared. That is the compiled phone.
+6. Drop the whole `sd-phone` folder into your server's `resources` and continue with [Dependencies](#dependencies).
+
+::: tip Edited the code later? Rebuild.
+Every time you change the phone's files, run `npm run build` again inside the `web` folder. The server loads the compiled `web/build` folder, not your raw source edits, so nothing changes in-game until you rebuild.
+:::
+
+::: warning Phone screen is blank or black?
+This almost always means the `web/build` folder is missing, because the build was skipped or the "Source code" zip was used. Build it with the steps above, or just download the Release zip instead.
+:::
+
 ## Dependencies
 
 Hard requirements, both must start before the phone:
