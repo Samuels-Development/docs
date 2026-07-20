@@ -622,6 +622,16 @@ local result = exports['sd-phone']:sendMail(mail)
 | `subject` | `string?` | Truncated to the compose cap |
 | `body` | `string?` | Truncated to the compose cap |
 | `from` | `table?` | `{ name?, email? }`. Display-only, never resolved to an account; defaults to the System sender |
+| `attachments` | `(string\|table)[]?` | Up to 5 attachments (see below); extras and malformed entries are dropped server-side |
+
+Each attachment is either a plain URL string, shorthand for a photo, or a tagged table:
+
+| Shape | Renders as |
+|---|---|
+| `'https://...'` | Photo (same as the tagged photo shape) |
+| `{ kind = 'photo', url }` | Tappable image with a fullscreen viewer; the recipient can save it to their Photos |
+| `{ kind = 'audio', url, name?, duration? }` | Inline audio player; savable to Voice Memos. `duration` is seconds |
+| `{ kind = 'note', title?, body? }` | Readable note card; savable to Notes. At least one of `title`/`body` required |
 
 | Return | Type | Description |
 |---|---|---|
@@ -637,6 +647,10 @@ if addresses[1] then
         subject = 'Payslip - Week 32',
         body    = ('Hours worked: %d\nTotal pay: $%d'):format(hours, pay),
         from    = { name = 'Los Santos Customs', email = 'payroll@lscustoms.com' },
+        attachments = {
+            'https://cdn.example.com/payslips/week32.png',
+            { kind = 'note', title = 'Overtime policy', body = 'Overtime pays 1.5x after 40 hours.' },
+        },
     })
 end
 ```
@@ -653,7 +667,7 @@ local result = exports['sd-phone']:sendMailFromPlayer(source, payload)
 | Parameter | Type | Description |
 |---|---|---|
 | `source` | `number` | The acting player's server ID; the sender's identity resolves from it |
-| `payload` | `table` | `{ fromEmail, to = string[], subject?, body? }` |
+| `payload` | `table` | `{ fromEmail, to = string[], subject?, body?, attachments? }`. Attachments use the tagged-table shapes documented under [sendMail](#sendmail) (the plain-string photo shorthand applies to `sendMail` only) |
 
 | Return | Type | Description |
 |---|---|---|
@@ -1306,6 +1320,128 @@ exports['sd-phone']:usePhone(event, item, inv, slot, data)
 ::: info
 These exports are registered only when ox_inventory is the active inventory, and they exist for ox_inventory's item-use dispatcher, not for manual calls. Other inventories register the phone items through their own `CreateUsableItem` style APIs and expose no export.
 :::
+
+The SIM exports manage the unique-phones SIM system: creating SIM card items, reading a player's active number, and assigning custom numbers. Numbers are bare digit strings; formatting in inputs is stripped.
+
+## giveSimCard
+
+Create a SIM card and put it in a player's inventory. With `opts.citizenid` the SIM is character-bound and carries that character's existing number and data; otherwise it is a blank SIM with a fresh number.
+
+**Syntax**
+```lua
+local number = exports['sd-phone']:giveSimCard(source, opts)
+```
+
+| Parameter | Type | Description |
+|---|---|---|
+| `source` | `number` | The receiving player's server ID |
+| `opts` | `table?` | `{ number?, citizenid? }`. `number` requests a specific number and fails if it is taken |
+
+| Return | Type | Description |
+|---|---|---|
+| `number` | `string?` | The SIM's bare-digit number, or `nil` when creation or the inventory give failed |
+
+**Example**
+```lua
+-- A phone shop selling a blank SIM
+local number = exports['sd-phone']:giveSimCard(source)
+if number then
+    TriggerClientEvent('shop:notify', source, ('Your new number is %s'):format(number))
+end
+```
+
+## getSimNumber
+
+Get the SIM number installed in a player's active phone.
+
+**Syntax**
+```lua
+local number = exports['sd-phone']:getSimNumber(source)
+```
+
+| Parameter | Type | Description |
+|---|---|---|
+| `source` | `number` | The player's server ID |
+
+| Return | Type | Description |
+|---|---|---|
+| `number` | `string?` | Bare-digit SIM number, or `nil` without an active SIM |
+
+## hasSim
+
+Whether the player's active phone has a SIM installed.
+
+**Syntax**
+```lua
+local installed = exports['sd-phone']:hasSim(source)
+```
+
+| Parameter | Type | Description |
+|---|---|---|
+| `source` | `number` | The player's server ID |
+
+| Return | Type | Description |
+|---|---|---|
+| `installed` | `boolean` | `true` when a SIM is installed |
+
+## isSimModeActive
+
+Whether unique phones / SIM mode is live, meaning the config is on and the active inventory backend supports it.
+
+**Syntax**
+```lua
+local active = exports['sd-phone']:isSimModeActive()
+```
+
+| Return | Type | Description |
+|---|---|---|
+| `active` | `boolean` | `true` while SIM mode is running |
+
+## isNumberAvailable
+
+Whether a phone number is free to assign: not on any SIM and not held by a legacy character assignment.
+
+**Syntax**
+```lua
+local free = exports['sd-phone']:isNumberAvailable(number)
+```
+
+| Parameter | Type | Description |
+|---|---|---|
+| `number` | `string` | Phone number in any formatting |
+
+| Return | Type | Description |
+|---|---|---|
+| `free` | `boolean` | `true` when the number can be assigned |
+
+## setSimNumber
+
+Assign a specific number to the SIM in a player's active phone, keeping its identity and data. This is the hook for server-owned "buy a custom number" implementations.
+
+**Syntax**
+```lua
+local ok, err = exports['sd-phone']:setSimNumber(source, number)
+```
+
+| Parameter | Type | Description |
+|---|---|---|
+| `source` | `number` | The player's server ID |
+| `number` | `string` | Requested number; digits are kept, 3 to 15 of them |
+
+| Return | Type | Description |
+|---|---|---|
+| `ok` | `boolean` | `true` on success |
+| `err` | `string?` | On failure: `'invalid'` (bad input or SIM mode off), `'no_sim'`, or `'taken'` |
+
+**Example**
+```lua
+-- A custom-number storefront
+local free = exports['sd-phone']:isNumberAvailable(wanted)
+if free and chargePlayer(source, price) then
+    local ok, err = exports['sd-phone']:setSimNumber(source, wanted)
+    if not ok then refundPlayer(source, price) end
+end
+```
 
 ::: tip
 Client-side exports for opening the phone, launching apps, and showing local notifications are documented on the [Client Exports](./exports-client) page.
