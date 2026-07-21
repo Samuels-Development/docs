@@ -170,6 +170,8 @@ Only needed if you turn on unique phones in `configs/simcards.lua` (off by defau
 },
 ```
 
+That's the whole integration. Sell or spawn `sim_card` anywhere you like — an ox_inventory shop, a loot table, an admin give — and a blank card **activates itself on first use**, minting a fresh registered number on the spot. The `giveSimCard` export exists only for special cases (character-bound SIMs or hardcoded numbers), and `ActivateBlankSims = false` in `configs/simcards.lua` disables self-activation if you want every SIM to come through it.
+
 ## API keys
 
 Third-party keys live in `configs/server/apikeys.lua`, which is deliberately excluded from the client download:

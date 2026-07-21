@@ -1325,7 +1325,11 @@ The SIM exports manage the unique-phones SIM system: creating SIM card items, re
 
 ## giveSimCard
 
-Create a SIM card and put it in a player's inventory. With `opts.citizenid` the SIM is character-bound and carries that character's existing number and data; otherwise it is a blank SIM with a fresh number.
+Create a **pre-provisioned** SIM card and put it in a player's inventory. With `opts.citizenid` the SIM is character-bound and carries that character's existing number and data; with `opts.number` it carries a specific hardcoded number; with neither it is simply a pre-activated SIM with a fresh number.
+
+:::: info You usually don't need this
+Blank `sim_card` items **activate themselves on first use** — a fresh number is minted and registered on the spot — so shops, loot tables and admin spawns can hand out the raw item with zero integration. Reach for this export only when the SIM must carry a *specific* identity (character-bound, or a hardcoded number). Setting `ActivateBlankSims = false` in `configs/simcards.lua` disables self-activation for servers that want every SIM created through this export.
+::::
 
 **Syntax**
 ```lua
@@ -1343,8 +1347,11 @@ local number = exports['sd-phone']:giveSimCard(source, opts)
 
 **Example**
 ```lua
--- A phone shop selling a blank SIM
-local number = exports['sd-phone']:giveSimCard(source)
+-- Onboarding: hand a new character a SIM bound to them (their number and data carry over)
+local number = exports['sd-phone']:giveSimCard(source, { citizenid = cid })
+
+-- A quest reward carrying a memorable hardcoded number (nil if the number is taken)
+local number = exports['sd-phone']:giveSimCard(source, { number = '2085550777' })
 if number then
     TriggerClientEvent('shop:notify', source, ('Your new number is %s'):format(number))
 end
