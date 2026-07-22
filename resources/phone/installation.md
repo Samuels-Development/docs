@@ -157,7 +157,7 @@ The black phone's item name is `phone_black` and its icon is `phone_black.png`. 
 
 ### SIM card item (optional)
 
-Only needed if you turn on unique phones in `configs/simcards.lua` (off by default), where phone numbers live on SIM items instead of characters and whichever SIM is in a phone decides whose data it shows. Copy `sim_card.png` from sd-phone's `images/` folder into `ox_inventory/web/images/` like the phone icons, then add the item:
+Only needed if you turn on [unique phones](/resources/phone/unique-phones) in `configs/uniqueandsim.lua` (off by default), where phone numbers live on SIM items instead of characters. Not needed in the `BuiltInNumbers` variant, where phones mint their own numbers. Copy `sim_card.png` from sd-phone's `images/` folder into `ox_inventory/web/images/` like the phone icons, then add the item:
 
 ```lua
 ['sim_card'] = {
@@ -170,7 +170,7 @@ Only needed if you turn on unique phones in `configs/simcards.lua` (off by defau
 },
 ```
 
-That's the whole integration. Sell or spawn `sim_card` anywhere you like — an ox_inventory shop, a loot table, an admin give — and a blank card **activates itself on first use**, minting a fresh registered number on the spot. The `giveSimCard` export exists only for special cases (character-bound SIMs or hardcoded numbers), and `ActivateBlankSims = false` in `configs/simcards.lua` disables self-activation if you want every SIM to come through it.
+That's the whole integration. Sell or spawn `sim_card` anywhere you like — an ox_inventory shop, a loot table, an admin give — and a blank card **activates itself on first use**, minting a fresh registered number on the spot. The `giveSimCard` export exists only for special cases (character-bound SIMs or hardcoded numbers), and `ActivateBlankSims = false` in `configs/uniqueandsim.lua` disables self-activation if you want every SIM to come through it.
 
 ## API keys
 

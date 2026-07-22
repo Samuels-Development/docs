@@ -1328,7 +1328,7 @@ The SIM exports manage the unique-phones SIM system: creating SIM card items, re
 Create a **pre-provisioned** SIM card and put it in a player's inventory. With `opts.citizenid` the SIM is character-bound and carries that character's existing number and data; with `opts.number` it carries a specific hardcoded number; with neither it is simply a pre-activated SIM with a fresh number.
 
 :::: info You usually don't need this
-Blank `sim_card` items **activate themselves on first use** — a fresh number is minted and registered on the spot — so shops, loot tables and admin spawns can hand out the raw item with zero integration. Reach for this export only when the SIM must carry a *specific* identity (character-bound, or a hardcoded number). Setting `ActivateBlankSims = false` in `configs/simcards.lua` disables self-activation for servers that want every SIM created through this export.
+Blank `sim_card` items **activate themselves on first use** — a fresh number is minted and registered on the spot — so shops, loot tables and admin spawns can hand out the raw item with zero integration. Reach for this export only when the SIM must carry a *specific* identity (character-bound, or a hardcoded number). Setting `ActivateBlankSims = false` in `configs/uniqueandsim.lua` disables self-activation for servers that want every SIM created through this export.
 ::::
 
 **Syntax**

@@ -72,7 +72,7 @@ Events other scripts fire AT lb-phone are handled too:
 
 | lb event | Behaviour |
 |---|---|
-| `lb-phone:usePhoneItem` | Opens the phone through the normal guarded path. The per-number `lbPhoneNumber` metadata is ignored: there are no per-number unique phones, every character has exactly one number |
+| `lb-phone:usePhoneItem` | Opens the phone through the normal guarded path. The per-number `lbPhoneNumber` metadata is ignored — sd-phone's own [unique-phones system](/resources/phone/unique-phones) (`configs/uniqueandsim.lua`) governs numbers and per-phone data instead |
 | `lb-phone:itemAdded` / `lb-phone:itemRemoved` | Acknowledged no-ops: phone ownership is resolved server-side on every open, nothing needs equipping |
 
 ## Export coverage
