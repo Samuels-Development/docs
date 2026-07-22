@@ -8,13 +8,55 @@ return {
     Debug = false,
 
     -- Saving Configuration
-    -- All shop data is automatically saved when the server shuts down/restarts via txAdmin.
-    -- Enable interval saving if you also want periodic saves while the server is running,
-    -- as a safety net against crashes or unexpected shutdowns. 
-    -- Warning: There is a LOT of data to save. I'd recommend keeping this disabled and if you do want ie enabled, make sure the interval isn't super frequent.
+    -- Shop data is automatically saved on txAdmin server shutdown/restart AND when the
+    -- resource itself stops (covers `restart sd-shops`). Interval saving is a safety net
+    -- against crashes: saves use column-level dirty tracking, so each flush only encodes
+    -- and writes the JSON columns that actually changed since the last save — cheap even
+    -- on busy servers, and safe to keep enabled.
     Saving = {
-        enabled = false,      -- Enable periodic saving while the server is running
-        interval = 30,       -- How often to save (in minutes)
+        enabled = true,      -- Enable periodic saving while the server is running
+        interval = 10,       -- How often to save (in minutes)
+    },
+
+    -- Data Retention / History Caps
+    -- Bounds the persisted per-shop history arrays so shop records can't grow without
+    -- limit over months of activity. When a list exceeds its cap the OLDEST entries are
+    -- trimmed. Running totals/statistics (revenue, counts, analytics) are separate
+    -- counters and are never affected by trimming. Set a value to 0 for unlimited
+    -- (not recommended on busy servers).
+    DataRetention = {
+        societyTransactions = 500,     -- Transaction history per shop (sales, deposits, withdrawals, upgrades, stock orders)
+        customerPurchaseHistory = 50,  -- Purchase history entries per customer per shop
+        productPurchaseHistory = 100,  -- Purchase records per product (feeds product analytics)
+    },
+
+    -- Security / anti-exploit Configuration
+    -- The purchase callbacks receive the cart and money total from the client, so a
+    -- Lua executor can call them directly with a spoofed $0 total, arbitrary item
+    -- names or absurd quantities. These limits let the server reject tampered
+    -- purchases before any item is granted. (Membership and quantity are always
+    -- enforced; the discount ceiling only bounds the charged money total.)
+    Security = {
+        -- Maximum fraction of an item's catalog price that a purchase may be
+        -- discounted before the server treats it as tampering and rejects it.
+        -- 0.95 = allow up to 95% off (sale + coupon + loyalty combined); a charged
+        -- total below 5% of the authoritative catalog subtotal is rejected.
+        -- Raise toward 1.0 if you run legitimately deeper promotions; lower it for
+        -- tighter protection.
+        maxPurchaseDiscount = 0.95,
+
+        -- Hard ceiling on the quantity of a single item per purchase line. Blocks
+        -- absurd/negative quantities sent by an executor.
+        maxPurchaseQuantity = 10000,
+    },
+
+    -- Pawn Shop Display Configuration
+    PawnShop = {
+        -- true  = the sell menu lists EVERY item the pawn shop buys, including items the
+        --         player doesn't currently carry (shown greyed out with a count of 0),
+        --         so customers can always see what the shop pays for each item.
+        -- false = only items the player actually has in their inventory are listed.
+        showAllBuyableItems = true,
     },
 
     -- Weapon Serial Number Configuration
@@ -202,6 +244,16 @@ return {
         },
     },
 
+    -- Variant Display Metadata (ox_inventory only)
+    -- When a shop item / whitelist entry defines a custom `label` (an item "variant",
+    -- e.g. two 'speaker' entries with different labels/images/metadata), the purchase
+    -- injects the entry's label/description/image into the granted item's metadata
+    -- (metadata.label / metadata.description / metadata.imageurl) so the item also
+    -- LOOKS like the variant inside the inventory — not just in the shop UI.
+    -- Explicit keys in the entry's own `metadata` table always take priority.
+    -- Entries without a custom label are never touched (so plain items keep stacking).
+    VariantDisplayMetadata = true,
+
     -- Ped spawn distance (distance at which peds will spawn/despawn)
     PedSpawnDistance = 50.0,
 
@@ -210,11 +262,17 @@ return {
 
     -- Society Payment System Configuration
     -- Allows players to purchase items using their job society funds
+    -- PER-SHOP CONTROL:
+    --   * Add `allowedShops = { 'shopId1', 'shopId2' }` to a society below to restrict
+    --     that society to paying for items at ONLY those shops (omit = all shops).
+    --   * Add `disableSocietyPayment = true` to any shop in shops.lua to block
+    --     society payments at that shop entirely.
+    -- Both are enforced server-side and filter the payment options shown in the UI.
     SocietyPayments = {
         enabled = true,  -- Set to false to completely disable society payments in shops
 
         -- Define which societies/jobs can use society funds and what grade is required
-        -- Format: ['society_name'] = { minGrade = 0, label = 'Display Name' }
+        -- Format: ['society_name'] = { minGrade = 0, label = 'Display Name', allowedShops = { 'shopId' } (optional) }
         allowedSocieties = {
             ['police'] = {
                 minGrade = 2,  -- Minimum job grade required to use society funds (sergeant and above)
@@ -226,7 +284,8 @@ return {
             },
             ['mechanic'] = {
                 minGrade = 1,  -- Mechanics can use society funds from grade 1+
-                label = 'Mechanic Society'
+                label = 'Mechanic Society',
+                -- allowedShops = { 'hardware' },  -- Example: mechanics can only pay with society funds at the hardware store
             },
             -- Add more societies as needed
             -- ['realestate'] = {

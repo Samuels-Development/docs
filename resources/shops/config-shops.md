@@ -79,6 +79,7 @@ return {
 | `purchaseRestrictions` | `table` | No | -- | Per-shop purchase whitelist (overrides global) |
 | `productWhitelist` | `table` | No | -- | Per-shop product whitelist (overrides global) |
 | `payoutType` | `string` | No | `'clean'` | Pawn shop payout type: `'clean'` (cash) or `'dirty'` (black money) |
+| `disableSocietyPayment` | `boolean` | No | `false` | When `true`, blocks society payments at this shop entirely (enforced server-side). To limit a society to specific shops instead, see `allowedShops` in [Society Payments](./config-main#society-payments) |
 
 ### Per-Shop UI Toggles
 

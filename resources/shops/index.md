@@ -76,7 +76,20 @@ Shop owners can create time-limited sale promotions with percentage discounts on
 
 ### Society Payments
 
-Players can purchase items using their job society funds if their job and grade are whitelisted in the configuration.
+Players can purchase items using their job society funds if their job and grade are whitelisted in the configuration. Payments can be restricted per shop: limit a society to specific shops with `allowedShops`, or block society payments at a shop entirely with `disableSocietyPayment`.
+
+### Admin Overview Menu
+
+Server admins get a "god view" over every shop with `/shopsadmin` (ACE-restricted to `group.admin`):
+
+- **Dashboard** with server-wide statistics: shop counts, society balances, revenue/expenses/profit, employees, customers, pending orders, and top shops
+- **Shop list** with search/filters and a full per-shop drill-down: finances, products, stock, employees, customers, sales, loyalty, coupons, upgrades, and settings
+- **Interactive map** of Los Santos plotting every shop with type icons and ownership filtering
+- **Admin controls** per shop: teleport, adjust society funds, rename, force open/closed, restock or set stock, fire employees, unban customers, grant upgrades, assign/transfer/remove owners, and reset shops -- all validated and logged
+
+### Server-Authoritative Security
+
+Every purchase is validated server-side against the shop's real catalog: items must actually be sold there, quantities must be sane, and prices are clamped -- tampered carts sent by executors are rejected and logged before any money or items move. Owner-set product prices can also be bounded via configurable [price limits](./config-management#price-limits).
 
 ### Logging System
 
@@ -91,19 +104,21 @@ Shops can be linked to framework jobs via `frameworkJob`. When a player purchase
 ```
 sd-shops/
   bridge/
-    init.lua              -- Framework detection
-    shared.lua            -- Locale system, shared utilities
-    client.lua            -- Client bridge (notifications, target, images, labels)
-    server.lua            -- Server bridge (money, inventory, player management)
+    shared/               -- Framework/inventory detection, locale system
+    client/               -- Client bridge (notifications, target, inventory/images)
+    server/               -- Server bridge (money, inventory, job, gang, society, player, logging)
   client/
+    admin.lua             -- Admin overview menu (client)
     hooks.lua             -- Client hook system
     main.lua              -- Client-side shop logic
     peds.lua              -- Ped spawning/management
   server/
-    datastore.lua         -- Database operations
+    admin.lua             -- Admin overview menu (ACE-gated server callbacks)
+    datastore.lua         -- Database operations (in-memory store + column-level saving)
     hooks.lua             -- Server hook system
-    main.lua              -- Server-side shop logic
-    management.lua        -- Shop management logic
+    lib/                  -- Shared helpers (shop/employee/customer data, stock, pricing, permissions, ...)
+    management/           -- Shop management callbacks (ownership, employees, products, stock, society, ...)
+    purchase/             -- Storefront/transaction callbacks (buy, currency, pawn, coupons, rewards, ...)
   configs/
     config.lua            -- Main configuration
     fallbacks.lua         -- Item name/description fallbacks
@@ -117,39 +132,13 @@ sd-shops/
   web/
     build/                -- React UI build files
     src/
-      AddProductScreen.tsx
-      App.tsx
-      ManagementMenu.tsx
-      PurchaseScreen.tsx
-      components/
-        AddRewardModal.tsx
-        BanCustomerModal.tsx
-        CategorySelector.tsx
-        ColorPicker.tsx
-        ConfirmDeleteModal.tsx
-        CustomDropdown.tsx
-        CustomerAnalyticsModal.tsx
-        DateTimePicker.tsx
-        EmployeeActivityModal.tsx
-        EmployeeImageModal.tsx
-        ImportPresetModal.tsx
-        ProductSelector.tsx
-        QuantityInput.tsx
-        SocietyDepositWithdrawModal.tsx
-      hooks/useDebounce.ts
-      index.css
-      locales/
-        TranslationProvider.tsx
-        i18n.ts
-      main.tsx
-      themeConfig.ts
-    index.html
-    package.json
-    postcss.config.js
-    tailwind.config.js
-    tsconfig.json
-    tsconfig.node.json
-    vite.config.ts
+      features/
+        shop/             -- Storefront UI (shopping panel, cart, modals)
+        management/       -- Management UI (per-tab files, modals)
+        admin/            -- Admin overview UI (dashboard, shop list, map, controls)
+      components/         -- Shared components
+      hooks/              -- Shared hooks
+      locales/            -- UI translation system
   fxmanifest.lua
 ```
 

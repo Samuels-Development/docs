@@ -67,6 +67,14 @@ refresh
 ensure sd-shops
 ```
 
+## Admin Menu Access (Optional)
+
+The admin overview menu (`/shopsadmin`) is restricted to the `group.admin` ACE group. txAdmin admins typically have this already; to grant it manually, add to your `server.cfg`:
+
+```cfg
+add_principal identifier.license:xxxxxxxx group.admin
+```
+
 ## Configuration
 
 Configure the resource to fit your server's needs. See the [Configuration](./config-main) pages for detailed explanations of each setting, or edit the files directly in the `configs/` folder.

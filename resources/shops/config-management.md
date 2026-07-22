@@ -364,6 +364,39 @@ ShowZeroStockNonOrderableItems = false
 Items with `canOrder = true` or stock > 0 always show regardless of this setting.
 :::
 
+## Price Limits
+
+```lua
+PriceLimits = {
+    enabled = true,
+    defaultMaxPrice = 0,
+    defaultMinPrice = 1,
+    orderPriceMultiplier = 0,
+}
+```
+
+Bounds the sale price shop owners/employees can set for their products. Limits are enforced server-side when adding or editing a product, and the allowed range is shown in the management UI.
+
+| Option | Type | Default | Description |
+|---|---|---|---|
+| `enabled` | `boolean` | `true` | Master switch. `false` = owners can set any price |
+| `defaultMaxPrice` | `number` | `0` | Global max price for items without their own `maxPrice` (`0` = no global cap) |
+| `defaultMinPrice` | `number` | `1` | Global min price for any product (`0` = allow $0 products) |
+| `orderPriceMultiplier` | `number` | `0` | e.g. `10` = an item that costs $5 to order can be sold for at most $50 (`0` = disabled) |
+
+Per-item limits can be set by adding `maxPrice` (and optionally `minPrice`) to any `ProductWhitelist` entry:
+
+```lua
+{ item = 'water', canOrder = true, orderPrice = 2, maxPrice = 25 },
+```
+
+The effective **max** price for an item is resolved in this order:
+
+1. `maxPrice` set directly on the whitelist entry
+2. `orderPriceMultiplier` × the entry's `orderPrice` (when `orderPriceMultiplier > 0`)
+3. `defaultMaxPrice` (when `> 0`)
+4. No cap
+
 ## Product Whitelist
 
 ```lua
@@ -394,6 +427,8 @@ Each whitelist entry:
 | `image` | `string` | No | Custom image (filename or full NUI/URL path) |
 | `metadata` | `table` | No | Metadata passed to inventory on purchase |
 | `displayMetadata` | `table` | No | ox_inventory tooltip display labels |
+| `maxPrice` | `number` | No | Max sale price owners can set for this item (see [Price Limits](#price-limits)) |
+| `minPrice` | `number` | No | Min sale price owners can set for this item (see [Price Limits](#price-limits)) |
 
 ::: tip
 The same item can appear multiple times with different labels/metadata to offer different "versions" (e.g., regular water and premium water). Individual shops can override the global whitelist with their own `productWhitelist` in `configs/shops.lua`.

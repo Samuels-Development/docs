@@ -382,11 +382,29 @@ return {
     -- Note: Items with canOrder=true OR stock>0 ALWAYS show regardless of this setting
     ShowZeroStockNonOrderableItems = false,
 
+    -- Product Price Limits
+    -- Bounds the price shop owners/employees can set for their products.
+    -- Per-item limits: add `maxPrice` (and optionally `minPrice`) to any ProductWhitelist entry below:
+    --     { item = 'water', canOrder = true, orderPrice = 2, maxPrice = 25 },
+    -- The effective MAX price for an item is resolved in this order:
+    --   1. `maxPrice` set directly on the whitelist entry
+    --   2. orderPriceMultiplier * the entry's orderPrice (when orderPriceMultiplier > 0)
+    --   3. defaultMaxPrice (when > 0)
+    --   4. no cap
+    -- Limits are enforced server-side when adding or editing a product, and shown in the management UI.
+    PriceLimits = {
+        enabled = true,           -- Master switch. false = owners can set any price
+        defaultMaxPrice = 0,      -- Global max price for items without their own maxPrice (0 = no global cap)
+        defaultMinPrice = 1,      -- Global min price for any product (0 = allow $0 products)
+        orderPriceMultiplier = 0, -- e.g. 10 = an item that costs $5 to order can be sold for at most $50 (0 = disabled)
+    },
+
     -- Product Whitelist
     -- Define what items each shop type is allowed to sell, with ordering options
     -- Each item has: canOrder (boolean), orderPrice (number)
     -- canOrder: If false, item won't appear in orderable items but can be added from inventory to stock/products
     -- orderPrice: The price to order this item from suppliers
+    -- maxPrice/minPrice (optional): bounds for the sale price owners can set for this item (see PriceLimits above)
     --
     -- ITEM DISPLAY OVERRIDES (label, description, image):
     -- Any whitelist item can override its display name, description, and image in the shop UI.

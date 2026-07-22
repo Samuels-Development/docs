@@ -2,6 +2,7 @@ return { -- Shop locations and configuration
     -- You can add an "illegal" parameter to any shop, and that shop will then exclusively use dirty money. See the bottom of this list for an example of an illegal shop.
     -- You can add "itemOverride = true" to any shop to use the shop's specific items instead of BaseProducts, even when BaseProducts is enabled.
     -- Per-shop UI toggles (all default to false): disableTransactionHistory, disableLoyalty, disablePresets, disableCoupons (see police armory at the bottom as an example)
+    -- Add "disableSocietyPayment = true" to a shop to block society payments at that shop; to limit a society to specific shops instead, see allowedShops in Config.SocietyPayments.
     -- Set blip.enabled = false to completely skip blip creation for a shop. Blips use the ped coords as their position.
     -- ROTATING PED LOCATIONS: Use ped.locations (array) instead of ped.coords/heading to randomize the ped's
     --   spawn point each server start. See the illegal_dealer_1 example at the bottom. Format:
