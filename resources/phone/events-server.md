@@ -339,6 +339,26 @@ Fires when a player switches airplane mode off, releasing withheld messages.
 |---|---|---|
 | `source` | `number` | The player's server id |
 
+### sd-phone:server:documents:created
+
+Fires once per document created through the [Documents exports](./exports-server#documents) — player-created documents do not fire it.
+
+```lua
+AddEventHandler('sd-phone:server:documents:created', function(data)
+    print(('%s issued "%s" (%s) as %s'):format(data.resource or '?', data.name, data.kind, data.docId))
+end)
+```
+
+| Field | Type | Description |
+|---|---|---|
+| `citizenid` | `string` | The owning identity (the acting phone profile under unique phones) |
+| `docId` | `string` | The new document's id |
+| `name` | `string` | Document display name |
+| `kind` | `string` | `'text'`, `'image'`, or `'file'` |
+| `resource` | `string?` | The resource that invoked the export |
+
+---
+
 ::: tip
 Client-local events (phone opened, camera mode, flashlight) live on the [Client Events](./events-client) page. Third-party scripts written against lb-phone's events keep working through the [lb-phone compatibility layer](./lb-phone-compatibility).
 :::

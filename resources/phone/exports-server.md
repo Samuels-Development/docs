@@ -1450,6 +1450,141 @@ if free and chargePlayer(source, price) then
 end
 ```
 
+## Documents
+
+The Documents exports put files on players' phones from any resource — the paperwork layer of the city. Citations from an MDT, contracts from a dealership, licenses from city hall: one call creates the document, files it into a named folder (auto-created), updates the owner's open phone live, and shows a notification banner. Documents marked `locked` are read-only for the player — no editing, renaming, moving, deleting, or sharing — but the issuing resource can still revoke them.
+
+Everything resolves through the phone's identity layer, so the same call works untouched on stock servers and under every [unique-phones mode](./unique-phones); documents ride cloud backups and admin wipes automatically.
+
+## createDocument
+
+Create a document on an online player's phone. Validates every field and applies the same caps as the app (`configs/documents.lua`).
+
+**Syntax**
+```lua
+local docId, err = exports['sd-phone']:createDocument(source, opts)
+```
+
+| Parameter | Type | Description |
+|---|---|---|
+| `source` | `number` | The receiving player's server ID |
+| `opts` | `table` | See fields below; `name` is required |
+
+| `opts` field | Type | Description |
+|---|---|---|
+| `name` | `string` | Display name (max length per config) |
+| `kind` | `string?` | `'text'` (default), `'image'`, or `'file'` |
+| `content` | `string?` | Body for `text` documents |
+| `url` | `string?` | `http(s)` URL for `image`/`file` documents |
+| `folder` | `string?` | Root folder **name** — resolved case-insensitively, created if absent |
+| `locked` | `boolean?` | Read-only for the player; only your resource can remove it |
+| `notify` | `boolean?` | Notification banner on delivery (default `true`) |
+
+| Return | Type | Description |
+|---|---|---|
+| `docId` | `string?` | The new document's id, or `nil` on refusal |
+| `err` | `string?` | Refusal message when `docId` is `nil` (caps hit, bad input, …) |
+
+**Example**
+```lua
+-- An MDT files a citation the player can read but never delete
+local docId = exports['sd-phone']:createDocument(source, {
+    name    = ('Citation #%d'):format(citationId),
+    folder  = 'LSPD',
+    content = citationText,
+    locked  = true,
+})
+
+-- Paying the fine revokes it
+if paid and docId then
+    exports['sd-phone']:deleteDocumentById(source, docId)
+end
+```
+
+## createDocumentForNumber
+
+The same as `createDocument`, addressed by phone number instead of server ID. The number is resolved to its owner; when they are online, delivery is pushed live.
+
+**Syntax**
+```lua
+local docId, err = exports['sd-phone']:createDocumentForNumber(number, opts)
+```
+
+| Parameter | Type | Description |
+|---|---|---|
+| `number` | `string` | Phone number in any formatting |
+| `opts` | `table` | Identical to `createDocument` |
+
+| Return | Type | Description |
+|---|---|---|
+| `docId` | `string?` | The new document's id, or `nil` (`'Number not in service'`, …) |
+| `err` | `string?` | Refusal message when `docId` is `nil` |
+
+## getPlayerDocuments
+
+Read a player's documents, optionally scoped to one root folder by name. Read-only; content is deliberately excluded — fetch it per document with `getDocumentContent`.
+
+**Syntax**
+```lua
+local docs = exports['sd-phone']:getPlayerDocuments(source, folderName)
+```
+
+| Parameter | Type | Description |
+|---|---|---|
+| `source` | `number` | The player's server ID |
+| `folderName` | `string?` | Optional root folder name filter (case-insensitive) |
+
+| Return | Type | Description |
+|---|---|---|
+| `docs` | `table[]` | Document rows `{ id, name, kind, folderId, size, locked, createdAt, updatedAt, url? }`; always an array, empty when nothing resolves |
+
+## getDocumentContent
+
+Read one document's raw text content.
+
+**Syntax**
+```lua
+local content = exports['sd-phone']:getDocumentContent(source, docId)
+```
+
+| Parameter | Type | Description |
+|---|---|---|
+| `source` | `number` | The player's server ID |
+| `docId` | `string` | The document id |
+
+| Return | Type | Description |
+|---|---|---|
+| `content` | `string?` | The document body, or `nil` when it doesn't exist or isn't theirs |
+
+**Example**
+```lua
+-- A court script pulls the statement the player wrote in their Files app
+local statement = exports['sd-phone']:getDocumentContent(source, docId)
+if statement then fileEvidence(caseId, statement) end
+```
+
+## deleteDocumentById
+
+Delete one of a player's documents. Deliberately bypasses the `locked` guard, so the resource that issued a read-only document can revoke it.
+
+**Syntax**
+```lua
+local removed = exports['sd-phone']:deleteDocumentById(source, docId)
+```
+
+| Parameter | Type | Description |
+|---|---|---|
+| `source` | `number` | The player's server ID |
+| `docId` | `string` | The document id |
+
+| Return | Type | Description |
+|---|---|---|
+| `removed` | `boolean` | `true` when a document was removed |
+
+::: info
+Every export-created document fires the [`sd-phone:server:documents:created`](./events-server) event, carrying the creating resource's name.
+:::
+
 ::: tip
 Client-side exports for opening the phone, launching apps, and showing local notifications are documented on the [Client Exports](./exports-client) page.
 :::
