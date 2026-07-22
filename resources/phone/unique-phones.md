@@ -36,10 +36,11 @@ Each phone item gets a persistent identity the first time it's used, and that id
 
 ### `DataOwner = 'character'` — stock data, SIM numbers
 
-Every phone opens the holder's **own character profile**, exactly as if the feature were off — a stolen phone shows the thief's data, never the owner's. SIM cards exist purely to change your number:
+**Your data always belongs to your character.** Messages, contacts, photos, app logins — every phone you pick up opens *your* profile, with or without a SIM, exactly as if the feature were off. A stolen phone shows the thief's own data, never the owner's. The only thing SIM cards do in this mode is decide your **number**:
 
-- Without a SIM the character keeps a vanilla **auto-assigned number with full service**.
-- Installing a SIM **overrides only the number**; ejecting falls back to a fresh auto number.
+- **Install a SIM** → your number becomes the card's number. Your data doesn't change.
+- **Swap to a different SIM** → different number, same data.
+- **Eject (or never own a SIM)** → you're not cut off: the phone keeps full service on a vanilla auto-assigned number. SIMs are entirely optional here — think of them as number-changers players *can* use, not something they need.
 - Enabling this mode on an existing stock server changes nothing for anyone — same data, same rows, zero migration. Use `/givesim <id> bind` to put a character's existing number onto a physical card.
 
 ### `DataOwner = 'sim'` — the SIM owns everything *(legacy)*
