@@ -1454,7 +1454,9 @@ end
 
 The Documents exports put files on players' phones from any resource — the paperwork layer of the city. Citations from an MDT, contracts from a dealership, licenses from city hall: one call creates the document, files it into a named folder (auto-created), updates the owner's open phone live, and shows a notification banner. Documents marked `locked` are read-only for the player — no editing, renaming, moving, deleting, or sharing — but the issuing resource can still revoke them.
 
-Everything resolves through the phone's identity layer, so the same call works untouched on stock servers and under every [unique-phones mode](./unique-phones); documents ride cloud backups and admin wipes automatically.
+A single text document can mix paragraphs and pictures: in the phone's read-only view (locked and signed documents), any line that is exactly one `http(s)` URL renders as an inline image — dossiers with surveillance stills, deeds with property photos, contracts with condition documentation. And players can **sign** text documents with a hand-drawn signature that the server records and verifies; [`getDocumentSignatures`](#getdocumentsignatures) reads those signatures back, so your script can confirm who signed before acting.
+
+Everything resolves through the phone's identity layer, so the same call works untouched on stock servers and under every [unique-phones mode](./unique-phones); documents and their signatures ride cloud backups and admin wipes automatically.
 
 ## createDocument
 
@@ -1474,7 +1476,7 @@ local docId, err = exports['sd-phone']:createDocument(source, opts)
 |---|---|---|
 | `name` | `string` | Display name (max length per config) |
 | `kind` | `string?` | `'text'` (default), `'image'`, or `'file'` |
-| `content` | `string?` | Body for `text` documents |
+| `content` | `string?` | Body for `text` documents. Lines that are exactly one `http(s)` URL render as inline images in the read-only view |
 | `url` | `string?` | `http(s)` URL for `image`/`file` documents |
 | `folder` | `string?` | Root folder **name** — resolved case-insensitively, created if absent |
 | `locked` | `boolean?` | Read-only for the player; only your resource can remove it |
@@ -1499,6 +1501,26 @@ local docId = exports['sd-phone']:createDocument(source, {
 if paid and docId then
     exports['sd-phone']:deleteDocumentById(source, docId)
 end
+```
+
+**Example — one document mixing paragraphs and inline images**
+```lua
+-- An illustrated case dossier: URL-only lines become pictures in the read view
+exports['sd-phone']:createDocument(source, {
+    name   = 'Case Dossier #204',
+    folder = 'LSPD',
+    locked = true,
+    content = table.concat({
+        'CASE DOSSIER #204 — CONFIDENTIAL',
+        '',
+        'Subject observed leaving the premises at 23:41. Surveillance still, camera 2:',
+        'https://your-cdn.example.com/stills/case204-cam2.jpg',
+        'The vehicle matched a stolen Sultan reported earlier the same evening:',
+        'https://your-cdn.example.com/stills/case204-plate.jpg',
+        '',
+        'Filed by Officer J. Marsh. Issued by the LSPD; read-only on the receiving phone.',
+    }, '\n'),
+})
 ```
 
 ## createDocumentForNumber
@@ -1580,6 +1602,84 @@ local removed = exports['sd-phone']:deleteDocumentById(source, docId)
 | Return | Type | Description |
 |---|---|---|
 | `removed` | `boolean` | `true` when a document was removed |
+
+## Document signatures
+
+Players sign text documents in the Files app: they draw a personal signature once (saved to their phone), then sign any document with one tap. Signatures are **server-authoritative rows**, not marks in the text — each carries the signer's identity, their display name frozen at signing time, an image snapshot of the drawn signature (redrawing later never rewrites old documents), and the signing timestamp. The verified badge the phone shows renders from those rows, never from document content, so a signature cannot be forged by typing a name.
+
+Signing freezes the document — the phone refuses further edits and renames — while delete, move, duplicate, and AirShare stay available. AirShared copies carry their signature rows, so a signed contract stays verifiably signed on the recipient's phone. Signing a `locked` document you issued is allowed by design: it adds signature rows without touching your content, which is exactly the contract flow — issue a locked agreement, then verify the player signed it.
+
+## getDocumentSignatures
+
+Read a document's signatures — the verification half of the contract flow.
+
+**Syntax**
+```lua
+local sigs = exports['sd-phone']:getDocumentSignatures(source, docId)
+```
+
+| Parameter | Type | Description |
+|---|---|---|
+| `source` | `number` | The player's server ID |
+| `docId` | `string` | The document id |
+
+| Return | Type | Description |
+|---|---|---|
+| `sigs` | `table[]` | Signature rows `{ id, signer, image, signedAt }`; always an array, empty when the document doesn't exist, isn't theirs, or is unsigned |
+
+| `sigs` entry field | Type | Description |
+|---|---|---|
+| `signer` | `string` | The signer's display name, frozen at signing time |
+| `image` | `string?` | PNG data-URL snapshot of the drawn signature |
+| `signedAt` | `number` | Epoch seconds of the signing moment |
+
+**Example — a dealership that releases the keys once the buyer signs**
+```lua
+local pendingSales = {}
+
+-- 1) Issue the locked agreement (an inline photo documents the vehicle's condition)
+RegisterCommand('sellblista', function(source)
+    local docId = exports['sd-phone']:createDocument(source, {
+        name   = 'Vehicle Purchase Agreement',
+        folder = 'Dinoco',
+        locked = true,
+        content = table.concat({
+            'VEHICLE PURCHASE AGREEMENT',
+            '',
+            'The buyer agrees to purchase one (1) used Blista for $12,500.',
+            'Condition at handover:',
+            'https://your-cdn.example.com/lot/blista-2041.jpg',
+            '',
+            'Sign this document in the Files app to accept.',
+        }, '\n'),
+    })
+    if docId then pendingSales[source] = docId end
+end)
+
+-- 2) Release the keys only when the buyer has actually signed
+RegisterCommand('collectkeys', function(source)
+    local docId = pendingSales[source]
+    if not docId then return end
+    local sigs = exports['sd-phone']:getDocumentSignatures(source, docId)
+    if #sigs == 0 then
+        -- not signed yet: point them at the Files app
+        return
+    end
+    print(('Contract signed by %s at %s'):format(sigs[1].signer, os.date('%Y-%m-%d %H:%M', sigs[1].signedAt)))
+    pendingSales[source] = nil
+    -- hand over the vehicle here
+end)
+```
+
+**Example — a court verifying every party signed a settlement**
+```lua
+local sigs = exports['sd-phone']:getDocumentSignatures(source, settlementDocId)
+local names = {}
+for i = 1, #sigs do names[#names + 1] = sigs[i].signer end
+if #sigs >= 2 then
+    print('Settlement executed by: ' .. table.concat(names, ', '))
+end
+```
 
 ::: info
 Every export-created document fires the [`sd-phone:server:documents:created`](./events-server) event, carrying the creating resource's name.
