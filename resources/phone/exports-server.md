@@ -1480,6 +1480,7 @@ local docId, err = exports['sd-phone']:createDocument(source, opts)
 | `url` | `string?` | `http(s)` URL for `image`/`file` documents |
 | `folder` | `string?` | Root folder **name** — resolved case-insensitively, created if absent |
 | `locked` | `boolean?` | Read-only for the player; only your resource can remove it |
+| `signable` | `boolean?` | Pass `false` to forbid signing this document (default signable; see [Document signatures](#document-signatures)) |
 | `notify` | `boolean?` | Notification banner on delivery (default `true`) |
 
 | Return | Type | Description |
@@ -1645,6 +1646,8 @@ local removed = exports['sd-phone']:deleteDocumentById(source, docId)
 Players sign text documents in the Files app: they draw a personal signature once (saved to their phone), then sign any document with one tap. Signatures are **server-authoritative rows**, not marks in the text — each carries the signer's identity, their display name frozen at signing time, an image snapshot of the drawn signature (redrawing later never rewrites old documents), and the signing timestamp. The verified badge the phone shows renders from those rows, never from document content, so a signature cannot be forged by typing a name.
 
 Signing freezes the document — the phone refuses further edits and renames — while delete, move, duplicate, and AirShare stay available. AirShared copies carry their signature rows, so a signed contract stays verifiably signed on the recipient's phone. Signing a `locked` document you issued is allowed by design: it adds signature rows without touching your content, which is exactly the contract flow — issue a locked agreement, then verify the player signed it.
+
+Every **text** document is signable by default. When a signature makes no sense on your document — a citation, a report, a license — issue it with `signable = false`: the phone hides the Sign button and the server refuses signing outright. AirShared copies keep the restriction.
 
 ## isDocumentSigned
 
