@@ -1523,6 +1523,43 @@ exports['sd-phone']:createDocument(source, {
 })
 ```
 
+::: tip The illustrated document format
+The `content` string is line-based, which makes long structured documents trivial to build with `table.concat`:
+
+- Every line is plain text; blank lines (`''`) create paragraph spacing.
+- A line that is **exactly one `http(s)` URL** renders as an inline picture in the read-only view — put a caption on the line above it. A URL that fails to load falls back to visible text, so a broken CDN link never blanks a section.
+- The images render for `locked` documents and signed documents; while a player's own document is still editable they see the raw URL in the editor, and the pictures appear once it is signed.
+- `MaxTextLength` (25,000 characters by default) is the only budget — enough for dozens of sections and images in one document.
+:::
+
+**Example — a long, fully structured report built section by section**
+```lua
+-- A vehicle inspection report a mechanic script issues after service: many text
+-- sections with a photo documenting each finding, assembled programmatically.
+local sections = {
+    'BENNYS ORIGINAL MOTOR WORKS — INSPECTION REPORT',
+    ('Vehicle: %s   Plate: %s   Odometer: %d mi'):format(vehicleLabel, plate, mileage),
+    ('Inspector: %s   Date: %s'):format(mechanicName, os.date('%Y-%m-%d')),
+    '',
+}
+
+for _, finding in ipairs(findings) do
+    sections[#sections + 1] = ('%d. %s — %s'):format(finding.no, finding.part, finding.verdict)
+    sections[#sections + 1] = finding.notes
+    if finding.photoUrl then sections[#sections + 1] = finding.photoUrl end
+    sections[#sections + 1] = ''
+end
+
+sections[#sections + 1] = ('Estimated repair total: $%d. This report is valid for 30 days.'):format(total)
+
+exports['sd-phone']:createDocument(source, {
+    name    = ('Inspection — %s'):format(plate),
+    folder  = 'Bennys',
+    locked  = true,
+    content = table.concat(sections, '\n'),
+})
+```
+
 ## createDocumentForNumber
 
 The same as `createDocument`, addressed by phone number instead of server ID. The number is resolved to its owner; when they are online, delivery is pushed live.
@@ -1608,6 +1645,33 @@ local removed = exports['sd-phone']:deleteDocumentById(source, docId)
 Players sign text documents in the Files app: they draw a personal signature once (saved to their phone), then sign any document with one tap. Signatures are **server-authoritative rows**, not marks in the text — each carries the signer's identity, their display name frozen at signing time, an image snapshot of the drawn signature (redrawing later never rewrites old documents), and the signing timestamp. The verified badge the phone shows renders from those rows, never from document content, so a signature cannot be forged by typing a name.
 
 Signing freezes the document — the phone refuses further edits and renames — while delete, move, duplicate, and AirShare stay available. AirShared copies carry their signature rows, so a signed contract stays verifiably signed on the recipient's phone. Signing a `locked` document you issued is allowed by design: it adds signature rows without touching your content, which is exactly the contract flow — issue a locked agreement, then verify the player signed it.
+
+## isDocumentSigned
+
+The quick boolean gate: `true` when the document carries at least one signature. Use it when you don't need the signer list — for the full rows, use [`getDocumentSignatures`](#getdocumentsignatures).
+
+**Syntax**
+```lua
+local signed = exports['sd-phone']:isDocumentSigned(source, docId)
+```
+
+| Parameter | Type | Description |
+|---|---|---|
+| `source` | `number` | The player's server ID |
+| `docId` | `string` | The document id |
+
+| Return | Type | Description |
+|---|---|---|
+| `signed` | `boolean` | `true` when at least one signature exists; `false` for an unsigned, missing, or not-theirs document |
+
+**Example**
+```lua
+-- Gate a rental handover on the signed agreement
+if not exports['sd-phone']:isDocumentSigned(source, rentalDocId) then
+    return notify(source, 'Sign the rental agreement in your Files app first.')
+end
+handOverKeys(source)
+```
 
 ## getDocumentSignatures
 
