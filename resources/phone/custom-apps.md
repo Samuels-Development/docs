@@ -10,7 +10,7 @@ Other resources can put their own apps on the phone. An app is just a webpage se
 Apps written for lb-phone are fully compatible. The registration exports, the injected globals (both capitalizations), the `componentsLoaded` handshake and the message relay all match lb-phone's behaviour, so an existing lb-phone app registers and runs without changes. See [lb-phone Compatibility](./lb-phone-compatibility) for the wider layer.
 
 ::: tip Start from a template
-[sd-phone-app-templates](https://github.com/Samuels-Development/sd-phone-app-templates) contains four complete example resources, one per stack: plain HTML/CSS/JS, React (JavaScript), React (TypeScript), and Vue 3. Copy one, rename it, and start building. Everything below is demonstrated inside them.
+[sd-phone-app-templates](https://github.com/Samuels-Development/sd-phone-app-templates) contains five complete example resources, one per stack: plain HTML/CSS/JS, React (JavaScript), React (TypeScript), Vue 3, and Svelte 5. Copy one, rename it, and start building. Everything below is demonstrated inside them.
 :::
 
 ## Registering an app

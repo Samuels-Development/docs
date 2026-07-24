@@ -1452,7 +1452,7 @@ end
 
 ## Documents
 
-The Documents exports put files on players' phones from any resource — the paperwork layer of the city. Citations from an MDT, contracts from a dealership, licenses from city hall: one call creates the document, files it into a named folder (auto-created), updates the owner's open phone live, and shows a notification banner. Documents marked `locked` are read-only for the player — no editing, renaming, moving, deleting, or sharing — but the issuing resource can still revoke them.
+The Documents exports put files on players' phones from any resource — the paperwork layer of the city. Citations from an MDT, contracts from a dealership, licenses from city hall: one call creates the document, files it into a named folder (auto-created), updates the owner's open phone live, and shows a notification banner. Documents marked `locked` are read-only for the player — no editing, renaming, moving, or sharing — though they may still discard their copy: the lock freezes a document's content and identity, not the owner's right to throw it away. For the rare record that must persist, pass `deletable = false` too. The issuing resource can always revoke its own documents either way.
 
 A single text document can mix paragraphs and pictures: in the phone's read-only view (locked and signed documents), any line that is exactly one `http(s)` URL renders as an inline image — dossiers with surveillance stills, deeds with property photos, contracts with condition documentation. And players can **sign** text documents with a hand-drawn signature that the server records and verifies; [`getDocumentSignatures`](#getdocumentsignatures) reads those signatures back, so your script can confirm who signed before acting.
 
@@ -1479,8 +1479,9 @@ local docId, err = exports['sd-phone']:createDocument(source, opts)
 | `content` | `string?` | Body for `text` documents. Lines that are exactly one `http(s)` URL render as inline images in the read-only view |
 | `url` | `string?` | `http(s)` URL for `image`/`file` documents |
 | `folder` | `string?` | Root folder **name** — resolved case-insensitively, created if absent |
-| `locked` | `boolean?` | Read-only for the player; only your resource can remove it |
+| `locked` | `boolean?` | Read-only for the player — no editing, renaming, moving, or sharing (deleting stays allowed unless `deletable = false`) |
 | `signable` | `boolean?` | Pass `false` to forbid signing this document (default signable; see [Document signatures](#document-signatures)) |
+| `deletable` | `boolean?` | Pass `false` to forbid the player deleting this document (default deletable). Deleting a folder around such a document moves it to the Files root instead of destroying it |
 | `notify` | `boolean?` | Notification banner on delivery (default `true`) |
 
 | Return | Type | Description |
@@ -1529,7 +1530,7 @@ The `content` string is line-based, which makes long structured documents trivia
 
 - Every line is plain text; blank lines (`''`) create paragraph spacing.
 - A line that is **exactly one `http(s)` URL** renders as an inline picture in the read-only view — put a caption on the line above it. A URL that fails to load falls back to visible text, so a broken CDN link never blanks a section.
-- The images render for `locked` documents and signed documents; while a player's own document is still editable they see the raw URL in the editor, and the pictures appear once it is signed.
+- The images render everywhere: in the read-only view of `locked` and signed documents, and inline while a player edits their own document — the editor works on the same format, with an image button that inserts gallery photos at the cursor. A document a player composes this way is byte-compatible with one your script issues.
 - `MaxTextLength` (25,000 characters by default) is the only budget — enough for dozens of sections and images in one document.
 :::
 
@@ -1625,7 +1626,7 @@ if statement then fileEvidence(caseId, statement) end
 
 ## deleteDocumentById
 
-Delete one of a player's documents. Deliberately bypasses the `locked` guard, so the resource that issued a read-only document can revoke it.
+Delete one of a player's documents. Deliberately bypasses the player-side guards, so the resource that issued a document can revoke it — including documents the player cannot delete themselves (`deletable = false`).
 
 **Syntax**
 ```lua
@@ -1645,9 +1646,13 @@ local removed = exports['sd-phone']:deleteDocumentById(source, docId)
 
 Players sign text documents in the Files app: they draw a personal signature once (saved to their phone), then sign any document with one tap. Signatures are **server-authoritative rows**, not marks in the text — each carries the signer's identity, their display name frozen at signing time, an image snapshot of the drawn signature (redrawing later never rewrites old documents), and the signing timestamp. The verified badge the phone shows renders from those rows, never from document content, so a signature cannot be forged by typing a name.
 
-Signing freezes the document — the phone refuses further edits and renames — while delete, move, duplicate, and AirShare stay available. AirShared copies carry their signature rows, so a signed contract stays verifiably signed on the recipient's phone. Signing a `locked` document you issued is allowed by design: it adds signature rows without touching your content, which is exactly the contract flow — issue a locked agreement, then verify the player signed it.
+Signing freezes the document — the phone refuses further edits and renames — while delete, move, duplicate, and AirShare stay available. AirShared and mailed copies carry their signature rows, so a signed contract stays verifiably signed on the recipient's phone. Signing a `locked` document you issued is allowed by design: it adds signature rows without touching your content, which is exactly the contract flow — issue a locked agreement, then verify the player signed it.
+
+A document takes any number of signatures — one per signer. A signed document still offers Sign to a player who hasn't signed it yet, so a copy gathers signatures as it passes from phone to phone, each new signature stacking below the earlier ones. And for proper two-party contracts there are **signature requests**: after signing your own document, its menu offers *Request Signature*, which asks a nearby player over AirShare. They review the full document — inline images and existing signatures included — and sign or decline. On signing, their signature lands on **your original**, your open phone updates live, and they automatically receive a completed copy carrying every signature, so both parties end up holding identical, fully executed paper.
 
 Every **text** document is signable by default. When a signature makes no sense on your document — a citation, a report, a license — issue it with `signable = false`: the phone hides the Sign button and the server refuses signing outright. AirShared copies keep the restriction.
+
+Deletion follows the same per-document pattern. Every document is deletable by its owner by default — even `locked` ones, since a player throwing away their copy of a citation is legitimate roleplay while the police record lives in your MDT, not their phone. When a document genuinely must persist — a court record, an active loan contract — issue it with `deletable = false`: the phone offers no Delete and the server refuses one, and deleting a folder around it re-parents the document to the Files root rather than destroying it. One consequence to design around: deleting a document also removes its signature rows, so if your script needs durable proof that something was signed, either record the verification when it matters (for example when the deal closes) or issue the contract with `deletable = false` — don't count on the player's copy existing forever.
 
 ## isDocumentSigned
 

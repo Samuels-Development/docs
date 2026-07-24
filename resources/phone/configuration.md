@@ -18,7 +18,7 @@ Server-only secrets (`configs/server/apikeys.lua`) are deliberately excluded fro
 | `config.lua` | The index that merges the per-app files; debug flag |
 | `phone.lua` | Open/close behaviour, keybind, the phone item list and their frame colours |
 | `uniqueandsim.lua` | [Unique phones, SIM cards, built-in numbers, cloud backups](/resources/phone/unique-phones) |
-| `homescreen.lua` | Dock, wallpaper, and the full app list |
+| `apps.lua` | Dock, home wallpaper, and the full app catalog. Per app: `base = true` ships it uninstallable; `enabled = false` disables it server-wide — hidden from the home screen and App Store, and removed from phones that had it installed |
 | `lockscreen.lua` | Lockscreen appearance |
 | `statusbar.lua` | Carrier text and the signal/battery indicators |
 | `share.lua` | AirShare nearby-target rules |
