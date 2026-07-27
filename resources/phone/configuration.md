@@ -16,13 +16,42 @@ Server-only secrets (`configs/server/apikeys.lua`) are deliberately excluded fro
 | File | Covers |
 |---|---|
 | `config.lua` | The index that merges the per-app files; debug flag |
-| `phone.lua` | Open/close behaviour, keybind, the phone item list and their frame colours |
+| `phone.lua` | Open/close behaviour, keybind, the phone item list and their frame colours, and the [phone number format](#phone-number-format) |
 | `uniqueandsim.lua` | [Unique phones, SIM cards, built-in numbers, cloud backups](/resources/phone/unique-phones) |
 | `apps.lua` | Dock, home wallpaper, and the full app catalog. Per app: `base = true` ships it uninstallable; `enabled = false` disables it server-wide — hidden from the home screen and App Store, and removed from phones that had it installed |
 | `lockscreen.lua` | Lockscreen appearance |
 | `statusbar.lua` | Carrier text and the signal/battery indicators |
 | `share.lua` | AirShare nearby-target rules |
 | `migrate.lua` | The lb-phone boot importer |
+
+## Phone number format
+
+`Number` in `configs/phone.lua` controls how long a new phone number is and how numbers are displayed. Numbers are always **stored as bare digits**, so this is presentation and generation only: no database column, contact, message or call log is rewritten, and every lookup keeps matching on digits.
+
+```lua
+Number = {
+    Length = 10,
+    Formats = {
+        [10] = '(XXX) XXX-XXXX',
+    },
+},
+```
+
+Each `X` in a format takes the next digit and every other character is printed literally, so `'+44 XXXX XXXXXX'`, `'XXX-XXXX'` and `'XX XX XX XX'` all work. A digit count with no entry is shown as bare digits.
+
+**Formats are keyed by digit count so that changing `Length` is safe.** Existing numbers are never reissued, so a running server ends up with a mix. Add an entry for the new length and keep the old one, and both generations stay readable side by side:
+
+```lua
+Number = {
+    Length = 7,
+    Formats = {
+        [7]  = 'XXX-XXXX',        -- issued from now on
+        [10] = '(XXX) XXX-XXXX',  -- already in circulation
+    },
+},
+```
+
+Every length listed here, plus `Length` itself, is also accepted when an admin assigns a number by hand, so an older number can still be corrected after the change.
 
 ## Communication
 
