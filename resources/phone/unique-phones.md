@@ -67,6 +67,8 @@ buttons = {
 },
 ```
 
+This is the one setup step tray mode adds; the [installation guide](/resources/phone/installation#sim-tray-button-only-for-simtray) shows it in place on a full item.
+
 Only the player currently carrying a phone can open its tray, and only a `sim_card` will go in.
 
 ::: tip Upgrading from the container version

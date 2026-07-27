@@ -83,7 +83,93 @@ ensure sd-phone
 
 3. Copy the item icons from sd-phone's `images/` folder into `ox_inventory/web/images/`. The files are named after the items (`phone_black.png`, `phone_blue.png`, ...), so ox_inventory picks them up automatically with no `image` field needed.
 
-4. Add the phone items to `ox_inventory/data/items.lua`. Each item maps to a frame colour and matching in-hand prop, and `consume = 0` keeps the item on use. The `buttons` entry opens that phone's [SIM tray](/resources/phone/unique-phones#physical-sim-trays); leave it in whatever mode you run, since the export does nothing unless `SimTray` is on:
+4. Add the phone items to `ox_inventory/data/items.lua`. Each item maps to a frame colour and matching in-hand prop, and `consume = 0` keeps the item on use:
+
+```lua
+['phone_black'] = {
+    label = 'Phone',
+    weight = 190,
+    stack = false,
+    consume = 0,
+    server = { export = 'sd-phone.usePhone_black' }
+},
+
+['phone_blue'] = {
+    label = 'Blue Phone',
+    weight = 190,
+    stack = false,
+    consume = 0,
+    server = { export = 'sd-phone.usePhone_blue' }
+},
+
+['phone_green'] = {
+    label = 'Green Phone',
+    weight = 190,
+    stack = false,
+    consume = 0,
+    server = { export = 'sd-phone.usePhone_green' }
+},
+
+['phone_orange'] = {
+    label = 'Orange Phone',
+    weight = 190,
+    stack = false,
+    consume = 0,
+    server = { export = 'sd-phone.usePhone_orange' }
+},
+
+['phone_pink'] = {
+    label = 'Pink Phone',
+    weight = 190,
+    stack = false,
+    consume = 0,
+    server = { export = 'sd-phone.usePhone_pink' }
+},
+
+['phone_purple'] = {
+    label = 'Purple Phone',
+    weight = 190,
+    stack = false,
+    consume = 0,
+    server = { export = 'sd-phone.usePhone_purple' }
+},
+
+['phone_red'] = {
+    label = 'Red Phone',
+    weight = 190,
+    stack = false,
+    consume = 0,
+    server = { export = 'sd-phone.usePhone_red' }
+},
+
+['phone_yellow'] = {
+    label = 'Yellow Phone',
+    weight = 190,
+    stack = false,
+    consume = 0,
+    server = { export = 'sd-phone.usePhone_yellow' }
+},
+```
+
+::: info
+The black phone's item name is `phone_black` and its icon is `phone_black.png`. The item-to-colour mapping lives in `configs/phone.lua` if you want different item names.
+
+Players can also press the open keybind (default F1), which is server-gated on actually owning a phone item. Other inventories register through their own usable-item APIs automatically; only the icons need copying into your inventory's image folder.
+:::
+
+### SIM tray button (only for `SimTray`)
+
+Skip this unless you are running [unique phones](/resources/phone/unique-phones) with `SimTray = true`, where the SIM is a physical card dragged into the phone. In every other mode the phone item above is complete as-is.
+
+In tray mode, using the phone opens the phone, so the tray needs its own right-click entry. Add a `buttons` field to **each** phone item:
+
+```lua
+buttons = {
+    { label = 'SIM Tray', action = function(slot) exports['sd-phone']:openSimTray(slot) end },
+},
+```
+
+Which gives you, for example:
 
 ```lua
 ['phone_black'] = {
@@ -96,90 +182,11 @@ ensure sd-phone
         { label = 'SIM Tray', action = function(slot) exports['sd-phone']:openSimTray(slot) end },
     }
 },
-
-['phone_blue'] = {
-    label = 'Blue Phone',
-    weight = 190,
-    stack = false,
-    consume = 0,
-    server = { export = 'sd-phone.usePhone_blue' },
-    buttons = {
-        { label = 'SIM Tray', action = function(slot) exports['sd-phone']:openSimTray(slot) end },
-    }
-},
-
-['phone_green'] = {
-    label = 'Green Phone',
-    weight = 190,
-    stack = false,
-    consume = 0,
-    server = { export = 'sd-phone.usePhone_green' },
-    buttons = {
-        { label = 'SIM Tray', action = function(slot) exports['sd-phone']:openSimTray(slot) end },
-    }
-},
-
-['phone_orange'] = {
-    label = 'Orange Phone',
-    weight = 190,
-    stack = false,
-    consume = 0,
-    server = { export = 'sd-phone.usePhone_orange' },
-    buttons = {
-        { label = 'SIM Tray', action = function(slot) exports['sd-phone']:openSimTray(slot) end },
-    }
-},
-
-['phone_pink'] = {
-    label = 'Pink Phone',
-    weight = 190,
-    stack = false,
-    consume = 0,
-    server = { export = 'sd-phone.usePhone_pink' },
-    buttons = {
-        { label = 'SIM Tray', action = function(slot) exports['sd-phone']:openSimTray(slot) end },
-    }
-},
-
-['phone_purple'] = {
-    label = 'Purple Phone',
-    weight = 190,
-    stack = false,
-    consume = 0,
-    server = { export = 'sd-phone.usePhone_purple' },
-    buttons = {
-        { label = 'SIM Tray', action = function(slot) exports['sd-phone']:openSimTray(slot) end },
-    }
-},
-
-['phone_red'] = {
-    label = 'Red Phone',
-    weight = 190,
-    stack = false,
-    consume = 0,
-    server = { export = 'sd-phone.usePhone_red' },
-    buttons = {
-        { label = 'SIM Tray', action = function(slot) exports['sd-phone']:openSimTray(slot) end },
-    }
-},
-
-['phone_yellow'] = {
-    label = 'Yellow Phone',
-    weight = 190,
-    stack = false,
-    consume = 0,
-    server = { export = 'sd-phone.usePhone_yellow' },
-    buttons = {
-        { label = 'SIM Tray', action = function(slot) exports['sd-phone']:openSimTray(slot) end },
-    }
-},
 ```
 
-::: info
-The black phone's item name is `phone_black` and its icon is `phone_black.png`. The item-to-colour mapping lives in `configs/phone.lua` if you want different item names.
+Note the comma added after `server = { ... }` once a field follows it. Repeat for every phone item you added; an item without the entry simply has no way to reach its tray.
 
-Players can also press the open keybind (default F1), which is server-gated on actually owning a phone item. Other inventories register through their own usable-item APIs automatically; only the icons need copying into your inventory's image folder, and `buttons` is an ox_inventory feature so SIM trays are ox-only.
-:::
+`buttons` is an ox_inventory feature, which is why SIM trays are ox-only. Leaving the entry in place on a server that later switches away from tray mode is harmless, since [`openSimTray`](/resources/phone/exports-client#opensimtray) is a no-op outside it.
 
 ### SIM card item (optional)
 
