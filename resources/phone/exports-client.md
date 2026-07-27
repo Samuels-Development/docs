@@ -119,6 +119,19 @@ Reads the disable switch.
 local disabled = exports['sd-phone']:isDisabled()
 ```
 
+## openSimTray
+
+Opens the SIM tray of the phone in `slot`. Intended for the phone item's `buttons` entry in `ox_inventory/data/items.lua` under [`SimTray` mode](/resources/phone/unique-phones#physical-sim-trays); the server re-derives the tray from the slot, so it only ever opens a tray belonging to a phone the caller actually carries. A no-op outside tray mode.
+
+**Syntax**
+```lua
+exports['sd-phone']:openSimTray(slot)
+```
+
+| Parameter | Type | Description |
+|---|---|---|
+| `slot` | `number` | Inventory slot holding the phone |
+
 The remaining exports read the local player's Groups app state from a client-side cache, refreshed at boot and after every membership-affecting push.
 
 ## getActiveGroupId

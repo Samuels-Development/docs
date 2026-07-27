@@ -83,7 +83,7 @@ ensure sd-phone
 
 3. Copy the item icons from sd-phone's `images/` folder into `ox_inventory/web/images/`. The files are named after the items (`phone_black.png`, `phone_blue.png`, ...), so ox_inventory picks them up automatically with no `image` field needed.
 
-4. Add the phone items to `ox_inventory/data/items.lua`. Each item maps to a frame colour and matching in-hand prop, and `consume = 0` keeps the item on use:
+4. Add the phone items to `ox_inventory/data/items.lua`. Each item maps to a frame colour and matching in-hand prop, and `consume = 0` keeps the item on use. The `buttons` entry opens that phone's [SIM tray](/resources/phone/unique-phones#physical-sim-trays); leave it in whatever mode you run, since the export does nothing unless `SimTray` is on:
 
 ```lua
 ['phone_black'] = {
@@ -91,7 +91,10 @@ ensure sd-phone
     weight = 190,
     stack = false,
     consume = 0,
-    server = { export = 'sd-phone.usePhone_black' }
+    server = { export = 'sd-phone.usePhone_black' },
+    buttons = {
+        { label = 'SIM Tray', action = function(slot) exports['sd-phone']:openSimTray(slot) end },
+    }
 },
 
 ['phone_blue'] = {
@@ -99,7 +102,10 @@ ensure sd-phone
     weight = 190,
     stack = false,
     consume = 0,
-    server = { export = 'sd-phone.usePhone_blue' }
+    server = { export = 'sd-phone.usePhone_blue' },
+    buttons = {
+        { label = 'SIM Tray', action = function(slot) exports['sd-phone']:openSimTray(slot) end },
+    }
 },
 
 ['phone_green'] = {
@@ -107,7 +113,10 @@ ensure sd-phone
     weight = 190,
     stack = false,
     consume = 0,
-    server = { export = 'sd-phone.usePhone_green' }
+    server = { export = 'sd-phone.usePhone_green' },
+    buttons = {
+        { label = 'SIM Tray', action = function(slot) exports['sd-phone']:openSimTray(slot) end },
+    }
 },
 
 ['phone_orange'] = {
@@ -115,7 +124,10 @@ ensure sd-phone
     weight = 190,
     stack = false,
     consume = 0,
-    server = { export = 'sd-phone.usePhone_orange' }
+    server = { export = 'sd-phone.usePhone_orange' },
+    buttons = {
+        { label = 'SIM Tray', action = function(slot) exports['sd-phone']:openSimTray(slot) end },
+    }
 },
 
 ['phone_pink'] = {
@@ -123,7 +135,10 @@ ensure sd-phone
     weight = 190,
     stack = false,
     consume = 0,
-    server = { export = 'sd-phone.usePhone_pink' }
+    server = { export = 'sd-phone.usePhone_pink' },
+    buttons = {
+        { label = 'SIM Tray', action = function(slot) exports['sd-phone']:openSimTray(slot) end },
+    }
 },
 
 ['phone_purple'] = {
@@ -131,7 +146,10 @@ ensure sd-phone
     weight = 190,
     stack = false,
     consume = 0,
-    server = { export = 'sd-phone.usePhone_purple' }
+    server = { export = 'sd-phone.usePhone_purple' },
+    buttons = {
+        { label = 'SIM Tray', action = function(slot) exports['sd-phone']:openSimTray(slot) end },
+    }
 },
 
 ['phone_red'] = {
@@ -139,7 +157,10 @@ ensure sd-phone
     weight = 190,
     stack = false,
     consume = 0,
-    server = { export = 'sd-phone.usePhone_red' }
+    server = { export = 'sd-phone.usePhone_red' },
+    buttons = {
+        { label = 'SIM Tray', action = function(slot) exports['sd-phone']:openSimTray(slot) end },
+    }
 },
 
 ['phone_yellow'] = {
@@ -147,12 +168,17 @@ ensure sd-phone
     weight = 190,
     stack = false,
     consume = 0,
-    server = { export = 'sd-phone.usePhone_yellow' }
+    server = { export = 'sd-phone.usePhone_yellow' },
+    buttons = {
+        { label = 'SIM Tray', action = function(slot) exports['sd-phone']:openSimTray(slot) end },
+    }
 },
 ```
 
 ::: info
-The black phone's item name is `phone_black` and its icon is `phone_black.png`. The item-to-colour mapping lives in `configs/phone.lua` if you want different item names. Players can also press the open keybind (default F1), which is server-gated on actually owning a phone item. Other inventories register through their own usable-item APIs automatically; only the icons need copying into your inventory's image folder.
+The black phone's item name is `phone_black` and its icon is `phone_black.png`. The item-to-colour mapping lives in `configs/phone.lua` if you want different item names.
+
+Players can also press the open keybind (default F1), which is server-gated on actually owning a phone item. Other inventories register through their own usable-item APIs automatically; only the icons need copying into your inventory's image folder, and `buttons` is an ox_inventory feature so SIM trays are ox-only.
 :::
 
 ### SIM card item (optional)
