@@ -436,6 +436,7 @@ const globalSidebar = [
       { text: 'Changing Locales', link: '/faq/changing-locales' },
       { text: 'Adding Police Alerts', link: '/faq/police-alerts' },
       { text: 'Dirty Money Types', link: '/faq/dirty-money' },
+      { text: 'requestModel / joaat Errors', link: '/faq/requestmodel-joaat-error' },
     ],
   },
 ]
