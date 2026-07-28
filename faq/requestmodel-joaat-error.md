@@ -32,10 +32,6 @@ v3.39.0 downgraded the failed validation from an **error** to a **warning**. Pro
 This is the only step most people need. The remaining warning is cosmetic — it prints to the client console only, never to your server console, and nothing is broken.
 :::
 
-### Update our scripts
-
-Newer versions of our scripts call `ox_lib` directly instead of going through the Qbox compatibility layer, so they are unaffected on any `ox_lib` version. If you are on the latest release of a script and still see the warning, it is coming from a **different resource** on your server, not ours.
-
 ### Remove the warning entirely (optional)
 
 The warning comes from `qbx_core`, and it is already fixed there — but **only on the `main` branch**, not in any tagged release. The fix is [commit `30d0ee2`](https://github.com/Qbox-project/qbx_core/commit/30d0ee2fc52eb756fbbf8fee72580952434ca118) (19 May 2026).
