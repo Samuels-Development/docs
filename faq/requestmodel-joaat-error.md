@@ -32,6 +32,22 @@ v3.39.0 downgraded the failed validation from an **error** to a **warning**. Pro
 This is the only step most people need. The remaining warning is cosmetic — it prints to the client console only, never to your server console, and nothing is broken.
 :::
 
+### Enable ox_lib progress bars in the script
+
+Many of our scripts include a bridge switch that makes them call `ox_lib` directly instead of routing through the Qbox compatibility layer. Turning it on avoids the problem entirely — both the error and the warning — on any `ox_lib` version.
+
+Open `bridge/client.lua` in the script and set:
+
+```lua
+local EnableOX = true
+```
+
+Then restart the resource. The setting is read once when the script loads, so a live edit will not apply until you restart it.
+
+::: tip
+Some of our scripts already ship with this enabled, so you may find it is already set to `true`. If there is no `EnableOX` in `bridge/client.lua`, that script uses a different bridge setup — updating `ox_lib` as described above still resolves the error, or open a support ticket and we will take a look.
+:::
+
 ### Remove the warning entirely (optional)
 
 The warning comes from `qbx_core`, and it is already fixed there — but **only on the `main` branch**, not in any tagged release. The fix is [commit `30d0ee2`](https://github.com/Qbox-project/qbx_core/commit/30d0ee2fc52eb756fbbf8fee72580952434ca118) (19 May 2026).
