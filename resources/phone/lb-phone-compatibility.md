@@ -79,6 +79,13 @@ Events other scripts fire AT lb-phone are handled too:
 
 Every export lb-phone documents is registered, as a full mapping, a partial one, or a warn-once stub with a type-safe default. The heavily-used surfaces are full or partial: `GetEquippedPhoneNumber`, `GetSourceFromNumber`, `SendMessage`, `SendMail`, `GetEmailAddress`, `SendNotification`, `NotifyEveryone`, `AddContact`, `AddTransaction`, `CreateCall`/`EndCall`/`IsInCall`, `HasPhoneItem`, `HasAirplaneMode`, `ResetSecurity`, and on the client `IsOpen`, `ToggleOpen`, `OpenApp`, `SendNotification`, `GetEquippedPhoneNumber`, `GetFlashlight`, `ToggleDisabled`, and the custom app surface `AddCustomApp`/`RemoveCustomApp`/`SendCustomAppMessage`.
 
+Cell towers map too: `GetCellTowers` on both sides returns the masts configured in
+`configs/celltowers.lua`, and `SetServiceBars` really does force the displayed bar count. Note the
+shape difference — lb-phone's config is a bare coordinate list, so `GetCellTowers` returns plain
+`vector3` values with no ranges. sd-phone's own [`getCellTowers`](./exports-server#getcelltowers)
+keeps them, alongside [`getServiceLevel`](./exports-server#getservicelevel) and
+[`hasService`](./exports-server#hasservice).
+
 Stubbed families (safe defaults, one console breadcrumb naming the caller): crypto, DarkChat, trays, battery, camera components, the check hooks, and lb-phone's callback wire (`RegisterCallback` and friends).
 
 ## Custom apps

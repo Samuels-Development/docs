@@ -20,7 +20,8 @@ Server-only secrets (`configs/server/apikeys.lua`) are deliberately excluded fro
 | `uniqueandsim.lua` | [Unique phones, SIM cards, built-in numbers, cloud backups](/resources/phone/unique-phones) |
 | `apps.lua` | Dock, home wallpaper, and the full app catalog. Per app: `base = true` ships it uninstallable; `enabled = false` disables it server-wide — hidden from the home screen and App Store, and removed from phones that had it installed |
 | `lockscreen.lua` | Lockscreen appearance |
-| `statusbar.lua` | Carrier text and the signal/battery indicators |
+| `statusbar.lua` | Carrier text, the battery indicator, and the fallback signal bars used when cell towers are off |
+| `celltowers.lua` | [Cell service](#cell-service): mast positions and coverage, capability thresholds, map blips |
 | `share.lua` | AirShare nearby-target rules |
 | `migrate.lua` | The lb-phone boot importer |
 
@@ -52,6 +53,65 @@ Number = {
 ```
 
 Every length listed here, plus `Length` itself, is also accepted when an admin assigns a number by hand, so an older number can still be corrected after the change.
+
+## Cell service
+
+`configs/celltowers.lua` turns signal strength into something real: a list of masts, each with a
+position and a flat radius, and a phone's service is the **best** reading across all of them.
+
+```lua
+Enabled = true,
+
+Towers = {
+    { tower = vec3(-75.0, -818.0, 326.0), range = 2200.0 },  -- Downtown Los Santos
+    { tower = vec3(1858.3, 3694.0,  37.9), range = 1700.0 },  -- Sandy Shores
+},
+```
+
+Service at a point is `1 - distance / range`, taking the highest result. So a player 200 units
+from a 250-range mast (20%) who is also 750 units from a 1000-range mast (25%) gets 25%: the
+further mast wins because it reaches better.
+
+Distance is **horizontal only**. The Z in each entry is ignored by the maths, so coordinates can be
+pasted straight off an antenna prop without the height eating coverage, and a pilot at altitude
+keeps the service of the ground below them.
+
+`Enabled = false` leaves every phone on full service without you having to delete the mast list. An
+empty `Towers` list does the same, as does a list where every entry is malformed: a config typo
+must never leave a server without phones.
+
+### What degrades
+
+Capabilities drop away in tiers rather than all at once, set by `Thresholds`:
+
+| Threshold | Default | Below it |
+|---|---|---|
+| `Text` | `0.05` | Texts are refused; texts sent to the player are held and delivered when they return to coverage |
+| `Call` | `0.15` | Calls cannot be placed, and the player cannot be reached |
+| `Data` | `0.30` | Data-backed apps refuse to load |
+
+Calls and texts are enforced **server-side**, recomputed from the server's own view of the player,
+so the gate is not something a modified client can talk its way past.
+
+Apps listed in `Offline` keep working with no signal at all: the phone's own settings, on-device
+content like Notes, Files, Photos and Contacts, reading existing message threads and the call log,
+plus the radio (which is RF, not cellular) and payphones (landlines). Anything not listed needs
+`Thresholds.Data`, so an app added later is covered by default.
+
+::: tip
+An in-progress call is deliberately **not** dropped when a player drives out of range. Only new
+calls are refused.
+:::
+
+### Map blips
+
+`Blips` draws a marker on each mast plus a translucent circle showing what it reaches, which is how
+you judge whether a layout has the dead zones you intended. It is a setup aid rather than something
+to run live, so it has its own switch, independent of `Enabled` — a network can be laid out and
+inspected before service gating is ever turned on.
+
+The circle's size is read from each mast's own `range`, never a separate number, so what the map
+shows cannot drift out of step with the service the maths gives you.
 
 ## Communication
 

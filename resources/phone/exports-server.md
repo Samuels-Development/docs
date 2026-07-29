@@ -13,7 +13,9 @@ Several mutating exports return the phone's standard envelope shape: `{ success 
 
 The first group of exports resolves phone numbers, owners, and connectivity. Every character has exactly one number.
 
-## getPhoneNumber
+## Numbers and identity
+
+### getPhoneNumber
 
 Get a player's phone number by server ID, assigning one on first access.
 
@@ -40,7 +42,7 @@ RegisterCommand('mynumber', function(source)
 end)
 ```
 
-## getPhoneNumberByIdentifier
+### getPhoneNumberByIdentifier
 
 Get a character's phone number straight from a citizenid, for resources that hold identifiers rather than server IDs. Works for offline characters.
 
@@ -64,7 +66,7 @@ local number = exports['sd-phone']:getPhoneNumberByIdentifier(citizenid, ensure)
 local number = exports['sd-phone']:getPhoneNumberByIdentifier(citizenid)
 ```
 
-## getIdentifierByNumber
+### getIdentifierByNumber
 
 Get the citizenid that owns a phone number. Both sides are digit-normalized, so any formatting matches.
 
@@ -89,7 +91,7 @@ if citizenid then
 end
 ```
 
-## getSourceByNumber
+### getSourceByNumber
 
 Get the connected server ID of the player that owns a phone number.
 
@@ -114,7 +116,7 @@ if playerId then
 end
 ```
 
-## isNumberInService
+### isNumberInService
 
 Check whether a phone number is assigned to any character. Useful for validating user-supplied numbers before sending anything at them.
 
@@ -138,7 +140,7 @@ if not exports['sd-phone']:isNumberInService(input) then
 end
 ```
 
-## isAirplaneMode
+### isAirplaneMode
 
 Check whether a player currently has airplane mode switched on.
 
@@ -168,7 +170,107 @@ end
 
 The notification exports push iOS-style banners onto a player's phone.
 
-## notify
+## Cell service
+
+Cell service reflects where a player is standing relative to the configured masts in
+`configs/celltowers.lua`. The level is recomputed from the server's own view of the player each
+time you ask, so these readings are authoritative rather than client-reported. When the tower
+system is switched off every reading reports full service.
+
+### getServiceLevel
+
+A player's current cell service, from `0.0` (dead zone) to `1.0` (at a mast).
+
+**Syntax**
+
+```lua
+exports['sd-phone']:getServiceLevel(source)
+```
+
+**Parameters**
+
+| Parameter | Type | Description |
+| --- | --- | --- |
+| `source` | `number` | Player server ID |
+
+**Returns**
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `level` | `number` | `0.0` to `1.0`. `1.0` when no masts are configured, or when the player cannot be resolved |
+
+**Example**
+
+```lua
+local level = exports['sd-phone']:getServiceLevel(source)
+if level == 0.0 then
+    print('player is in a dead zone')
+end
+```
+
+### hasService
+
+Whether a player can currently use a capability.
+
+**Syntax**
+
+```lua
+exports['sd-phone']:hasService(source, capability)
+```
+
+**Parameters**
+
+| Parameter | Type | Description |
+| --- | --- | --- |
+| `source` | `number` | Player server ID |
+| `capability` | `string?` | `'text'`, `'call'` or `'data'`. Defaults to `'data'` |
+
+**Returns**
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `allowed` | `boolean` | `true` when the player's signal clears that capability's threshold |
+
+**Example**
+
+```lua
+if not exports['sd-phone']:hasService(source, 'call') then
+    return 'They have no signal out there.'
+end
+```
+
+::: tip
+The phone already applies this to its own calls and texts. Reach for it when your own script wants
+to behave differently in a dead zone, such as a dispatch that refuses a callout.
+:::
+
+### getCellTowers
+
+Every configured mast with its coverage radius.
+
+**Syntax**
+
+```lua
+exports['sd-phone']:getCellTowers()
+```
+
+**Returns**
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `towers` | `table[]` | `{ tower = vector3, range = number }`, mirroring `configs/celltowers.lua` |
+
+Empty while the system is switched off. The table is rebuilt on every call, so mutating it never
+touches the running config.
+
+::: info
+The lb-phone compatibility export `GetCellTowers` returns bare `vector3` values with no ranges,
+matching lb-phone's own config shape. This one keeps the ranges.
+:::
+
+## Notifications
+
+### notify
 
 Send a phone notification banner to a player by server ID.
 
@@ -206,7 +308,7 @@ exports['sd-phone']:notify(source, {
 })
 ```
 
-## notifyNumber
+### notifyNumber
 
 Send the same notification banner addressed by phone number instead of server ID. The number is digit-normalized before lookup, so any formatting matches.
 
@@ -237,7 +339,9 @@ exports['sd-phone']:notifyNumber(reporterNumber, {
 
 The message exports send SMS on a player's behalf or as a service.
 
-## sendMessage
+## Messages
+
+### sendMessage
 
 Send a message on a player's behalf. Mirrors the phone's own composer payload and walks the full composer validation (kind whitelist, length caps, banking-validated money), so a caller cannot move unchecked funds.
 
@@ -274,7 +378,7 @@ exports['sd-phone']:sendMessage(source, {
 })
 ```
 
-## sendSystemMessage
+### sendSystemMessage
 
 Deliver a one-way service-to-player SMS from a short code, without any player acting as the sender. No sender mailbox copy is stored and the recipient's block list is bypassed. A recipient in airplane mode has the message withheld until they switch it off.
 
@@ -315,7 +419,9 @@ exports['sd-phone']:sendSystemMessage('8294', 'Downtown Cab Co.', customerNumber
 
 The call exports start, inspect, and end phone calls on a player's behalf.
 
-## startCall
+## Calls
+
+### startCall
 
 Start a 1:1 call on a player's behalf. The full player-originated validation applies: already-on-a-call and airplane checks, digit normalization, self-call guard, number-in-service, callee reachability and busy.
 
@@ -341,7 +447,7 @@ if not result.success then
 end
 ```
 
-## startGroupCall
+### startGroupCall
 
 Ring several players at once on a caller's behalf, for example a dispatch line ringing every on-duty unit.
 
@@ -367,7 +473,7 @@ local onDuty = getOnDutyOfficers() -- your own list of server IDs
 exports['sd-phone']:startGroupCall(source, onDuty, 'Dispatch', '911')
 ```
 
-## getCurrentCall
+### getCurrentCall
 
 Read a player's live call from their own perspective. Read-only.
 
@@ -392,7 +498,7 @@ if call and call.phase == 'active' then
 end
 ```
 
-## isInCall
+### isInCall
 
 Check whether a player is currently in a call or pending ring. Boolean shorthand over [getCurrentCall](#getcurrentcall).
 
@@ -416,7 +522,7 @@ if exports['sd-phone']:isInCall(source) then
 end
 ```
 
-## endCallFor
+### endCallFor
 
 End whatever call a player is in, on their behalf. The player's own channel is resolved internally, no raw channel argument is accepted, so a caller can never end someone else's call.
 
@@ -441,7 +547,7 @@ exports['sd-phone']:endCallFor(source)
 
 The contact exports read and mutate a player's contacts, recents, and block list.
 
-## logCall
+### logCall
 
 Log a call into a player's recents, for external calling systems. Every field is re-validated regardless of caller.
 
@@ -469,7 +575,9 @@ exports['sd-phone']:logCall(source, {
 })
 ```
 
-## getContacts
+## Contacts
+
+### getContacts
 
 Read a player's contacts, already serialized to the shape the app renders. Read-only.
 
@@ -492,7 +600,7 @@ local contacts = exports['sd-phone']:getContacts(source)
 print(('Player has %d contacts'):format(contacts and #contacts or 0))
 ```
 
-## addContact
+### addContact
 
 Create a contact for a player. Walks the exact same validation as the app's own add flow: the number must be in service, not the player's own, not a duplicate, and under the per-player cap. On success the new card is pushed live to the player's open phone.
 
@@ -527,7 +635,7 @@ exports['sd-phone']:addContact(source, {
 })
 ```
 
-## removeContactByNumber
+### removeContactByNumber
 
 Remove every contact matching a number from a player's list. The number is accepted in any format and digit-normalized before matching.
 
@@ -550,7 +658,7 @@ local result = exports['sd-phone']:removeContactByNumber(source, number)
 exports['sd-phone']:removeContactByNumber(source, '5550187')
 ```
 
-## getContactByNumber
+### getContactByNumber
 
 Look up one of a player's own contacts by number, serialized to the shape the app renders. Read-only.
 
@@ -574,7 +682,7 @@ local contact = exports['sd-phone']:getContactByNumber(source, callerNumber)
 local display = contact and contact.name or callerNumber
 ```
 
-## isNumberBlocked
+### isNumberBlocked
 
 Check whether a player has a number on their block list, for example a calling system deciding whether to ring them. Read-only; garbage input answers `false`.
 
@@ -603,7 +711,9 @@ end
 
 The mail exports deliver and read mailbox data.
 
-## sendMail
+## Mail
+
+### sendMail
 
 Send mail as the system sender, for automated senders like payroll, city hall, or a job script.
 
@@ -655,7 +765,7 @@ if addresses[1] then
 end
 ```
 
-## sendMailFromPlayer
+### sendMailFromPlayer
 
 Send mail on a player's behalf, as if they composed it themselves. The player must be signed into `fromEmail`, the From header is rebuilt from the account row, and the full compose validation applies.
 
@@ -683,7 +793,7 @@ exports['sd-phone']:sendMailFromPlayer(source, {
 })
 ```
 
-## getMailAccounts
+### getMailAccounts
 
 Get every mail account a player is signed into, in creation order. Never carries password hashes.
 
@@ -708,7 +818,7 @@ for _, acc in ipairs(accounts) do
 end
 ```
 
-## getMailAddresses
+### getMailAddresses
 
 Get the same account shape keyed by citizenid instead of a live source. Works for offline players.
 
@@ -734,7 +844,7 @@ The citizenid must be a non-empty string without `%` or `_` characters; the sess
 local addresses = exports['sd-phone']:getMailAddresses(citizenid)
 ```
 
-## mailAddressExists
+### mailAddressExists
 
 Check whether a mail address resolves to a registered account. The address is trimmed and lowercased before the lookup.
 
@@ -758,7 +868,7 @@ if exports['sd-phone']:mailAddressExists('payroll@lscustoms.com') then
 end
 ```
 
-## getMailbox
+### getMailbox
 
 Read a mailbox's messages, in the same serialized shape the app renders.
 
@@ -787,7 +897,9 @@ local inbox = exports['sd-phone']:getMailbox('payroll@lscustoms.com', 'inbox')
 
 The banking exports write and read the Wallet app's transaction log.
 
-## addBankTransaction
+## Banking
+
+### addBankTransaction
 
 Append a transaction row to a character's Wallet list. Log-only: it does NOT move money; the calling resource owns the actual credit or debit. Works for offline characters.
 
@@ -829,7 +941,7 @@ exports['sd-phone']:addBankTransaction(citizenid, {
 })
 ```
 
-## getBankTransactions
+### getBankTransactions
 
 Read a character's Wallet transaction log, newest first. Read-only.
 
@@ -857,7 +969,9 @@ end
 
 The badge exports drive the home-screen unread counters.
 
-## pushBadges
+## Badges
+
+### pushBadges
 
 Recompute and push a player's home-screen badge counts. Call after mutating anything the counts derive from.
 
@@ -876,7 +990,7 @@ exports['sd-phone']:pushBadges(source)
 exports['sd-phone']:pushBadges(source)
 ```
 
-## getBadgeCounts
+### getBadgeCounts
 
 Read a player's current per-app unread counts without pushing them.
 
@@ -903,7 +1017,9 @@ end
 
 The photo exports save and host media for the Photos app.
 
-## addPhoto
+## Photos and media
+
+### addPhoto
 
 Save an already-hosted http(s) media URL into a player's gallery. The URL walks the same validation as the app's own save path; on success the photo is pushed live so an open Photos app updates.
 
@@ -926,7 +1042,7 @@ local result = exports['sd-phone']:addPhoto(source, url)
 exports['sd-phone']:addPhoto(source, 'https://cdn.example.com/photos/race-finish.jpg')
 ```
 
-## uploadMedia
+### uploadMedia
 
 Asynchronously upload a base64 `data:` URL to the configured media host and hand the hosted CDN URL to a callback.
 
@@ -962,7 +1078,9 @@ end)
 
 The account exports query the shared login engine behind the social apps. The account apps are `photogram`, `cherry`, `vibez`, `birdy`, `mail`, and `ryde`.
 
-## accountExists
+## App accounts
+
+### accountExists
 
 Check whether an account exists for an app. The username is trimmed and lowercased before the lookup, matching how accounts register.
 
@@ -987,7 +1105,7 @@ if exports['sd-phone']:accountExists('birdy', 'weazelnews') then
 end
 ```
 
-## getAppAccount
+### getAppAccount
 
 Get one account in its public shape. Never returns the password hash. Read-only.
 
@@ -1010,7 +1128,7 @@ local account = exports['sd-phone']:getAppAccount(app, username)
 local account = exports['sd-phone']:getAppAccount('photogram', 'lifeinvader')
 ```
 
-## getSessionAccount
+### getSessionAccount
 
 Get the account a citizen is currently signed into for an app. Read-only.
 
@@ -1042,7 +1160,9 @@ The group exports read the Groups app's membership state. The export view shape 
 These exports return real citizenids, so they are for trusted server callers only.
 :::
 
-## getActiveGroup
+## Groups
+
+### getActiveGroup
 
 Get a player's active group as the full export view.
 
@@ -1068,7 +1188,7 @@ if not group or #group.members < 2 then
 end
 ```
 
-## getActiveGroupId
+### getActiveGroupId
 
 Get just a player's active group ID. A cheap one-row read, useful as a precheck before pulling the full view.
 
@@ -1090,7 +1210,7 @@ local groupId = exports['sd-phone']:getActiveGroupId(source)
 local groupId = exports['sd-phone']:getActiveGroupId(source)
 ```
 
-## getGroup
+### getGroup
 
 Get the export view of a specific group by ID.
 
@@ -1119,7 +1239,9 @@ end
 
 The services exports integrate with the Services app's company directory.
 
-## getCompanyDirectory
+## Services directory
+
+### getCompanyDirectory
 
 Get the configured company directory, the same rows the app's Companies tab lists. Pure config read; a fresh array each call, safe for the caller to mutate.
 
@@ -1139,7 +1261,7 @@ for _, company in ipairs(exports['sd-phone']:getCompanyDirectory()) do
 end
 ```
 
-## messageCompany
+### messageCompany
 
 Send a customer message to a configured company on a player's behalf. The payload walks the full validation (directory whitelist, kind whitelist, length caps); on-duty staff get the same banner and live inbox push as the app's own path.
 
@@ -1167,7 +1289,9 @@ exports['sd-phone']:messageCompany(source, {
 
 The Weazel News exports publish to the news app as a trusted caller.
 
-## postArticle
+## Weazel News
+
+### postArticle
 
 Publish an article from another resource. Only the staff boss-gate is skipped; every clamp still applies (category whitelist, required headline, length caps). Timestamps are server-stamped and a featured article demotes every other hero.
 
@@ -1211,7 +1335,7 @@ local id, reason = exports['sd-phone']:postArticle({
 if not id then print('Article rejected: ' .. reason) end
 ```
 
-## setBreakingTicker
+### setBreakingTicker
 
 Replace the breaking-news ticker. Lines are trimmed, non-strings and empties dropped, each line capped and at most the configured number of lines kept, in order.
 
@@ -1238,7 +1362,9 @@ exports['sd-phone']:setBreakingTicker({
 
 The music export delivers tracks into a player's library.
 
-## giveTrack
+## Music
+
+### giveTrack
 
 Give a track straight to a player's music library, skipping the AirShare nearby-consent handshake entirely: the caller vouches for the delivery (a quest reward, a purchased song). The track merges into the recipient's library even while the Music app is closed.
 
@@ -1276,7 +1402,9 @@ exports['sd-phone']:giveTrack(source, {
 
 The item exports tie the phone to its inventory items.
 
-## hasPhone
+## Phone items and SIM
+
+### hasPhone
 
 Check whether a player owns any configured phone item, answered by the same authoritative inventory check the keybind gate uses.
 
@@ -1300,7 +1428,7 @@ if not exports['sd-phone']:hasPhone(source) then
 end
 ```
 
-## usePhone
+### usePhone
 
 The usable-item export family behind the phone items. ox_inventory dispatches item use to a per-item export on the owning resource, and the export name is auto-derived from the item key (`use` plus the item name with its first letter uppercased). With the default items that registers `usePhone` for `phone`, plus `usePhone_blue`, `usePhone_green`, `usePhone_orange`, `usePhone_pink`, `usePhone_purple`, `usePhone_red`, and `usePhone_yellow` for the coloured variants. Only the `usingItem` phase acts, opening the phone in that variant's frame colour.
 
@@ -1323,7 +1451,7 @@ These exports are registered only when ox_inventory is the active inventory, and
 
 The SIM exports manage the unique-phones SIM system: creating SIM card items, reading a player's active number, and assigning custom numbers. Numbers are bare digit strings; formatting in inputs is stripped.
 
-## giveSimCard
+### giveSimCard
 
 Create a **pre-provisioned** SIM card and put it in a player's inventory. With `opts.citizenid` the SIM is character-bound and carries that character's existing number and data; with `opts.number` it carries a specific hardcoded number; with neither it is simply a pre-activated SIM with a fresh number.
 
@@ -1357,7 +1485,7 @@ if number then
 end
 ```
 
-## getSimNumber
+### getSimNumber
 
 Get the SIM number installed in a player's active phone.
 
@@ -1374,7 +1502,7 @@ local number = exports['sd-phone']:getSimNumber(source)
 |---|---|---|
 | `number` | `string?` | Bare-digit SIM number, or `nil` without an active SIM |
 
-## hasSim
+### hasSim
 
 Whether the player's active phone has a SIM installed.
 
@@ -1391,7 +1519,7 @@ local installed = exports['sd-phone']:hasSim(source)
 |---|---|---|
 | `installed` | `boolean` | `true` when a SIM is installed |
 
-## isSimModeActive
+### isSimModeActive
 
 Whether unique phones / SIM mode is live, meaning the config is on and the active inventory backend supports it.
 
@@ -1404,7 +1532,7 @@ local active = exports['sd-phone']:isSimModeActive()
 |---|---|---|
 | `active` | `boolean` | `true` while SIM mode is running |
 
-## isNumberAvailable
+### isNumberAvailable
 
 Whether a phone number is free to assign: not on any SIM and not held by a legacy character assignment.
 
@@ -1421,7 +1549,7 @@ local free = exports['sd-phone']:isNumberAvailable(number)
 |---|---|---|
 | `free` | `boolean` | `true` when the number can be assigned |
 
-## setSimNumber
+### setSimNumber
 
 Assign a specific number to the SIM in a player's active phone, keeping its identity and data. This is the hook for server-owned "buy a custom number" implementations.
 
@@ -1458,7 +1586,7 @@ A single text document can mix paragraphs and pictures: in the phone's read-only
 
 Everything resolves through the phone's identity layer, so the same call works untouched on stock servers and under every [unique-phones mode](./unique-phones); documents and their signatures ride cloud backups and admin wipes automatically.
 
-## createDocument
+### createDocument
 
 Create a document on an online player's phone. Validates every field and applies the same caps as the app (`configs/documents.lua`).
 
@@ -1562,7 +1690,7 @@ exports['sd-phone']:createDocument(source, {
 })
 ```
 
-## createDocumentForNumber
+### createDocumentForNumber
 
 The same as `createDocument`, addressed by phone number instead of server ID. The number is resolved to its owner; when they are online, delivery is pushed live.
 
@@ -1581,7 +1709,7 @@ local docId, err = exports['sd-phone']:createDocumentForNumber(number, opts)
 | `docId` | `string?` | The new document's id, or `nil` (`'Number not in service'`, …) |
 | `err` | `string?` | Refusal message when `docId` is `nil` |
 
-## getPlayerDocuments
+### getPlayerDocuments
 
 Read a player's documents, optionally scoped to one root folder by name. Read-only; content is deliberately excluded — fetch it per document with `getDocumentContent`.
 
@@ -1599,7 +1727,7 @@ local docs = exports['sd-phone']:getPlayerDocuments(source, folderName)
 |---|---|---|
 | `docs` | `table[]` | Document rows `{ id, name, kind, folderId, size, locked, createdAt, updatedAt, url? }`; always an array, empty when nothing resolves |
 
-## getDocumentContent
+### getDocumentContent
 
 Read one document's raw text content.
 
@@ -1624,7 +1752,7 @@ local statement = exports['sd-phone']:getDocumentContent(source, docId)
 if statement then fileEvidence(caseId, statement) end
 ```
 
-## deleteDocumentById
+### deleteDocumentById
 
 Delete one of a player's documents. Deliberately bypasses the player-side guards, so the resource that issued a document can revoke it — including documents the player cannot delete themselves (`deletable = false`).
 
@@ -1654,7 +1782,7 @@ Every **text** document is signable by default. When a signature makes no sense 
 
 Deletion follows the same per-document pattern. Every document is deletable by its owner by default — even `locked` ones, since a player throwing away their copy of a citation is legitimate roleplay while the police record lives in your MDT, not their phone. When a document genuinely must persist — a court record, an active loan contract — issue it with `deletable = false`: the phone offers no Delete and the server refuses one, and deleting a folder around it re-parents the document to the Files root rather than destroying it. One consequence to design around: deleting a document also removes its signature rows, so if your script needs durable proof that something was signed, either record the verification when it matters (for example when the deal closes) or issue the contract with `deletable = false` — don't count on the player's copy existing forever.
 
-## isDocumentSigned
+### isDocumentSigned
 
 The quick boolean gate: `true` when the document carries at least one signature. Use it when you don't need the signer list — for the full rows, use [`getDocumentSignatures`](#getdocumentsignatures).
 
@@ -1681,7 +1809,7 @@ end
 handOverKeys(source)
 ```
 
-## getDocumentSignatures
+### getDocumentSignatures
 
 Read a document's signatures — the verification half of the contract flow.
 

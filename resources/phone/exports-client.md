@@ -7,7 +7,9 @@ description: Client-side exports for opening the phone, launching apps, showing 
 
 The phone provides client-side exports for opening and closing the shell, launching apps with deep links, showing local notification banners, and reading phone state. They are callable by other client scripts on the same machine only; the client and server export registries are completely independent.
 
-## isOpen
+## Phone state
+
+### isOpen
 
 Whether the phone UI is currently open.
 
@@ -20,7 +22,7 @@ local open = exports['sd-phone']:isOpen()
 |---|---|---|
 | `open` | `boolean` | Whether the phone is out |
 
-## isLocked
+### isLocked
 
 Whether the phone is sitting on the lockscreen. The phone always opens locked.
 
@@ -29,7 +31,7 @@ Whether the phone is sitting on the lockscreen. The phone always opens locked.
 local locked = exports['sd-phone']:isLocked()
 ```
 
-## open
+### open
 
 Open the phone. Re-runs the dead/swimming/disabled safety blocks (a refusal shows a notify) but not the ownership gate: callers vouch for their own context. Opens onto the lockscreen.
 
@@ -38,7 +40,7 @@ Open the phone. Re-runs the dead/swimming/disabled safety blocks (a refusal show
 exports['sd-phone']:open()
 ```
 
-## close
+### close
 
 Close the phone. Idempotent, safe to call when already closed.
 
@@ -47,7 +49,7 @@ Close the phone. Idempotent, safe to call when already closed.
 exports['sd-phone']:close()
 ```
 
-## openApp
+### openApp
 
 Launch an app by home-screen id, opening the phone first if it is closed. The launch queues behind the lockscreen exactly like a tapped lockscreen notification; nothing bypasses or unlocks anything.
 
@@ -73,25 +75,7 @@ RegisterNetEvent('mydispatch:ping', function()
 end)
 ```
 
-## showNotification
-
-Show one iOS-style banner directly, client-local with no server trip. Same payload contract as the server `notify` export.
-
-**Syntax**
-```lua
-exports['sd-phone']:showNotification(data)
-```
-
-| Parameter | Type | Description |
-|---|---|---|
-| `data.title` | `string` | Required banner title |
-| `data.app` | `string?` | App id whose icon to show |
-| `data.image` | `string?` | Custom icon URL, overrides `data.app` |
-| `data.body` | `string?` | Banner body text |
-| `data.time` | `string?` | Display time string |
-| `data.appId` | `string?` | App opened when the banner is tapped |
-
-## setDisabled
+### setDisabled
 
 Session-local disable switch. While disabled the phone refuses to open, and disabling while it is out closes it immediately (extinguishing the lockscreen flashlight with it). Resets to enabled on resource restart.
 
@@ -110,7 +94,7 @@ exports['sd-phone']:setDisabled(disabled)
 exports['sd-phone']:setDisabled(true)
 ```
 
-## isDisabled
+### isDisabled
 
 Reads the disable switch.
 
@@ -119,7 +103,147 @@ Reads the disable switch.
 local disabled = exports['sd-phone']:isDisabled()
 ```
 
-## openSimTray
+## Notifications
+
+### showNotification
+
+Show one iOS-style banner directly, client-local with no server trip. Same payload contract as the server `notify` export.
+
+**Syntax**
+```lua
+exports['sd-phone']:showNotification(data)
+```
+
+| Parameter | Type | Description |
+|---|---|---|
+| `data.title` | `string` | Required banner title |
+| `data.app` | `string?` | App id whose icon to show |
+| `data.image` | `string?` | Custom icon URL, overrides `data.app` |
+| `data.body` | `string?` | Banner body text |
+| `data.time` | `string?` | Display time string |
+| `data.appId` | `string?` | App opened when the banner is tapped |
+
+## Cell service
+
+Cell service reflects where the player is standing relative to the configured masts in
+`configs/celltowers.lua`. When the tower system is switched off every reading reports full
+service, so these are safe to call unconditionally.
+
+### getServiceLevel
+
+Current cell service where the player stands, from `0.0` (dead zone) to `1.0` (at a mast).
+
+**Syntax**
+
+```lua
+exports['sd-phone']:getServiceLevel()
+```
+
+**Returns**
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `level` | `number` | `0.0` to `1.0`. Always `1.0` when no masts are configured |
+
+**Example**
+
+```lua
+if exports['sd-phone']:getServiceLevel() < 0.2 then
+    print('signal is weak here')
+end
+```
+
+### getServiceBars
+
+The bar count the status bar is drawing, `0` to `4`.
+
+**Syntax**
+
+```lua
+exports['sd-phone']:getServiceBars()
+```
+
+**Returns**
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `bars` | `number` | `0` to `4`. `0` is shown as "No Service" |
+
+::: tip
+Bars are a display bucket, not a capability check. Use [`hasService`](#hasservice) to ask whether
+something will actually work.
+:::
+
+### hasService
+
+Whether a capability is currently possible where the player stands.
+
+**Syntax**
+
+```lua
+exports['sd-phone']:hasService(capability)
+```
+
+**Parameters**
+
+| Parameter | Type | Description |
+| --- | --- | --- |
+| `capability` | `string?` | `'text'`, `'call'` or `'data'`. Defaults to `'data'` |
+
+**Returns**
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `allowed` | `boolean` | `true` when the signal clears that capability's threshold |
+
+**Example**
+
+```lua
+if not exports['sd-phone']:hasService('call') then
+    print('too weak to place a call from here')
+end
+```
+
+::: warning
+This is the client's own reading, so treat it as a UI hint. Calls and texts are enforced
+server-side, where the level is recomputed from the server's view of the player.
+:::
+
+### getCellTowers
+
+Every configured mast with its coverage radius.
+
+**Syntax**
+
+```lua
+exports['sd-phone']:getCellTowers()
+```
+
+**Returns**
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `towers` | `table[]` | `{ tower = vector3, range = number }`, mirroring `configs/celltowers.lua` |
+
+Empty while the system is switched off. The table is rebuilt on every call, so mutating it never
+touches the running config.
+
+**Example**
+
+```lua
+for _, mast in ipairs(exports['sd-phone']:getCellTowers()) do
+    print(('mast at %s covers %.0f units'):format(mast.tower, mast.range))
+end
+```
+
+::: info
+The lb-phone compatibility export `GetCellTowers` returns bare `vector3` values with no ranges,
+matching lb-phone's own config shape. This one keeps the ranges.
+:::
+
+## SIM tray
+
+### openSimTray
 
 Opens the SIM tray of the phone in `slot`. Intended for the phone item's `buttons` entry in `ox_inventory/data/items.lua` under [`SimTray` mode](/resources/phone/unique-phones#physical-sim-trays); the server re-derives the tray from the slot, so it only ever opens a tray belonging to a phone the caller actually carries. A no-op outside tray mode.
 
@@ -134,7 +258,9 @@ exports['sd-phone']:openSimTray(slot)
 
 The remaining exports read the local player's Groups app state from a client-side cache, refreshed at boot and after every membership-affecting push.
 
-## getActiveGroupId
+## Groups
+
+### getActiveGroupId
 
 The local player's active group id. Instant, no server round trip.
 
@@ -143,7 +269,7 @@ The local player's active group id. Instant, no server round trip.
 local id = exports['sd-phone']:getActiveGroupId()
 ```
 
-## getActiveGroup
+### getActiveGroup
 
 Cached export view of the local player's active group (same shape as the server `getGroup` view). Refetches lazily when the cache is cold, so a read before the boot fetch still gets an answer.
 
@@ -152,7 +278,7 @@ Cached export view of the local player's active group (same shape as the server 
 local group = exports['sd-phone']:getActiveGroup()
 ```
 
-## refreshActiveGroup
+### refreshActiveGroup
 
 Force a re-fetch of the cached active group, for consumers that just performed a server action and want a guaranteed-fresh next read.
 
@@ -161,7 +287,9 @@ Force a re-fetch of the cached active group, for consumers that just performed a
 exports['sd-phone']:refreshActiveGroup()
 ```
 
-## addCustomApp
+## Custom apps
+
+### addCustomApp
 
 Registers a third-party app on the phone. The full field table, page requirements and lifecycle live in the [Custom Apps guide](./custom-apps).
 
@@ -179,7 +307,7 @@ local ok, err = exports['sd-phone']:addCustomApp({
 | `ok` | `boolean` | Whether the app was registered |
 | `err` | `string?` | Reason when `ok` is false |
 
-## removeCustomApp
+### removeCustomApp
 
 Unregisters a custom app. Only the resource that registered the identifier may remove it; apps are also removed automatically when their resource stops.
 
@@ -188,7 +316,7 @@ Unregisters a custom app. Only the resource that registered the identifier may r
 local ok, err = exports['sd-phone']:removeCustomApp('my-app')
 ```
 
-## sendCustomAppMessage
+### sendCustomAppMessage
 
 Pushes a message into a custom app's UI, where `useNuiEvent(action, cb)` receives it. The reserved identifier `'any'` broadcasts to every custom app.
 
