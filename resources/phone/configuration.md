@@ -98,10 +98,24 @@ content like Notes, Files, Photos and Contacts, reading existing message threads
 plus the radio (which is RF, not cellular) and payphones (landlines). Anything not listed needs
 `Thresholds.Data`, so an app added later is covered by default.
 
+### Dropped calls
+
+A call already in progress ends when a participant loses call-grade signal, and both sides get a
+phone notification saying so — the one who drove out of range is told they lost service, the other
+that the caller did.
+
+`DropCallsAfter` is the grace period in seconds, default `6`. It stops a call dying because
+someone clipped the edge of a dead zone for a moment: the countdown resets the instant signal
+returns. Set `0` to cut the moment coverage goes, or `false` to let a connected call survive
+anywhere once it is up.
+
 ::: tip
-An in-progress call is deliberately **not** dropped when a player drives out of range. Only new
-calls are refused.
+A payphone leg is never dropped. A booth is a landline and has no cell signal to lose, so only the
+mobile side of a payphone call is watched.
 :::
+
+Ringing calls are left alone; an unanswered ring times out on its own. Voice quality does not
+degrade on the way down: a call either holds or drops.
 
 ### Map blips
 
