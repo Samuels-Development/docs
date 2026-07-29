@@ -87,8 +87,13 @@ Capabilities drop away in tiers rather than all at once, set by `Thresholds`:
 | Threshold | Default | Below it |
 |---|---|---|
 | `Text` | `0.05` | Texts are refused; texts sent to the player are held and delivered when they return to coverage |
+| `Data` | `0.05` | Data-backed apps refuse to load |
 | `Call` | `0.15` | Calls cannot be placed, and the player cannot be reached |
-| `Data` | `0.30` | Data-backed apps refuse to load |
+
+Text and data share the first bar's cutoff, so both work anywhere the phone shows a bar at all,
+while a voice call needs more. That ordering is deliberate: a call wants sustained bandwidth in
+both directions, where a text or a feed request is a short burst a weak signal still carries. The
+practical result is a one-bar band where you can text and browse but not call.
 
 Calls and texts are enforced **server-side**, recomputed from the server's own view of the player,
 so the gate is not something a modified client can talk its way past.
