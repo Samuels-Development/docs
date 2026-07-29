@@ -329,6 +329,72 @@ Fires when contacts are removed, from the app delete or the `removeContactByNumb
 
 ---
 
+## Wi-Fi
+
+### sd-phone:server:wifi:connected
+
+Fires when a player joins a Wi-Fi network, once the join has been recorded. The password has already
+been checked and the server has already placed the player inside the network's radius, so this is a
+connection that genuinely happened.
+
+```lua
+AddEventHandler('sd-phone:server:wifi:connected', function(source, networkId)
+    if networkId == 'mazebank' then
+        print(GetPlayerName(source) .. ' is on the bank router')
+    end
+end)
+```
+
+| Parameter | Type | Description |
+|---|---|---|
+| `source` | `number` | The player's server id |
+| `networkId` | `string` | Network id from `configs/wifi.lua` |
+
+### sd-phone:server:wifi:disconnected
+
+Fires when a connection ends, once per ending.
+
+| Parameter | Type | Description |
+|---|---|---|
+| `source` | `number` | The player's server id |
+| `networkId` | `string` | The network they were on, read before the connection was cleared |
+
+Every path that ends a connection fires it: an explicit disconnect, walking out of range, the
+network being edited out of the config under a live connection, and the player dropping from the
+server. A listener gating a door or a terminal on a network has to hear the ending rather than
+merely stop being told about the id, so none of those four is allowed to end a connection silently.
+
+---
+
+## Cell service
+
+### sd-phone:server:service:lost
+
+Fires when a player loses cell service.
+
+| Parameter | Type | Description |
+|---|---|---|
+| `source` | `number` | The player's server id |
+
+::: info
+A client only reports which edge it crossed. The level is re-derived from the server's own coords
+before anything fires, so a forged report cannot announce a loss that did not happen. A repeat loss
+announces nothing.
+:::
+
+### sd-phone:server:service:regained
+
+Fires when a player comes back into coverage.
+
+| Parameter | Type | Description |
+|---|---|---|
+| `source` | `number` | The player's server id |
+
+Pre-existing rather than new: this is the event that drains texts withheld while the player was out
+of coverage.
+
+---
+
 ## Settings
 
 ### sd-phone:server:airplane:released

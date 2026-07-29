@@ -241,6 +241,133 @@ The lb-phone compatibility export `GetCellTowers` returns bare `vector3` values 
 matching lb-phone's own config shape. This one keeps the ranges.
 :::
 
+## Wi-Fi
+
+Wi-Fi covers the local networks in `configs/wifi.lua`, which carry data where the masts do not
+reach. These readings come from the phone's own scan, so they are exactly what the status bar and
+the Wi-Fi list in Settings are drawing. When the system is switched off nothing is ever in range and
+every reading reports no connection.
+
+### isOnWifi
+
+Whether the phone is joined to a network right now.
+
+**Syntax**
+
+```lua
+exports['sd-phone']:isOnWifi()
+```
+
+**Returns**
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `connected` | `boolean` | `true` while joined to a network |
+
+### getWifi
+
+The joined network's id, as `configs/wifi.lua` names it.
+
+**Syntax**
+
+```lua
+exports['sd-phone']:getWifi()
+```
+
+**Returns**
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `id` | `string?` | Network id, `nil` while off Wi-Fi |
+
+**Example**
+
+```lua
+if exports['sd-phone']:getWifi() == 'mazebank' then
+    print('on the bank router')
+end
+```
+
+### getWifiNetwork
+
+The joined network with its live signal.
+
+**Syntax**
+
+```lua
+exports['sd-phone']:getWifiNetwork()
+```
+
+**Returns**
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `id` | `string` | Network id |
+| `ssid` | `string` | The name the player reads on screen |
+| `strength` | `number` | `0.0` to `1.0`, raw across the network's radius |
+| `bars` | `number` | `0` to `3`, the bucket the Wi-Fi glyph draws |
+
+`nil` while off Wi-Fi. Use `strength` when you want the real number and `bars` when you want to
+match what the player is looking at.
+
+### getWifiNetworks
+
+Every configured network, in range or not.
+
+**Syntax**
+
+```lua
+exports['sd-phone']:getWifiNetworks()
+```
+
+**Returns**
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `networks` | `table[]` | `{ id, ssid, coords, range, secured }`, mirroring `configs/wifi.lua` |
+
+Empty while the system is switched off. The tables are rebuilt on every call, so mutating the result
+never touches the running config.
+
+::: warning
+`secured` is the only password-derived value in this list. A network's password is checked
+server-side and is never sent to a client, so no client export can leak one.
+:::
+
+### getNearbyWifi
+
+What is in reach right now, strongest first, as of the last scan.
+
+**Syntax**
+
+```lua
+exports['sd-phone']:getNearbyWifi()
+```
+
+**Returns**
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `networks` | `table[]` | `{ id, ssid, secured, strength, bars, known }`, strongest first |
+
+`known` means this character has joined the network before, so rejoining it needs no password. Empty
+while the radio is off or nothing is in range.
+
+**Example**
+
+```lua
+for _, net in ipairs(exports['sd-phone']:getNearbyWifi()) do
+    print(('%s  %d bars%s'):format(net.ssid, net.bars, net.secured and ' (locked)' or ''))
+end
+```
+
+::: warning
+Every export in this category is display-grade: it answers from where the client believes it is.
+Anything that has to hold, such as gating a door, a terminal or a download, belongs on
+[`hasWifiAccess`](./exports-server#haswifiaccess), which recomputes the connection from the server's
+own view of the player.
+:::
+
 ## SIM tray
 
 ### openSimTray

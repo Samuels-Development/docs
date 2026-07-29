@@ -22,6 +22,7 @@ Server-only secrets (`configs/server/apikeys.lua`) are deliberately excluded fro
 | `lockscreen.lua` | Lockscreen appearance |
 | `statusbar.lua` | Carrier text, the battery indicator, and the fallback signal bars used when cell towers are off |
 | `celltowers.lua` | [Cell service](#cell-service): mast positions and coverage, capability thresholds, map blips |
+| `wifi.lua` | [Wi-Fi](#wi-fi): local networks, what a connection carries, remembering and scanning |
 | `share.lua` | AirShare nearby-target rules |
 | `migrate.lua` | The lb-phone boot importer |
 
@@ -131,6 +132,104 @@ inspected before service gating is ever turned on.
 
 The circle's size is read from each mast's own `range`, never a separate number, so what the map
 shows cannot drift out of step with the service the maths gives you.
+
+## Wi-Fi
+
+`configs/wifi.lua` is the other half of connectivity: routers placed around the world that carry
+data where the masts do not reach, or will not.
+
+```lua
+Enabled = true,
+
+Networks = {
+    { id = 'legion',   ssid = 'Legion Square Free',  coords = vec3(195.0, -935.0, 30.7), range = 55.0 },
+    { id = 'mazebank', ssid = 'MazeBank-Corporate',  coords = vec3(-70.0, -800.0, 44.2), range = 50.0, password = 'maze2024' },
+},
+```
+
+`id` is what everything else refers to: the exports, the app gating, and a player's remembered
+networks. Renaming one drops every connection to it. `ssid` is only ever the name a player reads on
+screen. `password` is optional, and omitting it leaves the network open, which the phone shows
+without a padlock and joins in one tap.
+
+`Enabled = false` makes the whole system inert without you having to delete the network list:
+nothing is scanned, nothing connects, and the phone falls back to cell service alone.
+
+### Range is a sphere
+
+Unlike cell towers, where the radius is flat and height is ignored, Wi-Fi range is a **true sphere**
+and distance counts the Z. A router is a box in a room rather than a mast on a hill, so the floor
+above can sit outside a network the floor below is on. That is usually what you want: a router meant
+to belong to one office should not blanket the whole tower.
+
+Twelve networks ship configured, split between public places that would plausibly hand out free
+Wi-Fi and places with a reason to keep people out. One of them sits at Mount Gordo, which is a cell
+dead zone, and it is the point of the whole feature: somewhere with no bars at all where a player
+can still get online, if they know where to stand.
+
+::: warning
+Passwords are checked **server-side only**, against a player the server has itself placed inside the
+network's radius. A password is never sent to a client and never appears in any export; `secured` is
+the only thing about it that a caller ever learns.
+:::
+
+### What a connection carries
+
+`Provides` decides what Wi-Fi is actually good for:
+
+| Flag | Default | Covers |
+|---|---|---|
+| `Data` | `true` | Data-backed apps load over the connection |
+| `Call` | `false` | Placing and receiving calls over Wi-Fi |
+| `Text` | `false` | Sending and receiving texts over Wi-Fi |
+
+Data is the whole point of Wi-Fi, so it is on. Calls and texts ride the cellular network and stay
+refused in a dead zone unless you switch Wi-Fi calling on here, which is a real thing phones do.
+
+Wi-Fi plugs into the same capability gate cell service uses, rather than sitting beside it, so a
+connection satisfies the data threshold on its own. A router inside a cell dead zone is somewhere a
+player can browse and download with no service whatsoever.
+
+### Joining, remembering and scanning
+
+`Remember = true` rejoins a network the player has connected to before as soon as they walk back
+into it, without asking for the password again. `false` makes every join deliberate.
+
+A character's joined networks, their radio switch, and the networks they explicitly disconnected
+from all persist per character in a `phone_wifi` table, so they survive a restart, a relog and a
+character swap.
+
+Disconnect and Forget are deliberately different:
+
+| Action | Effect |
+|---|---|
+| Disconnect | Stay off that network until the player joins it by hand again |
+| Forget | The same, and the stored password goes too, so the next join asks for it |
+
+`ScanSeconds` is the gap between scans while the phone is on screen, default `2`. Nothing is scanned
+while it is holstered. `DropBelow` is the strength, `0` to `1` across the radius, at which the phone
+gives up and drops a connection. The default `0.05` sits a little above zero so a player standing
+exactly on the edge does not flap in and out.
+
+### Wi-Fi-locked apps
+
+An app in `configs/apps.lua` can carry `wifi = '<network id>'` to make it downloadable only while
+the phone is on that network. `addCustomApp` accepts the same field.
+
+```lua
+{ id = 'darkchat', label = 'Dark Chat', icon = 'darkchat', route = '/darkchat', wifi = 'mazebank' },
+```
+
+The App Store marks a locked app with a padlock and names the network it wants. For built-in apps
+the install path enforces it server-side, re-deriving the connection from the server's own view of
+the player, so a client that lies about where it is still cannot reach the app. For third-party apps
+the lock is UI-only: custom-app install state lives on the client, so there is nothing server-side
+to gate.
+
+::: tip
+[`hasWifiAccess`](/resources/phone/exports-server#haswifiaccess) is the same check the install path
+makes. Reach for it when something of your own should only work inside one building.
+:::
 
 ## Communication
 

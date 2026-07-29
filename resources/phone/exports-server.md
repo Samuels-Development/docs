@@ -268,6 +268,125 @@ The lb-phone compatibility export `GetCellTowers` returns bare `vector3` values 
 matching lb-phone's own config shape. This one keeps the ranges.
 :::
 
+## Wi-Fi
+
+Wi-Fi covers the local networks in `configs/wifi.lua`, which carry data where the masts do not
+reach. Every export here re-derives the player's position from the server's own view before it
+answers, and clears a connection the player has walked out of, so a reading is never something a
+client asserted. When the system is switched off nobody is ever connected.
+
+### isOnWifi
+
+Whether a player is on a Wi-Fi network right now.
+
+**Syntax**
+
+```lua
+exports['sd-phone']:isOnWifi(source)
+```
+
+**Parameters**
+
+| Parameter | Type | Description |
+| --- | --- | --- |
+| `source` | `number` | Player server ID |
+
+**Returns**
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `connected` | `boolean` | `true` while the player is joined to a network and still inside it |
+
+### getWifi
+
+The network a player is connected to.
+
+**Syntax**
+
+```lua
+exports['sd-phone']:getWifi(source)
+```
+
+**Parameters**
+
+| Parameter | Type | Description |
+| --- | --- | --- |
+| `source` | `number` | Player server ID |
+
+**Returns**
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `id` | `string?` | Network id from `configs/wifi.lua`, `nil` when on none |
+
+### hasWifiAccess
+
+Whether a player is connected to that network specifically, range included.
+
+**Syntax**
+
+```lua
+exports['sd-phone']:hasWifiAccess(source, id)
+```
+
+**Parameters**
+
+| Parameter | Type | Description |
+| --- | --- | --- |
+| `source` | `number` | Player server ID |
+| `id` | `string` | Network id from `configs/wifi.lua` |
+
+**Returns**
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `allowed` | `boolean` | `true` only when that player is on that network |
+
+**Example**
+
+```lua
+if not exports['sd-phone']:hasWifiAccess(source, 'mazebank') then
+    return 'You have to be on the bank network to do that.'
+end
+```
+
+::: tip
+This is the check that backs Wi-Fi-locked app downloads, and it is the right call for anything of
+your own that should only work inside one building. The player's position is re-read server-side on
+every call, so a modified client cannot talk its way past it.
+:::
+
+### getWifiNetworks
+
+Every configured network with its position and radius.
+
+**Syntax**
+
+```lua
+exports['sd-phone']:getWifiNetworks()
+```
+
+**Returns**
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `networks` | `table[]` | `{ id, ssid, coords, range, secured }`, mirroring `configs/wifi.lua` |
+
+Empty while the system is switched off. The tables are rebuilt on every call, so mutating the result
+never touches the running config.
+
+::: warning
+`secured` is the only password-derived value here. A network's password stays inside the Wi-Fi
+module, is compared only against a player the server has itself placed inside the radius, and is
+never part of any export or any message to a client.
+:::
+
+::: info
+The matching [client exports](./exports-client#wi-fi) answer from the phone's own scan and are meant
+for UI. These are the authoritative ones. Gate on the server exports and use the client ones to
+describe the situation to the player.
+:::
+
 ## Notifications
 
 ### notify
