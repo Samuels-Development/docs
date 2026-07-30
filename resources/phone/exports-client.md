@@ -1,6 +1,6 @@
 ---
 title: Client Exports
-description: Client-side exports for opening the phone, launching apps, showing notifications, and reading phone state from other scripts.
+description: Client-side exports for opening the phone, launching apps, showing notifications, and reading phone, Wi-Fi and Bluetooth state from other scripts.
 ---
 
 # Client Exports
@@ -366,6 +366,92 @@ Every export in this category is display-grade: it answers from where the client
 Anything that has to hold, such as gating a door, a terminal or a download, belongs on
 [`hasWifiAccess`](./exports-server#haswifiaccess), which recomputes the connection from the server's
 own view of the player.
+:::
+
+## Bluetooth
+
+Bluetooth covers the devices other resources register with the phone: boomboxes, car stereos,
+headsets, smartwatches. These exports read a mirror the server pushes on every change, so they cost
+nothing to call and never block. What they cannot do is answer for anyone but the local player.
+
+### isBluetoothOn
+
+Whether this character's Bluetooth radio is switched on.
+
+**Syntax**
+
+```lua
+exports['sd-phone']:isBluetoothOn()
+```
+
+**Returns**
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `enabled` | `boolean` | `true` while the radio is on |
+
+A switched-on radio with nothing in range is still on. This says nothing about what is connected.
+
+### isBluetoothConnected
+
+Whether this phone is connected to a device right now.
+
+**Syntax**
+
+```lua
+exports['sd-phone']:isBluetoothConnected(deviceId)
+```
+
+**Parameters**
+
+| Parameter | Type | Description |
+| --- | --- | --- |
+| `deviceId` | `string` | The device id its owning resource registered |
+
+**Returns**
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `connected` | `boolean` | `true` while the phone holds a live connection to it |
+
+**Example**
+
+```lua
+if exports['sd-phone']:isBluetoothConnected('dispatch_headset') then
+    playRadioChatter()
+end
+```
+
+### getConnectedDevices
+
+Every device this phone is connected to.
+
+**Syntax**
+
+```lua
+exports['sd-phone']:getConnectedDevices()
+```
+
+**Returns**
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `devices` | `table[]` | `{ id, name, kind }`, empty while nothing is connected |
+
+The tables are rebuilt on every call, so mutating the result never touches the mirror.
+
+**Example**
+
+```lua
+for _, device in ipairs(exports['sd-phone']:getConnectedDevices()) do
+    print(('connected to %s (%s)'):format(device.name, device.kind))
+end
+```
+
+::: warning
+Every export in this category is display-grade: it answers from a mirror the client holds. Anything
+that has to hold, such as gating what a boombox will play or what a headset can hear, belongs on the
+[server exports](./exports-server#bluetooth), which answer from the registry itself.
 :::
 
 ## SIM tray

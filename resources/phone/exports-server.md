@@ -1,6 +1,6 @@
 ---
 title: Server Exports
-description: Server-side exports for phone numbers, notifications, messages, calls, mail, banking, and app data from other scripts.
+description: Server-side exports for phone numbers, notifications, messages, calls, mail, banking, Bluetooth devices, and app data from other scripts.
 ---
 
 # Server Exports
@@ -385,6 +385,320 @@ never part of any export or any message to a client.
 The matching [client exports](./exports-client#wi-fi) answer from the phone's own scan and are meant
 for UI. These are the authoritative ones. Gate on the server exports and use the client ones to
 describe the situation to the player.
+:::
+
+## Bluetooth
+
+Bluetooth is a registry rather than a config: another resource declares a device, and phones nearby
+can pair with it. A boombox, a car stereo, a headset and a smartwatch are all the same thing here,
+so what a connection *means* is entirely the owning resource's to decide. The phone only answers who
+is connected to what.
+
+A device belongs to the resource that registered it. Stopping that resource unregisters its devices
+and disconnects everyone on them, so nothing is ever left pointing at a script that is gone.
+
+Positions are re-derived from the server's own view of the player, never asserted by a client.
+
+### registerBluetoothDevice
+
+Registers a device phones can pair with.
+
+**Syntax**
+
+```lua
+exports['sd-phone']:registerBluetoothDevice(device)
+```
+
+**Device**
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `id` | `string` | Unique id, up to 64 characters. Registering an id twice is refused rather than overwritten |
+| `name` | `string` | Name the phone shows in its device list |
+| `kind` | `string?` | `vehicle`, `audio`, `headset`, `wearable` or `device`. Picks the icon; defaults to `device` |
+| `coords` | `vector3?` | Where the device sits. Required unless `entity` is given |
+| `entity` | `number?` | Network id of an entity the device follows, for a prop or a vehicle. Falls back to `coords` when the entity has despawned |
+| `range` | `number?` | Metres it reaches, defaulting to `10.0`. A true sphere, so height counts |
+| `maxConnections` | `number?` | Phones it accepts at once, defaulting to `1`. `0` means unlimited |
+| `onConnect` | `function?` | `(source, deviceId)` when a phone connects |
+| `onDisconnect` | `function?` | `(source, deviceId, reason)` when one goes away |
+
+**Returns**
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `ok` | `boolean` | `false` when the registration was rejected |
+| `err` | `string?` | Why it was rejected |
+
+**Example**
+
+```lua
+exports['sd-phone']:registerBluetoothDevice({
+    id             = 'boombox_pier',
+    name           = 'Pier Boombox',
+    kind           = 'audio',
+    coords         = vector3(-1850.2, -1230.7, 13.0),
+    range          = 18.0,
+    maxConnections = 0,
+    onConnect      = function(source, deviceId)
+        TriggerClientEvent('my-radio:client:takeControl', source, deviceId)
+    end,
+    onDisconnect   = function(source, deviceId, reason)
+        TriggerClientEvent('my-radio:client:releaseControl', source, deviceId, reason)
+    end,
+})
+```
+
+::: info
+A registration is rejected rather than repaired. A missing name, a zero range, a negative connection
+cap or neither `coords` nor `entity` all come back as `false, err`, so a script learns its device is
+wrong instead of finding it silently unreachable.
+:::
+
+### updateBluetoothDevice
+
+Patches a registered device in place. Renaming or moving a device this way keeps everyone connected,
+where unregistering and re-registering would drop them all first.
+
+**Syntax**
+
+```lua
+exports['sd-phone']:updateBluetoothDevice(deviceId, patch)
+```
+
+**Parameters**
+
+| Parameter | Type | Description |
+| --- | --- | --- |
+| `deviceId` | `string` | The device to patch |
+| `patch` | `table` | Any registration field except `id`. Omitted keys keep their current value |
+
+**Returns**
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `ok` | `boolean` | `false` when the patch was refused |
+| `err` | `string?` | Why it was refused |
+
+**Example**
+
+```lua
+exports['sd-phone']:updateBluetoothDevice('boombox_pier', { name = 'Beach Boombox', range = 25.0 })
+```
+
+::: warning
+Only the resource that registered a device may patch it. The merged result still has to pass the
+same validation as a fresh registration, so a patch cannot install a broken device.
+
+Lowering `maxConnections` below the number of phones already on a device does not kick anyone. The
+device simply refuses new connections until it drains.
+:::
+
+### unregisterBluetoothDevice
+
+Removes a device, disconnecting everyone on it first with reason `unregistered`.
+
+**Syntax**
+
+```lua
+exports['sd-phone']:unregisterBluetoothDevice(deviceId)
+```
+
+**Returns**
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `removed` | `boolean` | `false` when no such device was registered |
+
+You rarely need this on shutdown: a resource stopping already takes its own devices with it.
+
+### getBluetoothDevices
+
+Every registered device, as identity only.
+
+**Syntax**
+
+```lua
+exports['sd-phone']:getBluetoothDevices()
+```
+
+**Returns**
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `devices` | `table[]` | `{ id, name, kind, owner }`, where `owner` is the resource that registered it |
+
+Positions, ranges and callbacks are deliberately absent. The tables are rebuilt on every call, so
+mutating the result never reaches into the registry.
+
+### getBluetoothDevice
+
+One registered device, as identity only.
+
+**Syntax**
+
+```lua
+exports['sd-phone']:getBluetoothDevice(deviceId)
+```
+
+**Returns**
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `device` | `table?` | `{ id, name, kind, owner }`, or `nil` when nothing is registered under that id |
+
+### isBluetoothConnected
+
+Whether a player is connected to a device right now.
+
+**Syntax**
+
+```lua
+exports['sd-phone']:isBluetoothConnected(source, deviceId)
+```
+
+**Parameters**
+
+| Parameter | Type | Description |
+| --- | --- | --- |
+| `source` | `number` | Player server ID |
+| `deviceId` | `string` | The device to check |
+
+**Returns**
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `connected` | `boolean` | `true` while the player holds a live connection to it |
+
+**Example**
+
+```lua
+RegisterCommand('playtrack', function(source)
+    if not exports['sd-phone']:isBluetoothConnected(source, 'boombox_pier') then
+        return TriggerClientEvent('chat:addMessage', source, { args = { 'Radio', 'Connect to the boombox first.' } })
+    end
+    -- play the track
+end)
+```
+
+### getBluetoothConnections
+
+Every player connected to a device.
+
+**Syntax**
+
+```lua
+exports['sd-phone']:getBluetoothConnections(deviceId)
+```
+
+**Returns**
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `sources` | `number[]` | Server ids, empty when nobody is on the device |
+
+**Example**
+
+```lua
+for _, src in ipairs(exports['sd-phone']:getBluetoothConnections('boombox_pier')) do
+    TriggerClientEvent('my-radio:client:sync', src, currentTrack)
+end
+```
+
+### getConnectedDevices
+
+Every device a player is connected to.
+
+**Syntax**
+
+```lua
+exports['sd-phone']:getConnectedDevices(source)
+```
+
+**Returns**
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `ids` | `string[]` | Device ids, empty when the player is connected to nothing |
+
+### isBluetoothEnabled
+
+Whether a player's Bluetooth radio is switched on. This is the per-character setting behind the
+toggle in Settings, persisted across sessions.
+
+**Syntax**
+
+```lua
+exports['sd-phone']:isBluetoothEnabled(source)
+```
+
+**Returns**
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `enabled` | `boolean` | `false` when the radio is off, or when the source has no loaded character |
+
+This is what tells "the radio is off" apart from "the device is out of range". Both look identical
+through `isBluetoothConnected` alone, which is worth checking before you tell a player their gear is
+broken.
+
+### connectBluetooth
+
+Connects a player to a device from script, without them pairing through the phone.
+
+**Syntax**
+
+```lua
+exports['sd-phone']:connectBluetooth(source, deviceId)
+```
+
+**Returns**
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `ok` | `boolean` | `false` when the connection was refused |
+| `err` | `string?` | `no character`, `bluetooth is off`, `unknown device` or `device is full` |
+
+**Example — issuing a headset when a shift starts**
+
+```lua
+AddEventHandler('my-job:server:clockOn', function(source)
+    local ok, err = exports['sd-phone']:connectBluetooth(source, 'dispatch_headset')
+    if not ok then print('headset refused: ' .. err) end
+end)
+```
+
+::: info
+This honours the player's radio switch and the device's connection limit, but not its range, which
+is the point of connecting by hand. It does not pair: the device is not added to the player's saved
+list, so nothing reconnects it later. A connection to a device the player *has* paired is still
+subject to the reconnect sweep, which drops it once they walk out of range.
+:::
+
+### disconnectBluetooth
+
+Disconnects a player from a device, firing the owning script's `onDisconnect` with reason `kicked`.
+
+**Syntax**
+
+```lua
+exports['sd-phone']:disconnectBluetooth(source, deviceId)
+```
+
+**Returns**
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `disconnected` | `boolean` | `false` when the player was not connected to it |
+
+The pairing survives, so the phone reconnects on its own while the player stays in range. To stop
+that, unregister the device or move it out of reach.
+
+::: info
+Every connection and disconnection also fires a server event, which is how a resource that does not
+own a device can still watch it. See
+[Bluetooth events](./events-server#bluetooth). The matching
+[client exports](./exports-client#bluetooth) answer for the local player without a round trip.
 :::
 
 ## Notifications

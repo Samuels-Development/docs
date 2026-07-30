@@ -1,6 +1,6 @@
 ---
 title: Server Events
-description: Server-side events the phone fires on message, mail, call, banking, photo, social, and contact activity, for other resources to listen to.
+description: Server-side events the phone fires on message, mail, call, banking, photo, social, contact, Wi-Fi, and Bluetooth activity, for other resources to listen to.
 ---
 
 # Server Events
@@ -363,6 +363,67 @@ Every path that ends a connection fires it: an explicit disconnect, walking out 
 network being edited out of the config under a live connection, and the player dropping from the
 server. A listener gating a door or a terminal on a network has to hear the ending rather than
 merely stop being told about the id, so none of those four is allowed to end a connection silently.
+
+---
+
+## Bluetooth
+
+A device's own `onConnect` and `onDisconnect` callbacks only reach the resource that registered it.
+These events are how everything else watches: a logging script, an admin tool, or a resource that
+cares whether a player has any audio device at all without owning one.
+
+### sd-phone:server:bluetooth:connected
+
+Fires when a player connects to a device, after the owning script's `onConnect` has run, so a
+listener always sees a settled connection.
+
+```lua
+AddEventHandler('sd-phone:server:bluetooth:connected', function(source, deviceId, device)
+    print(('%s connected to %s (%s)'):format(GetPlayerName(source), device.name, device.owner))
+end)
+```
+
+| Parameter | Type | Description |
+|---|---|---|
+| `source` | `number` | The player's server id |
+| `deviceId` | `string` | Device id as its owning resource registered it |
+| `device` | `table` | `{ id, name, kind, owner }`, identity only |
+
+Both the pairing a player taps in Settings and the reconnect sweep that picks a device back up when
+they walk into range come through here. There is no separate "paired" event, because pairing always
+ends in a connection.
+
+### sd-phone:server:bluetooth:disconnected
+
+Fires when a connection ends, once per ending.
+
+```lua
+AddEventHandler('sd-phone:server:bluetooth:disconnected', function(source, deviceId, reason)
+    if reason == 'range' then
+        print(GetPlayerName(source) .. ' walked away from ' .. deviceId)
+    end
+end)
+```
+
+| Parameter | Type | Description |
+|---|---|---|
+| `source` | `number` | The player's server id |
+| `deviceId` | `string` | The device they were on, read before the connection was cleared |
+| `reason` | `string` | Why it ended, from the table below |
+
+| Reason | Meaning |
+|---|---|
+| `manual` | The player disconnected or forgot the device in Settings |
+| `range` | They walked out of the device's reach |
+| `disabled` | They switched their Bluetooth radio off |
+| `dropped` | They left the server |
+| `unregistered` | The device was removed, or the resource owning it stopped |
+| `kicked` | A script called `disconnectBluetooth` |
+
+Every path that ends a connection fires it, including the two that no client ever reports: the
+owning resource stopping, and the player dropping. A listener holding state against a connection has
+to hear the ending rather than merely stop being told about it, so none of the six is allowed to end
+a connection silently.
 
 ---
 
