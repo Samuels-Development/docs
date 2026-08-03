@@ -152,7 +152,7 @@
 
 .vp-doc table {
   border-radius: 8px;
-  overflow: hidden;
+  overflow-x: auto;
 }
 
 .vp-doc table td:first-child,

@@ -147,14 +147,14 @@ After the handshake these globals exist on your page's `window`. Both capitaliza
 | `SetPopUp(data)` | Phone-native dialog: `title`, `description`, optional `input`, `buttons` with `cb` callbacks |
 | `SetContextMenu(data)` | Phone-native action sheet with `buttons` |
 | `SendNotification({ title, content })` | Raises a phone notification and unread badge tied to your app |
-| `GetSettings()` / `OnSettingsChange(cb)` | Phone settings; read `settings.display.theme` for light/dark support |
-| `SelectGallery` / `SelectEmoji` / `SelectGIF` / `colorPicker` / `contactSelector` | Phone-native pickers, callback style |
+| `GetSettings()`<br>`OnSettingsChange(cb)` | Phone settings; read `settings.display.theme` for light/dark support |
+| `SelectGallery`<br>`SelectEmoji`<br>`SelectGIF`<br>`colorPicker`<br>`contactSelector` | Phone-native pickers, callback style |
 | `openMedia({ src })` | Fullscreen image viewer |
 | `setApp(name)` | Navigate to another app |
 | `createCall({ number })` | Opens the phone dialer |
 | `formatPhoneNumber(value)` | Formats a number the way the phone does |
 | `components.*` | The namespaced form of everything above, plus `uploadMedia`, `saveToGallery` and `createGameRender` |
-| `appName` / `resourceName` / `appIdentifier` | Your app's registered name, owning resource, and identifier |
+| `appName`<br>`resourceName`<br>`appIdentifier` | Your app's registered name, owning resource, and identifier |
 
 The TypeScript template ships a `components.d.ts` typing the common surface.
 
