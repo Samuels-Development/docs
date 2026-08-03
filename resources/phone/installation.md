@@ -180,12 +180,6 @@ INSERT INTO `items` (`name`, `label`, `weight`, `rare`, `can_remove`) VALUES
 
 :::
 
-::: info Only ox_inventory needs `consume` and `server.export`
-`consume = 0` is what keeps the phone in the player's pocket when they use it, and the export name is derived from the item name (`phone_blue` becomes `usePhone_blue`), so a renamed item needs a matching `server.export`. Every other inventory registers through its own usable-item API automatically, so those definitions need neither field.
-
-The item-to-colour mapping lives in `configs/phone.lua` if you want different item names. Players can also press the open keybind (default F1), which is server-gated on actually owning a phone item.
-:::
-
 ## <span class="step-num">3</span> Add Item Images
 
 Copy the item icons from sd-phone's `images/` folder into your inventory's image folder (`ox_inventory/web/images/`, `qb-inventory/html/images/`, and so on). You can also download them directly from the container below.
@@ -208,7 +202,32 @@ Copy the item icons from sd-phone's `images/` folder into your inventory's image
 
 The files are named after the items, so ox_inventory picks them up automatically with no `image` field needed. `sim_card.png` is only needed if you turn on [unique phones](/resources/phone/unique-phones); see below.
 
-## <span class="step-num">4</span> Start the Resource
+## <span class="step-num">4</span> Add Your API Keys
+
+Third-party keys live in `configs/server/apikeys.lua`, which is deliberately excluded from the client download. Set them before you start the phone for the first time:
+
+| Key | Purpose |
+|---|---|
+| `Giphy` | The Messages GIF picker. Free key from developers.giphy.com; left blank the picker shows a setup hint |
+| `FivemanageMedia` | **Required** for the Camera, Photos and Voice Memos apps. Photo, video, and voice-note uploads go through fivemanage.com. Use a Fivemanage token of type **Media**. Left blank, the uploader falls back to the legacy `sd_fivemanage_key` convar; with neither set, capture UI still opens but nothing uploads or saves |
+
+::: warning The media apps need a Fivemanage key
+Camera photos and videos, Photos uploads, and Voice Memos all store their files on Fivemanage. Without a `FivemanageMedia` token, those apps open but captures never upload or save. Create a free token in the [Fivemanage](https://refer.fivemanage.com/samuel) dashboard: open the **Tokens** tab, click Create Token, and pick token type **Media**. The rest of the phone works fine without it.
+:::
+
+<div align="center" style="margin: 2.5rem 0; padding: 2rem 1rem; border: 1px solid var(--vp-c-divider); border-radius: 14px;">
+
+<a href="https://refer.fivemanage.com/samuel" target="_blank" rel="noreferrer"><img src="/fivemanage-banner.png" alt="Fivemanage" width="360" style="border-radius: 10px;" /></a>
+
+<h3 style="border: 0; margin: 0.75rem 0 0.5rem;">Media hosting for the phone</h3>
+
+Photos, camera clips and voice memos upload to **[Fivemanage](https://refer.fivemanage.com/samuel)** and come back as fast CDN URLs, so you never run your own media server. Required for those apps: in the dashboard, open the **Tokens** tab, create a token of type **Media**, and drop it into `FivemanageMedia`.
+
+<a href="https://refer.fivemanage.com/samuel" target="_blank" rel="noreferrer"><img src="https://img.shields.io/badge/Get%20started%20with%20Fivemanage-%E2%86%92-0D0D0D?style=for-the-badge" alt="Get started with Fivemanage" /></a>
+
+</div>
+
+## <span class="step-num">5</span> Start the Resource
 
 To load the resource, either restart your server entirely, or run the following in your **server console** (F8 or txAdmin live console):
 
@@ -280,39 +299,14 @@ INSERT INTO `items` (`name`, `label`, `weight`, `rare`, `can_remove`) VALUES
 
 That's the whole integration. Sell or spawn `sim_card` anywhere you like — an ox_inventory shop, a loot table, an admin give — and a blank card **activates itself on first use**, minting a fresh registered number on the spot. The `giveSimCard` export exists only for special cases (character-bound SIMs or hardcoded numbers), and `ActivateBlankSims = false` in `configs/uniqueandsim.lua` disables self-activation if you want every SIM to come through it.
 
-## API keys
-
-Third-party keys live in `configs/server/apikeys.lua`, which is deliberately excluded from the client download:
-
-| Key | Purpose |
-|---|---|
-| `Giphy` | The Messages GIF picker. Free key from developers.giphy.com; left blank the picker shows a setup hint |
-| `FivemanageMedia` | **Required** for the Camera, Photos and Voice Memos apps. Photo, video, and voice-note uploads go through fivemanage.com. Use a Fivemanage token of type **Media**. Left blank, the uploader falls back to the legacy `sd_fivemanage_key` convar; with neither set, capture UI still opens but nothing uploads or saves |
-
-::: warning The media apps need a Fivemanage key
-Camera photos and videos, Photos uploads, and Voice Memos all store their files on Fivemanage. Without a `FivemanageMedia` token, those apps open but captures never upload or save. Create a free token in the [Fivemanage](https://refer.fivemanage.com/samuel) dashboard: open the **Tokens** tab, click Create Token, and pick token type **Media**. The rest of the phone works fine without it.
-:::
-
-<div align="center" style="margin: 2.5rem 0; padding: 2rem 1rem; border: 1px solid var(--vp-c-divider); border-radius: 14px;">
-
-<a href="https://refer.fivemanage.com/samuel" target="_blank" rel="noreferrer"><img src="/fivemanage-banner.png" alt="Fivemanage" width="360" style="border-radius: 10px;" /></a>
-
-<h3 style="border: 0; margin: 0.75rem 0 0.5rem;">Media hosting for the phone</h3>
-
-Photos, camera clips and voice memos upload to **[Fivemanage](https://refer.fivemanage.com/samuel)** and come back as fast CDN URLs, so you never run your own media server. Required for those apps: in the dashboard, open the **Tokens** tab, create a token of type **Media**, and drop it into `FivemanageMedia`.
-
-<a href="https://refer.fivemanage.com/samuel" target="_blank" rel="noreferrer"><img src="https://img.shields.io/badge/Get%20started%20with%20Fivemanage-%E2%86%92-0D0D0D?style=for-the-badge" alt="Get started with Fivemanage" /></a>
-
-</div>
-
 ## Convars
 
 | Convar | Default | Purpose |
 |---|---|---|
 | `sd_fivemanage_key` | empty | Legacy location for the Fivemanage media token; prefer `configs/server/apikeys.lua` |
 | `sd_phone_lbcompat` | `true` | The [lb-phone compatibility layer](./lb-phone-compatibility); set `false` to disable |
-| `sd_phone_turn_url` / `sd_phone_turn_username` / `sd_phone_turn_credential` | empty | Static TURN server for nearby-voice capture in camera videos and Photogram Live |
-| `sd_cf_turn_token_id` / `sd_cf_turn_api_token` | empty | Alternatively, Cloudflare Calls TURN credentials (auto-minted short-lived keys) |
+| `sd_phone_turn_url`<br>`sd_phone_turn_username`<br>`sd_phone_turn_credential` | empty | Static TURN server for nearby-voice capture in camera videos and Photogram Live |
+| `sd_cf_turn_token_id`<br>`sd_cf_turn_api_token` | empty | Alternatively, Cloudflare Calls TURN credentials (auto-minted short-lived keys) |
 
 The TURN convars are optional: without them, video voice capture still records the player's own microphone, and nearby-player voices are captured whenever a direct connection succeeds.
 

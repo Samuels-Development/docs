@@ -44,18 +44,19 @@ Framework and inventory are detected automatically, so there is nothing to confi
 
 sd-tablet builds sd-phone's interface from source, so there is a one-time build step. It is quick.
 
-1. Download the tablet from the [CFX Portal](https://portal.cfx.re/assets/granted-assets) or the [repo](https://github.com/Samuels-Development/sd-tablet), and extract it into your server's `resources` directory.
-2. **Place `sd-tablet` in the same folder as `sd-phone`.** If sd-phone lives in a category folder such as `[sd]`, put sd-tablet in that same folder.
-3. Install [Node.js](https://nodejs.org) (the **LTS** version) if you do not have it. Close and reopen any terminal afterwards so the `npm` command is available.
-4. Open a terminal **inside the tablet's `web` folder**. On Windows, find the `web` folder inside `sd-tablet`, right-click it and choose **Copy as path**, then in Command Prompt or PowerShell type `cd ` and paste. You are in the right place when the line ends with `...\sd-tablet\web>`.
-5. Run these two commands, one at a time, waiting for each to finish:
+1. Get the source from the [repo](https://github.com/Samuels-Development/sd-tablet): either the green **Code** button > **Download ZIP**, or `git clone https://github.com/Samuels-Development/sd-tablet.git`.
+2. If you downloaded the ZIP, the folder is named `sd-tablet-main`. **Rename it to `sd-tablet`**, or the resource will not start in-game.
+3. **Place `sd-tablet` in the same folder as `sd-phone`.** If sd-phone lives in a category folder such as `[sd]`, put sd-tablet in that same folder.
+4. Install [Node.js](https://nodejs.org) (the **LTS** version) if you do not have it. Close and reopen any terminal afterwards so the `npm` command is available.
+5. Open a terminal **inside the tablet's `web` folder**. On Windows, find the `web` folder inside `sd-tablet`, right-click it and choose **Copy as path**, then in Command Prompt or PowerShell type `cd ` and paste. You are in the right place when the line ends with `...\sd-tablet\web>`.
+6. Run these two commands, one at a time, waiting for each to finish:
 
 ```sh
 npm install
 npm run build
 ```
 
-6. When the second command prints something like `built in 6.07s`, a `web/build` folder has appeared. That is the compiled tablet.
+7. When the second command prints something like `built in 6.07s`, a `web/build` folder has appeared. That is the compiled tablet.
 
 ::: warning "Next to sd-phone" is not cosmetic
 The build resolves sd-phone's source through a relative path (`../../sd-phone/web/src`). If the two resources are not siblings, the build cannot find it and fails. This is also why the tablet must be rebuilt whenever you update sd-phone.
@@ -178,12 +179,6 @@ INSERT INTO `items` (`name`, `label`, `weight`, `rare`, `can_remove`) VALUES
 
 :::
 
-::: info Only ox_inventory needs the `server.export` line
-On ox_inventory the export name is derived from the item name (`tablet_blue` becomes `useTablet_blue`), so a renamed item needs a matching `server.export`. Every other inventory registers through its own usable-item API automatically, so those definitions need no export field at all.
-
-The item-to-colour mapping lives in `configs/tablet.lua` if you want different item names. Set `RequireItem = false` there to give everyone the keybind without carrying anything, or `Items = false` to drop item-based opening entirely.
-:::
-
 ::: details Upgrading from an earlier build? Add the legacy `tablet` item too
 Before the colours existed there was a single item named `tablet`. It is still listed in `configs/tablet.lua` so tablets already sitting in players' inventories keep working, and it opens in black. If you are installing fresh you do not need it.
 
@@ -276,6 +271,8 @@ The tablet compiles sd-phone's interface, so the two move together:
 ## Configuration
 
 Open and close behaviour, the keybind, the hold pose and prop, movement, safety blocks and the cosmetic status bar all live in `configs/tablet.lua`. The dock, wallpaper and app catalog live in `configs/apps.lua`.
+
+The item list itself is in `configs/tablet.lua` too, if you want different item names. Set `RequireItem = false` there to give everyone the keybind without carrying anything, or `Items = false` to drop item-based opening entirely.
 
 Everything else the tablet displays is configured in [sd-phone's own config](/resources/phone/configuration), because the data is the phone's.
 
