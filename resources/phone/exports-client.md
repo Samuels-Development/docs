@@ -520,6 +520,21 @@ local ok, err = exports['sd-phone']:addCustomApp({
 | `ok` | `boolean` | Whether the app was registered |
 | `err` | `string?` | Reason when `ok` is false |
 
+Optional `devices` and `job` fields limit who sees the icon:
+
+```lua
+exports['sd-phone']:addCustomApp({
+    identifier = 'mdt-lite',
+    name       = 'MDT Lite',
+    ui         = GetCurrentResourceName() .. '/ui/index.html',
+    devices    = 'tablet',
+    job        = { police = 2 },
+})
+```
+
+Both only decide whether an icon is drawn. Neither authorises anything, so keep checking the job
+server-side in your own resource. See [Limiting who sees an app](/resources/phone/custom-apps#limiting-who-sees-an-app).
+
 ### removeCustomApp
 
 Unregisters a custom app. Only the resource that registered the identifier may remove it; apps are also removed automatically when their resource stops.

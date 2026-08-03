@@ -26,6 +26,17 @@ Ensure your app resource **after** sd-phone in `server.cfg` (place its `ensure` 
 local ok, err = exports['sd-phone']:addCustomApp(app)
 ```
 
+::: warning The name is camelCase on this export
+`exports['sd-phone']` uses sd-phone's own camelCase names. The PascalCase lb-phone names
+(`AddCustomApp`, `RemoveCustomApp`, `SendCustomAppMessage`, `CloseApp`) exist **only** on
+`exports['lb-phone']`, never on `exports['sd-phone']`.
+
+Calling `exports['sd-phone']:AddCustomApp(...)` indexes a nil and throws. If your registration
+sits behind a `pcall` and a retry loop, that throw is easy to misread as "the phone has not
+started yet", and the loop will retry until it gives up even though sd-phone was ready the whole
+time. See [Supporting both phones](#supporting-both-phones).
+:::
+
 | Field | Type | Required | Description |
 |---|---|---|---|
 | `identifier` | `string` | yes | Unique app id, never shown to players. Built-in app ids are reserved |
@@ -33,6 +44,8 @@ local ok, err = exports['sd-phone']:addCustomApp(app)
 | `description` | `string` | no | App Store description |
 | `developer` | `string` | no | App Store provider attribution |
 | `defaultApp` | `boolean` | no | `true` = pre-installed for everyone, `false`/absent = downloadable from the App Store |
+| `devices` | `string` \| `string[]` | no | Devices that list the app: `'phone'`, `'tablet'`. Absent = every device. See [Limiting who sees an app](#limiting-who-sees-an-app) |
+| `job` | `string` \| `string[]` \| `table` | no | Jobs that see the app, optionally with a minimum grade. Absent = everyone. **Cosmetic only.** See [Limiting who sees an app](#limiting-who-sees-an-app) |
 | `ui` | `string` | no | The app webpage: `resourcename/path/index.html`, or a full `http(s)://` URL (a Vite dev server, or a remote site) |
 | `icon` | `string` | no | Icon URL, usually `https://cfx-nui-<resource>/ui/icon.svg`. Without one the phone renders a monogram tile |
 | `images` | `string[]` | no | Screenshot URLs for the App Store listing |
@@ -174,9 +187,125 @@ useNuiEvent('balanceChanged', (data) => setBalance(data.balance));
 
 Do not push initial data from `onOpen`; the page may still be loading when it fires. Let the UI pull on mount instead.
 
+## Limiting who sees an app
+
+Two optional fields decide whether the app's icon is drawn. Leave either out and it does not
+restrict anything.
+
+### `devices`
+
+Some apps only make sense on one device. `devices` is an allow-list of device ids, matched
+case-insensitively:
+
+```lua
+devices = 'tablet'              -- tablet only
+devices = { 'phone', 'tablet' } -- both, same as leaving it out
+```
+
+Current ids are `phone` and `tablet`. An empty list is treated as "no restriction" rather than
+"no devices", so a mistake never silently hides your app everywhere.
+
+### `job`
+
+`job` restricts the app to one or more jobs, in whichever of these shapes suits you:
+
+```lua
+job = 'police'                            -- one job, any grade
+job = { 'police', 'ambulance' }           -- several jobs, any grade
+job = { police = 3, ambulance = 0 }       -- minimum grade per job
+```
+
+The icon appears and disappears as the player's job changes; there is nothing to poll and nothing
+to re-register. Before the framework has loaded a job for the player, gated apps are hidden.
+
+::: danger These fields are cosmetic. They are not security.
+`job` decides whether an **icon is drawn**. It does not protect anything behind it.
+
+A player can trigger your resource's events and call your callbacks directly, whether or not the
+phone ever drew your icon for them. Anything that matters must be checked **server-side**, in your
+own resource:
+
+```lua
+-- In YOUR resource, server side. Do not rely on the icon being hidden.
+lib.callback.register('my-app:server:doThing', function(source)
+    if not hasPoliceJob(source) then return false end
+    -- ...
+end)
+```
+
+Treat `job` as a way to keep home screens tidy, not as an access control list.
+:::
+
 ## Development workflow
 
 Point the app at a live dev server for hot reload: set `ui_page 'http://localhost:5173'` in your manifest (the templates read `ui_page` back to build the `ui` field), restart your resource, and the phone loads the dev server inside the app frame. Swap back to the built page for production.
+
+## Supporting both phones
+
+If you are shipping an app that should work on sd-phone **and** lb-phone, do not detect which one is
+running. Call `exports['lb-phone']` unconditionally and use lb-phone's PascalCase names.
+
+```lua
+-- Works on both. sd-phone answers this through its compatibility layer.
+local ok, err = exports['lb-phone']:AddCustomApp(app)
+```
+
+This works because of how FiveM resolves exports, not because of `provide`. Indexing
+`exports['lb-phone'].AddCustomApp` fires a `__cfx_export_lb-phone_AddCustomApp` event and uses
+whichever handler answers. On a server running only sd-phone, that handler is sd-phone's
+compatibility layer, and every lb-shaped export listed under
+[export coverage](./lb-phone-compatibility#export-coverage) answers. On a server running the real
+lb-phone it is lb-phone. **No resource named `lb-phone` has to exist for this to work.**
+
+::: danger Do not gate on `GetResourceState('lb-phone')`
+`provide 'lb-phone'` does **not** make `GetResourceState('lb-phone')` report `started`. It only
+satisfies other resources' `dependency 'lb-phone'` declarations. On a server running just sd-phone
+that state reads as missing, so a readiness check written against it will wait forever and never
+call an export that would have answered immediately.
+
+Check the real resource instead, and call the alias regardless:
+
+```lua
+local function phoneStarted()
+    return GetResourceState('sd-phone') == 'started'
+        or GetResourceState('lb-phone') == 'started'
+end
+```
+:::
+
+The trap is doing it the other way around: resolving *which* phone is running and then calling
+lb-shaped names on whichever one you found. That works for lb-phone and throws for sd-phone, because
+the names differ per namespace:
+
+| Called on `exports['lb-phone']` | Equivalent on `exports['sd-phone']` |
+| --- | --- |
+| `AddCustomApp` | `addCustomApp` |
+| `RemoveCustomApp` | `removeCustomApp` |
+| `SendCustomAppMessage` | `sendCustomAppMessage` |
+| `CloseApp` | `close` |
+
+Note the last row. It is not a pure case difference, so lowercasing the first letter is not a safe
+shim.
+
+Two things to know before you rely on this path:
+
+- The compatibility layer is on by default but an admin can switch it off with
+  `set sd_phone_lbcompat "false"`, which takes the `lb-phone` exports with it. If your app targets
+  sd-phone specifically rather than both phones, prefer sd-phone's own camelCase names.
+- Restarting the phone strands consumers that already resolved an `exports['lb-phone']` function,
+  until those consumers restart too. See the
+  [restart caveat](./lb-phone-compatibility#enabling-and-disabling). During development, restart
+  your app resource after restarting the phone.
+
+::: danger A leftover lb-phone folder disables the layer, even stopped
+sd-phone's compatibility layer stands down on purpose when it finds any resource named `lb-phone`
+that is not its own shim, so that it never competes with a real lb-phone. That check enumerates
+resources rather than reading their state, so a folder that is present but **never started** is
+enough to switch the layer off, and with it every `exports['lb-phone']` name.
+
+The symptom is registration that retries and gives up while the phone is plainly running. Move any
+old lb-phone folder out of `resources/` entirely rather than merely leaving it unstarted.
+:::
 
 ## Notes and limits
 
