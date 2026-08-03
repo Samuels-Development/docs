@@ -55,6 +55,9 @@ A modular low-level crime suite with 20 activities — mailbox break-ins, pickpo
 ### [Phone](/resources/phone/)
 An iOS-themed smartphone with 45+ server-backed apps: messages, mail, calls over pma-voice, social apps on a real accounts engine, a live game-view camera, online multiplayer games, ride-hailing, and a newsroom. Ships an extensive export and event surface for developers, plus a drop-in lb-phone compatibility layer with data migration.
 
+### [Tablet](/resources/tablet/)
+A companion tablet for the phone. Same apps, same accounts, same character and the same data on a bigger screen, with no pairing or syncing, plus a police MDT built for the larger layout. Requires sd-phone.
+
 ---
 
 ## Common Dependencies

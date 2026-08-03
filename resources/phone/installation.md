@@ -68,9 +68,9 @@ Hard requirements, both must start before the phone:
 
 The phone auto-detects the running framework (qb-core, qbx_core, ESX) and whichever inventory, banking, housing, garage, and voice resources are installed; there is nothing to configure for the common setups. Calls and the Radio app carry audio over pma-voice.
 
-## Setup
+## <span class="step-num">1</span> Add the Resource
 
-1. Place `sd-phone` and [`sd-phone-props`](https://github.com/Samuels-Development/sd-phone-props) in your resources folder and ensure them after the dependencies:
+Place `sd-phone` and [`sd-phone-props`](https://github.com/Samuels-Development/sd-phone-props) in your resources folder and ensure them after the dependencies:
 
 ```cfg
 ensure ox_lib
@@ -79,13 +79,17 @@ ensure sd-phone-props
 ensure sd-phone
 ```
 
-2. Database tables create themselves on first boot; there is no SQL file to import.
+::: tip No SQL to import
+Database tables create themselves on first boot. The only SQL on this page is the ESX item list below, and that is for your inventory, not the phone.
+:::
 
-3. Copy the item icons from sd-phone's `images/` folder into `ox_inventory/web/images/`. The files are named after the items (`phone_black.png`, `phone_blue.png`, ...), so ox_inventory picks them up automatically with no `image` field needed.
+## <span class="step-num">2</span> Add Items
 
-4. Add the phone items to `ox_inventory/data/items.lua`. Each item maps to a frame colour and matching in-hand prop, and `consume = 0` keeps the item on use:
+Register **8 items**, one per frame colour. Each item maps to a frame colour and its matching in-hand prop.
 
-```lua
+::: code-group
+
+```lua [ox_inventory]
 ['phone_black'] = {
     label = 'Phone',
     weight = 190,
@@ -151,11 +155,69 @@ ensure sd-phone
 },
 ```
 
-::: info
-The black phone's item name is `phone_black` and its icon is `phone_black.png`. The item-to-colour mapping lives in `configs/phone.lua` if you want different item names.
+```lua [qb-core / qbx_core]
+['phone_black']  = { name = 'phone_black',  label = 'Phone',        weight = 190, type = 'item', image = 'phone_black.png',  unique = true, useable = true, shouldClose = true, description = 'A smartphone.' },
+['phone_blue']   = { name = 'phone_blue',   label = 'Blue Phone',   weight = 190, type = 'item', image = 'phone_blue.png',   unique = true, useable = true, shouldClose = true, description = 'A smartphone.' },
+['phone_green']  = { name = 'phone_green',  label = 'Green Phone',  weight = 190, type = 'item', image = 'phone_green.png',  unique = true, useable = true, shouldClose = true, description = 'A smartphone.' },
+['phone_orange'] = { name = 'phone_orange', label = 'Orange Phone', weight = 190, type = 'item', image = 'phone_orange.png', unique = true, useable = true, shouldClose = true, description = 'A smartphone.' },
+['phone_pink']   = { name = 'phone_pink',   label = 'Pink Phone',   weight = 190, type = 'item', image = 'phone_pink.png',   unique = true, useable = true, shouldClose = true, description = 'A smartphone.' },
+['phone_purple'] = { name = 'phone_purple', label = 'Purple Phone', weight = 190, type = 'item', image = 'phone_purple.png', unique = true, useable = true, shouldClose = true, description = 'A smartphone.' },
+['phone_red']    = { name = 'phone_red',    label = 'Red Phone',    weight = 190, type = 'item', image = 'phone_red.png',    unique = true, useable = true, shouldClose = true, description = 'A smartphone.' },
+['phone_yellow'] = { name = 'phone_yellow', label = 'Yellow Phone', weight = 190, type = 'item', image = 'phone_yellow.png', unique = true, useable = true, shouldClose = true, description = 'A smartphone.' },
+```
 
-Players can also press the open keybind (default F1), which is server-gated on actually owning a phone item. Other inventories register through their own usable-item APIs automatically; only the icons need copying into your inventory's image folder.
+```sql [ESX]
+INSERT INTO `items` (`name`, `label`, `weight`, `rare`, `can_remove`) VALUES
+  ('phone_black',  'Phone',        190, 0, 1),
+  ('phone_blue',   'Blue Phone',   190, 0, 1),
+  ('phone_green',  'Green Phone',  190, 0, 1),
+  ('phone_orange', 'Orange Phone', 190, 0, 1),
+  ('phone_pink',   'Pink Phone',   190, 0, 1),
+  ('phone_purple', 'Purple Phone', 190, 0, 1),
+  ('phone_red',    'Red Phone',    190, 0, 1),
+  ('phone_yellow', 'Yellow Phone', 190, 0, 1);
+```
+
 :::
+
+::: info Only ox_inventory needs `consume` and `server.export`
+`consume = 0` is what keeps the phone in the player's pocket when they use it, and the export name is derived from the item name (`phone_blue` becomes `usePhone_blue`), so a renamed item needs a matching `server.export`. Every other inventory registers through its own usable-item API automatically, so those definitions need neither field.
+
+The item-to-colour mapping lives in `configs/phone.lua` if you want different item names. Players can also press the open keybind (default F1), which is server-gated on actually owning a phone item.
+:::
+
+## <span class="step-num">3</span> Add Item Images
+
+Copy the item icons from sd-phone's `images/` folder into your inventory's image folder (`ox_inventory/web/images/`, `qb-inventory/html/images/`, and so on). You can also download them directly from the container below.
+
+<ItemImageGrid
+  title="Phone Item Images"
+  zipName="sd-phone-images"
+  :images="[
+    { src: '/items/phone/phone_black.png', name: 'phone_black.png', alt: 'Phone' },
+    { src: '/items/phone/phone_blue.png', name: 'phone_blue.png', alt: 'Blue Phone' },
+    { src: '/items/phone/phone_green.png', name: 'phone_green.png', alt: 'Green Phone' },
+    { src: '/items/phone/phone_orange.png', name: 'phone_orange.png', alt: 'Orange Phone' },
+    { src: '/items/phone/phone_pink.png', name: 'phone_pink.png', alt: 'Pink Phone' },
+    { src: '/items/phone/phone_purple.png', name: 'phone_purple.png', alt: 'Purple Phone' },
+    { src: '/items/phone/phone_red.png', name: 'phone_red.png', alt: 'Red Phone' },
+    { src: '/items/phone/phone_yellow.png', name: 'phone_yellow.png', alt: 'Yellow Phone' },
+    { src: '/items/phone/sim_card.png', name: 'sim_card.png', alt: 'SIM Card' },
+  ]"
+/>
+
+The files are named after the items, so ox_inventory picks them up automatically with no `image` field needed. `sim_card.png` is only needed if you turn on [unique phones](/resources/phone/unique-phones); see below.
+
+## <span class="step-num">4</span> Start the Resource
+
+To load the resource, either restart your server entirely, or run the following in your **server console** (F8 or txAdmin live console):
+
+```cfg
+refresh
+ensure sd-phone
+```
+
+## Optional item setup
 
 ### SIM tray button (only for `SimTray`)
 
@@ -192,7 +254,9 @@ Note the comma added after `server = { ... }` once a field follows it. Repeat fo
 
 Only needed if you turn on [unique phones](/resources/phone/unique-phones) in `configs/uniqueandsim.lua` (off by default), where phone numbers live on SIM items instead of characters. Not needed in the `BuiltInNumbers` variant, where phones mint their own numbers. Copy `sim_card.png` from sd-phone's `images/` folder into `ox_inventory/web/images/` like the phone icons, then add the item:
 
-```lua
+::: code-group
+
+```lua [ox_inventory]
 ['sim_card'] = {
     label = 'SIM Card',
     weight = 5,
@@ -202,6 +266,17 @@ Only needed if you turn on [unique phones](/resources/phone/unique-phones) in `c
     server = { export = 'sd-phone.useSim_card' }
 },
 ```
+
+```lua [qb-core / qbx_core]
+['sim_card'] = { name = 'sim_card', label = 'SIM Card', weight = 5, type = 'item', image = 'sim_card.png', unique = true, useable = true, shouldClose = true, description = 'A SIM card. Install it in a phone to get a number.' },
+```
+
+```sql [ESX]
+INSERT INTO `items` (`name`, `label`, `weight`, `rare`, `can_remove`) VALUES
+  ('sim_card', 'SIM Card', 5, 0, 1);
+```
+
+:::
 
 That's the whole integration. Sell or spawn `sim_card` anywhere you like — an ox_inventory shop, a loot table, an admin give — and a blank card **activates itself on first use**, minting a fresh registered number on the spot. The `giveSimCard` export exists only for special cases (character-bound SIMs or hardcoded numbers), and `ActivateBlankSims = false` in `configs/uniqueandsim.lua` disables self-activation if you want every SIM to come through it.
 

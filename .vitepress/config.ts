@@ -397,7 +397,7 @@ const globalSidebar = [
     ],
   },
   {
-    text: 'Phone',
+    text: 'Phone & Tablet',
     items: [
       {
         text: 'Phone',
@@ -425,6 +425,14 @@ const globalSidebar = [
             ],
           },
           { text: 'lb-phone Compatibility', link: '/resources/phone/lb-phone-compatibility' },
+        ],
+      },
+      {
+        text: 'Tablet',
+        collapsed: true,
+        items: [
+          { text: 'Overview', link: '/resources/tablet/' },
+          { text: 'Installation', link: '/resources/tablet/installation' },
         ],
       },
     ],
