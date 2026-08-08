@@ -117,22 +117,36 @@ html, body {
 }
 ```
 
-**Render only after `componentsLoaded`.** In game, the phone injects the API globals into your page and then posts the string `componentsLoaded` to your window. Rendering earlier means the globals do not exist yet.
+**Render only after `componentsLoaded`.** In game, the phone injects the API globals into your page and then posts the string `componentsLoaded` to your window. The injection happens *after* your page has loaded, so none of the globals exist while your own scripts are parsing. Touching one at that point throws `ReferenceError`.
+
+Wait on both signals the phone gives. The posted string fires once, so a page that attaches its listener late never hears it; the `componentsLoaded` flag covers that case because a poll can re-read it. Racing the two is the only form that is correct whether the phone is fast or slow:
 
 ```js
 const devMode = !window.invokeNative;
 
-if (window.name === '' || devMode) {
-    if (devMode) {
-        document.body.style.visibility = 'visible';
-        render();
-    } else {
+function whenReady() {
+    return new Promise((resolve) => {
+        if (window.componentsLoaded) return resolve();
+
+        const poll = setInterval(() => {
+            if (window.componentsLoaded) { clearInterval(poll); resolve(); }
+        }, 50);
+
         window.addEventListener('message', (e) => {
-            if (e.data === 'componentsLoaded') render();
+            if (e.data === 'componentsLoaded') { clearInterval(poll); resolve(); }
         });
-    }
+    });
+}
+
+if (devMode) {
+    document.body.style.visibility = 'visible';
+    render();
+} else {
+    whenReady().then(render);
 }
 ```
+
+A listener on its own is the common mistake, and it fails intermittently: it works on a slow phone and breaks on a fast one, which makes it painful to reproduce. Registering DOM event handlers at parse time is fine, because they only reach for the globals once something is clicked.
 
 `window.invokeNative` only exists inside FiveM, which makes it the dev-mode detector: in a plain browser the app renders immediately with mocked data.
 
@@ -142,13 +156,20 @@ After the handshake these globals exist on your page's `window`. Both capitaliza
 
 | Global | Description |
 |---|---|
-| `fetchNui(event, data)` | POSTs to your own resource's `RegisterNUICallback` handlers, returns a Promise |
-| `useNuiEvent(action, cb)` | Receives `sendCustomAppMessage` pushes matching `action` |
+| `fetchNui(event, data)` | POSTs to your own resource's `RegisterNUICallback` handlers, returns a Promise. Resolves `undefined` on any failure |
+| `fetchNuiStrict(event, data)` | As `fetchNui`, but rejects instead of swallowing, so a failed call is distinguishable from a handler that returned nothing |
+| `useNuiEvent(action, cb)` | Receives `sendCustomAppMessage` pushes matching `action`. Returns an unsubscribe function |
 | `SetPopUp(data)` | Phone-native dialog: `title`, `description`, optional `input`, `buttons` with `cb` callbacks |
 | `SetContextMenu(data)` | Phone-native action sheet with `buttons` |
 | `SendNotification({ title, content })` | Raises a phone notification and unread badge tied to your app |
 | `GetSettings()`<br>`OnSettingsChange(cb)` | Phone settings; read `settings.display.theme` for light/dark support |
-| `SelectGallery`<br>`SelectEmoji`<br>`SelectGIF`<br>`colorPicker`<br>`contactSelector` | Phone-native pickers, callback style |
+| `SelectGallery`<br>`SelectEmoji`<br>`SelectGIF`<br>`colorPicker`<br>`contactSelector` | Phone-native pickers. Each takes a callback *and* resolves the same value, so `await` works too |
+| `UseCamera()` | Opens the phone's camera. Resolves the uploaded photo URL, or `null` if the player backs out |
+| `ShowConfirm(text)` | Yes/no dialog over `SetPopUp`, resolving a boolean |
+| `GetPhoneNumber()` | The acting character's number, or `null` when it cannot be resolved |
+| `GetStorage(key, fallback)`<br>`SetStorage(key, value)` | Per-app persistence, JSON in and out |
+| `OnAppOpen(cb)`<br>`OnAppClose(cb)` | Fires as your app is foregrounded and backgrounded |
+| `componentsSupports(name)` | Feature test that accounts for stubs; see below |
 | `openMedia({ src })` | Fullscreen image viewer |
 | `setApp(name)` | Navigate to another app |
 | `createCall({ number })` | Opens the phone dialer |
@@ -156,7 +177,42 @@ After the handshake these globals exist on your page's `window`. Both capitaliza
 | `components.*` | The namespaced form of everything above, plus `uploadMedia`, `saveToGallery` and `createGameRender` |
 | `appName`<br>`resourceName`<br>`appIdentifier` | Your app's registered name, owning resource, and identifier |
 
-The TypeScript template ships a `components.d.ts` typing the common surface.
+Types for the whole surface ship with the phone at `web/build/components.d.ts`. Copy it next to your app source for autocomplete and type checking; it carries the same version as the API it describes, so it cannot drift from the phone you are running.
+
+### Feature detection
+
+`typeof UseCamera === 'function'` is not a reliable test. A handful of names exist as callable functions but are not implemented by the host and simply resolve `null` — `SetContactModal` is one today. `componentsSupports()` accounts for that:
+
+```js
+if (componentsSupports('UseCamera')) {
+    const photo = await UseCamera();
+}
+```
+
+`componentsUnsupported` is the frozen list of those names, and `componentsVersion` is bumped whenever the surface changes. Because the phone serves the API to your page, the two can never disagree: whatever your app can see, the phone implements.
+
+### Storage
+
+`SetStorage` and `GetStorage` give your app a namespaced key/value store, JSON-encoded on the way in and decoded on the way out:
+
+```js
+await SetStorage('prefs', { sort: 'newest', compact: true });
+const prefs = await GetStorage('prefs', { sort: 'newest' });
+```
+
+Pass `null` as the value to delete a key. `GetStorage` returns the fallback when the key is missing or unreadable.
+
+Two things to design around. It is **device-local**, so it does not follow a character between machines and a cleared cache loses it — persist anything that matters server-side through your own resource. And each app has a budget of **64 KB across 64 keys**; a write that would exceed it is refused and `SetStorage` resolves `false` rather than throwing. Check the return value if you store anything unbounded.
+
+### Lifecycle
+
+A backgrounded app is not unloaded. The player can switch away and the page keeps running, timers and all, so an app that polls will keep polling off-screen. `OnAppOpen` and `OnAppClose` are how you notice:
+
+```js
+const stop = OnAppClose(() => clearInterval(pollTimer));
+```
+
+Both return an unsubscribe function.
 
 ## Talking between Lua and the UI
 
