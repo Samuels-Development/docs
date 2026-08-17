@@ -46,12 +46,16 @@ time. See [Supporting both phones](#supporting-both-phones).
 | `defaultApp` | `boolean` | no | `true` = pre-installed for everyone, `false`/absent = downloadable from the App Store |
 | `devices` | `string` \| `string[]` | no | Devices that list the app: `'phone'`, `'tablet'`. Absent = every device. See [Limiting who sees an app](#limiting-who-sees-an-app) |
 | `job` | `string` \| `string[]` \| `table` | no | Jobs that see the app, optionally with a minimum grade. Absent = everyone. **Cosmetic only.** See [Limiting who sees an app](#limiting-who-sees-an-app) |
+| `requires` | `table` | no | Hide the app until the player clears a gate: an item, player metadata, a job, or your own export. **Cosmetic only.** See [`requires`](#requires) |
 | `ui` | `string` | no | The app webpage: `resourcename/path/index.html`, or a full `http(s)://` URL (a Vite dev server, or a remote site) |
 | `icon` | `string` | no | Icon URL, usually `https://cfx-nui-<resource>/ui/icon.svg`. Without one the phone renders a monogram tile |
 | `images` | `string[]` | no | Screenshot URLs for the App Store listing |
+| `widgets` | `table[]` | no | Home screen widgets your app offers. See [Home screen widgets](#home-screen-widgets) |
+| `wifi` | `string` | no | Network id from `configs/wifi.lua`; the app is only downloadable on that network. Needs `defaultApp` off, since it gates the **download**. UI-only for custom apps |
 | `size` | `number` | no | Cosmetic size in kB shown in the App Store |
 | `price` | `number` | no | Displayed price in the App Store |
 | `fixBlur` | `boolean` | no | Applies lb-phone's crispness fix; requires rem/em units in your CSS |
+| `game`<br>`keepOpen`<br>`landscape` | `boolean` | no | Accepted for lb-phone parity, not honoured yet. See [Notes and limits](#notes-and-limits) |
 | `onOpen` | `function` | no | Fired when the player opens the app. `onUse` works as an alias |
 | `onClose` | `function` | no | Fired when the player closes the app |
 | `onDelete` | `function` | no | Fired when the player uninstalls the app |
@@ -96,6 +100,72 @@ Re-registering the same identifier from the same resource replaces it, so callin
 ```lua
 exports['sd-phone']:removeCustomApp('my-app')
 ```
+
+### Every field at once
+
+Nothing below is required beyond `identifier` and `name`. This is a reference, not a template to copy
+wholesale — most apps set five or six of these.
+
+```lua
+exports['sd-phone']:addCustomApp({
+    -- Identity
+    identifier  = 'my-app',                       -- unique; built-in ids are reserved
+    name        = 'My App',
+    description = 'Does something great.',
+    developer   = 'My Studio',
+
+    -- Where it lives
+    ui          = GetCurrentResourceName() .. '/ui/index.html',
+    icon        = ('https://cfx-nui-%s/ui/icon.svg'):format(GetCurrentResourceName()),
+
+    -- App Store presentation
+    defaultApp  = true,                           -- pre-installed; false = downloadable
+    images      = {                               -- screenshots on the listing
+        ('https://cfx-nui-%s/ui/shot1.png'):format(GetCurrentResourceName()),
+    },
+    size        = 24,                             -- cosmetic kB
+    price       = 0,
+
+    -- Who sees it
+    devices     = { 'phone', 'tablet' },          -- absent = every device
+    job         = { police = 3 },                 -- name, array, or name = minimum grade
+    requires    = {                               -- every condition must pass
+        item     = 'usb_drive',
+        metadata = { vip = true },
+        jobs     = { police = 3, ambulance = 0 },
+        check    = 'my_resource.canSeeApp',
+        consume  = false,                         -- true = permanent unlock instead of a live check
+    },
+    wifi        = 'mazebank',                     -- needs defaultApp = false to mean anything
+
+    -- Home screen widgets
+    widgets     = {
+        {
+            id    = 'summary',                    -- defaults to a slug of `name`
+            name  = 'Summary',
+            ui    = GetCurrentResourceName() .. '/ui/widget.html',
+            sizes = { 'sm', 'md', 'lg' },         -- absent = all three
+        },
+    },
+
+    -- Rendering
+    fixBlur     = true,                           -- needs rem/em units in your CSS
+    game        = false,                          -- accepted for lb-phone parity, not honoured yet
+    keepOpen    = false,                          -- ditto
+    landscape   = false,                          -- ditto
+
+    -- Lifecycle
+    onOpen      = function() end,                 -- `onUse` is an accepted alias
+    onClose     = function() end,
+    onDelete    = function() end,
+})
+```
+
+::: tip Setting `job` and `requires` together
+Both apply, and both have to pass. `job` is the older field and is kept for lb-phone parity;
+`requires.jobs` does the same thing with the rest of the gate vocabulary available alongside it, so
+prefer `requires` for anything new.
+:::
 
 ## The app webpage
 
@@ -393,9 +463,79 @@ holds even for a `requires` the player has never cleared: the phone never drew t
 stops them calling your resource directly if they learn the event name.
 :::
 
+## Home screen widgets
+
+An app can offer widgets that sit on the home screen next to the built-in ones. The player adds them
+from the widget gallery; each is a separate page of yours, framed at the size they chose.
+
+```lua
+widgets = {
+    {
+        id    = 'summary',                                   -- optional, defaults to a slug of `name`
+        name  = 'Summary',                                   -- required, shown in the gallery
+        ui    = GetCurrentResourceName() .. '/ui/widget.html', -- required
+        sizes = { 'sm', 'md', 'lg' },                        -- optional, absent means all three
+    },
+}
+```
+
+A widget with no `name`, no `ui`, or no usable size is skipped with a debug line rather than failing
+the whole registration. Duplicate ids within one app are dropped. A widget cannot frame sd-phone
+itself.
+
+### What your widget page receives
+
+The size and geometry arrive twice — as query parameters on the URL, and again as a `postMessage`
+whenever they change:
+
+```js
+const params = new URLSearchParams(location.search);
+params.get('app');     // your app identifier
+params.get('widget');  // this widget's id
+params.get('size');    // 'sm' | 'md' | 'lg'
+params.get('width');   // px
+params.get('height');  // px
+
+window.addEventListener('message', (e) => {
+    if (e.data?.type !== 'sd-phone:widget') return;
+    const { size, width, height, theme } = e.data;   // theme is 'light' | 'dark'
+});
+```
+
+The message fires on load and again on any size or theme change, so treat it as the source of truth
+and the query string as the first paint.
+
+::: warning Widgets are display-only
+The widget frame is rendered with `pointer-events: none`. Taps pass through to the home screen and
+open your app rather than reaching your page, so a widget cannot have buttons. Anything interactive
+belongs in the app itself.
+:::
+
+Two more things to design around. A widget renders **while your app is closed**, so it cannot rely on
+state the app set up — fetch what it needs itself. And it is framed with a `no-referrer` policy in a
+sandbox allowing scripts and same-origin only, so treat it as a small standalone page.
+
+If the owning resource stops, or the widget id disappears from a later registration, the tile stays
+on the player's home screen showing "Not available" rather than vanishing.
+
 ## Development workflow
 
 Point the app at a live dev server for hot reload: set `ui_page 'http://localhost:5173'` in your manifest (the templates read `ui_page` back to build the `ui` field), restart your resource, and the phone loads the dev server inside the app frame. Swap back to the built page for production.
+
+::: warning `ui_page` also renders your page over the game
+FiveM treats `ui_page` as your resource's **own** NUI overlay, mounted on top of the game at all
+times. The phone does not need it: listing the page in `files{}` is what serves it over
+`https://cfx-nui-<resource>/...`, which is all the `ui` field resolves to.
+
+A page with a transparent background hides this. One with a solid full-height background covers the
+player's whole screen, with the phone closed and nothing to dismiss. If you keep `ui_page` for the
+hot-reload convenience above, either keep the page transparent or drop the field and pass the path
+to `addCustomApp` as a literal:
+
+```lua
+ui = GetCurrentResourceName() .. '/ui/index.html',
+```
+:::
 
 ## Supporting both phones
 
