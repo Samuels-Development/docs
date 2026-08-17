@@ -244,7 +244,7 @@ After the handshake these globals exist on your page's `window`. Both capitaliza
 | `setApp(name)` | Navigate to another app |
 | `createCall({ number })` | Opens the phone dialer |
 | `formatPhoneNumber(value)` | Formats a number the way the phone does |
-| `components.*` | The namespaced form of everything above, plus `uploadMedia`, `saveToGallery` and `createGameRender` |
+| `components.*` | lb-phone's own component vocabulary, for apps ported straight across: `setPopUp`, `setContextMenu`, `setGallery`, `setColorPicker`, `setContactSelector`, `setContactModal`, `setEmojiPickerVisible`, `setGifPickerVisible`, `setMusicSelector`, `setShareComponent`, `setFullscreenImage`, `setHomeIndicatorVisible`, `GameMap`, plus `uploadMedia`, `saveToGallery` and `createGameRender`. These are **not** camelCase aliases of the globals above — `components.setGallery` is what the global `SelectGallery` wraps |
 | `appName`<br>`resourceName`<br>`appIdentifier` | Your app's registered name, owning resource, and identifier |
 
 Types for the whole surface ship with the phone at `web/build/components.d.ts`. Copy it next to your app source for autocomplete and type checking; it carries the same version as the API it describes, so it cannot drift from the phone you are running.
