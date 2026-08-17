@@ -245,7 +245,7 @@ Do not push initial data from `onOpen`; the page may still be loading when it fi
 
 ## Limiting who sees an app
 
-Two optional fields decide whether the app's icon is drawn. Leave either out and it does not
+Three optional fields decide whether the app's icon is drawn. Leave any of them out and it does not
 restrict anything.
 
 ### `devices`
@@ -274,8 +274,107 @@ job = { police = 3, ambulance = 0 }       -- minimum grade per job
 The icon appears and disappears as the player's job changes; there is nothing to poll and nothing
 to re-register. Before the framework has loaded a job for the player, gated apps are hidden.
 
+### `requires`
+
+`requires` hides the app until the player clears a gate. It takes the same conditions the phone's own
+built-in apps use in `configs/apps.lua`, so a third-party app gates exactly like a first-party one.
+
+The **server** answers it, and the client is only ever told the result. An app the player cannot see
+never reaches their phone at all — not its identifier, not its name, not the item that would unlock
+it. That makes `requires` the right field for an app that is meant to be a secret, where `job` and
+`devices` only decide what is drawn from a list the phone already holds.
+
+Every condition present has to pass:
+
+```lua
+requires = {
+    item     = 'usb_drive',              -- hold at least one
+    metadata = { vip = true },           -- framework player metadata
+    jobs     = { police = 3 },           -- a job, at a minimum grade
+    check    = 'my_resource.canSeeApp',  -- your own server export
+}
+```
+
+#### `item`
+
+```lua
+item = 'usb_drive'                                      -- hold at least one
+item = { name = 'usb_drive', count = 3 }                -- hold at least three
+item = { name = 'usb_drive', metadata = { tier = 3 } }  -- hold one whose slot metadata matches
+```
+
+Metadata matching needs an inventory that exposes per-slot metadata (ox_inventory does). On one that
+does not, the condition falls back to a plain count rather than refusing every player.
+
+#### `metadata`
+
+Framework player metadata, each key compared to the value you give:
+
+```lua
+metadata = { vip = true, licence_hacking = true }
+```
+
+QBCore and QBox read `PlayerData.metadata`. ESX needs `getMeta`, added in ESX 1.10; on older builds
+there is no metadata store to read and the condition never passes.
+
+#### `jobs`
+
+The same shapes as `job` above:
+
+```lua
+jobs = 'police'
+jobs = { 'police', 'ambulance' }
+jobs = { police = 3, ambulance = 0 }   -- a police sergeant OR any medic
+```
+
+#### `check`
+
+Anything the fields above cannot express. Your export is called as `(source, appId)`:
+
+```lua
+-- In YOUR resource, server side.
+exports('canSeeApp', function(source, appId)
+    return isHacker(source)
+end)
+```
+
+Only a literal `true` opens the gate. An error inside the export, a `nil` return, or a resource that
+is not started all keep the app hidden, and the phone logs the reason once to the server console.
+
+#### Permanent unlocks
+
+`consume = true` swaps the **item** check for a permanent per-character unlock. Every other condition
+in the same table stays live:
+
+```lua
+requires = { consume = true }                          -- unlocked entirely by your script
+requires = { consume = true, jobs = { police = 0 } }   -- unlocked, and still police-only
+```
+
+Grant and revoke it from your own server code:
+
+```lua
+exports['sd-phone']:unlockApp(source, 'my_app')
+exports['sd-phone']:revokeApp(source, 'my_app')
+local owned = exports['sd-phone']:hasAppUnlock(source, 'my_app')
+```
+
+The unlock is stored against the character and survives relogs, restarts and an empty inventory.
+
+::: tip Built-in apps can spend an item for you
+For an app in `configs/apps.lua`, `requires = { item = 'usb', consume = true }` makes the phone
+register that item as usable and spend it on use. A custom app cannot get that automatically — the
+phone will not let a client-side registration claim which item unlocks what — so call `unlockApp`
+from your own usable-item handler instead.
+:::
+
+#### When it re-evaluates
+
+On every phone open, on every job change, and immediately whenever you grant or revoke an unlock.
+Picking an item up with the phone closed means the app is there when the player next opens it.
+
 ::: danger These fields are cosmetic. They are not security.
-`job` decides whether an **icon is drawn**. It does not protect anything behind it.
+`job` and `requires` decide whether an **icon is drawn**. They do not protect anything behind it.
 
 A player can trigger your resource's events and call your callbacks directly, whether or not the
 phone ever drew your icon for them. Anything that matters must be checked **server-side**, in your
@@ -289,7 +388,9 @@ lib.callback.register('my-app:server:doThing', function(source)
 end)
 ```
 
-Treat `job` as a way to keep home screens tidy, not as an access control list.
+Treat `job` and `requires` as a way to keep home screens tidy, not as an access control list. This
+holds even for a `requires` the player has never cleared: the phone never drew the icon, but nothing
+stops them calling your resource directly if they learn the event name.
 :::
 
 ## Development workflow

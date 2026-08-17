@@ -2318,6 +2318,91 @@ end
 Every export-created document fires the [`sd-phone:server:documents:created`](./events-server) event, carrying the creating resource's name.
 :::
 
+## App unlocks
+
+Apps gated with `requires = { consume = true }` are unlocked permanently for a character rather than
+checked live. These three exports are how that unlock is handed out, taken back, and read.
+
+The unlock is stored against the character and survives relogs, resource restarts and an empty
+inventory. It is scoped per character, so a second character on the same account does not inherit it.
+
+See [Custom Apps](./custom-apps#requires) for the gate itself, and `configs/apps.lua` for gating a
+built-in app.
+
+### unlockApp
+
+Grants a permanent app unlock. Idempotent — granting one the character already has changes nothing.
+
+**Syntax**
+
+```lua
+exports['sd-phone']:unlockApp(source, appId)
+```
+
+**Parameters**
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `source` | `number` | Player server id |
+| `appId` | `string` | App identifier, as `configs/apps.lua` or `addCustomApp` names it |
+
+**Returns**
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `ok` | `boolean` | `false` when the app id is empty or the player has no loaded character |
+
+The player's phone is told immediately, so a gated app appears without waiting for a reopen.
+
+**Example — a heist payout that hands over a hidden app**
+```lua
+if lootTier >= 3 then
+    exports['sd-phone']:unlockApp(source, 'darkchat')
+end
+```
+
+### revokeApp
+
+Takes a permanent unlock back.
+
+**Syntax**
+
+```lua
+exports['sd-phone']:revokeApp(source, appId)
+```
+
+**Returns**
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `removed` | `boolean` | `false` when the character did not have that unlock |
+
+### hasAppUnlock
+
+Whether a character currently holds a permanent unlock. Read-only.
+
+**Syntax**
+
+```lua
+exports['sd-phone']:hasAppUnlock(source, appId)
+```
+
+**Returns**
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `unlocked` | `boolean` | `false` when the player has no loaded character |
+
+::: warning An unlock is not a permission
+`hasAppUnlock` tells you whether the phone will draw the icon. It does not stop a player calling your
+resource's events directly, so keep checking whatever actually matters server-side.
+:::
+
+::: info
+`/appunlock grant|revoke <app> [target]` does the same thing by hand. Acting on another player needs
+the phone's admin aces.
+:::
+
 ::: tip
 Client-side exports for opening the phone, launching apps, and showing local notifications are documented on the [Client Exports](./exports-client) page.
 :::

@@ -18,7 +18,7 @@ Server-only secrets (`configs/server/apikeys.lua`) are deliberately excluded fro
 | `config.lua` | The index that merges the per-app files; debug flag |
 | `phone.lua` | Open/close behaviour, keybind, the phone item list and their frame colours, and the [phone number format](#phone-number-format) |
 | `uniqueandsim.lua` | [Unique phones, SIM cards, built-in numbers, cloud backups](/resources/phone/unique-phones) |
-| `apps.lua` | Dock, home wallpaper, and the full app catalog. Per app: `base = true` ships it uninstallable; `enabled = false` disables it server-wide — hidden from the home screen and App Store, and removed from phones that had it installed |
+| `apps.lua` | Dock, home wallpaper, and the full app catalog. Per app: `base = true` ships it uninstallable; `enabled = false` disables it server-wide — hidden from the home screen and App Store, and removed from phones that had it installed; `requires = {}` hides it from a player until they clear a gate |
 | `lockscreen.lua` | Lockscreen appearance |
 | `statusbar.lua` | Carrier text, the battery indicator, and the fallback signal bars used when cell towers are off |
 | `celltowers.lua` | [Cell service](#cell-service): mast positions and coverage, capability thresholds, map blips |
@@ -229,6 +229,74 @@ to gate.
 ::: tip
 [`hasWifiAccess`](/resources/phone/exports-server#haswifiaccess) is the same check the install path
 makes. Reach for it when something of your own should only work inside one building.
+:::
+
+::: warning `wifi` needs `base = false`
+It gates the **download**, and a `base = true` app is never downloaded. To restrict an app that ships
+installed, use `requires` below instead.
+:::
+
+### Gating an app with `requires`
+
+Any app in `configs/apps.lua` can carry a `requires` table. The app is hidden from that player until
+every condition in it passes, and because the server answers the question, a hidden app's id never
+reaches their phone at all.
+
+```lua
+-- Only for someone carrying a burner.
+{ id = 'darkchat', ..., requires = { item = 'burner_phone' } },
+
+-- Only for a police sergeant or above.
+{ id = 'services', ..., requires = { jobs = { police = 3 } } },
+
+-- Installed permanently by using an item, then kept forever.
+{ id = 'health', ..., requires = { item = 'health_usb', consume = true } },
+```
+
+| Condition | Meaning |
+| --- | --- |
+| `item` | Hold the item. `{ name = 'usb', count = 3 }` for an amount, `{ name = 'usb', metadata = { tier = 3 } }` to match slot metadata |
+| `metadata` | Framework player metadata, key by key. QBCore/QBox read `PlayerData.metadata`; ESX needs `getMeta` (1.10+) |
+| `jobs` | A name, an array of names, or a `name = minimumGrade` map. Any one match is enough |
+| `check` | A server export called as `(source, appId)`. Only a literal `true` opens the gate |
+| `consume` | Swaps the `item` check for a permanent per-character unlock. Other conditions stay live |
+
+Gates are re-checked on every phone open and on every job change.
+
+**Unlock items.** With `consume = true` and an `item`, the phone registers that item as usable and
+spends it itself. Leave `consume = 0` on the ox_inventory item so a refused use does not destroy it,
+and point the item at the export the phone creates — `use` plus the item name with a capital first
+letter:
+
+```lua
+-- ox_inventory/data/items.lua
+['health_usb'] = {
+    label = 'Medical Data Key',
+    stack = false,
+    close = true,
+    consume = 0, -- required: sd-phone consumes the item itself on install
+    server = { export = 'sd-phone.useHealth_usb' },
+},
+```
+
+You can also grant an unlock with no item at all, from script or by hand:
+
+```lua
+exports['sd-phone']:unlockApp(source, 'darkchat')
+```
+```
+/appunlock grant darkchat 12
+```
+
+::: danger A gate draws an icon. It is not access control.
+`requires` decides whether the app appears. It does not stop a player triggering that app's events or
+callbacks directly, so anything worth protecting is checked server-side by the app itself.
+:::
+
+::: tip
+Third-party apps take the same `requires` through
+[`addCustomApp`](/resources/phone/custom-apps#requires), so a custom app gates exactly like a
+built-in one.
 :::
 
 ## Communication
