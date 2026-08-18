@@ -408,6 +408,7 @@ const globalSidebar = [
           { text: 'Configuration', link: '/resources/phone/configuration' },
           { text: 'Unique Phones & SIMs', link: '/resources/phone/unique-phones' },
           { text: 'Custom Apps', link: '/resources/phone/custom-apps' },
+          { text: 'Dispatch on the MDT', link: '/resources/phone/dispatch-mdt' },
           {
             text: 'Exports',
             collapsed: true,
