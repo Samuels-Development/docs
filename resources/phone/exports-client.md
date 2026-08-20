@@ -556,6 +556,155 @@ local ok, err = exports['sd-phone']:sendCustomAppMessage('my-app', {
 })
 ```
 
+## Lock screen widgets
+
+A card your app pushes onto the player's lock screen, sitting above the notification stack. Unlike a
+home screen widget, the player never places it: your resource decides when it appears and when it
+goes away, which suits things that are only true for a while, such as a ride in progress, an active
+call, or a running timer.
+
+The widget must be declared in `lockscreenWidgets` on your `addCustomApp` registration first. See
+[Lock screen widgets](/resources/phone/custom-apps#lock-screen-widgets) for the schema and what the
+page receives.
+
+### showLockscreenWidget
+
+Shows one of your declared lock screen widgets, or updates the payload of one already showing.
+
+**Syntax**
+```lua
+local ok = exports['sd-phone']:showLockscreenWidget(appId, widgetId, data, onAction)
+```
+
+| Parameter | Type | Required | Description |
+|---|---|---|---|
+| `appId` | `string` | yes | Your app identifier, as passed to `addCustomApp` |
+| `widgetId` | `string` | yes | Id of an entry in that app's `lockscreenWidgets` |
+| `data` | `table` | no | Payload delivered to the page. Sent again on every call, so this is how you push updates |
+| `onAction` | `function` | no | Called as `onAction(action, value, data)` when the page relays an interaction |
+
+| Return | Type | Description |
+|---|---|---|
+| `ok` | `boolean` | Whether the card was shown |
+
+Returns `false` when the widget is not declared, when the calling resource is not the one that
+registered the app, or when the player does not currently pass the app's `job` or `requires` gates.
+
+**Example**
+```lua
+exports['sd-phone']:showLockscreenWidget('taxi-co', 'ride', {
+    driver = 'Marla',
+    eta    = 4,
+}, function(action)
+    if action == 'cancel' then cancelRide() end
+end)
+```
+
+Call it again with a new `data` table to update the card in place. There is no separate update
+export.
+
+### hideLockscreenWidget
+
+Removes a card you are showing.
+
+**Syntax**
+```lua
+local ok = exports['sd-phone']:hideLockscreenWidget(appId, widgetId)
+```
+
+| Return | Type | Description |
+|---|---|---|
+| `ok` | `boolean` | Whether the card was hidden. `false` when your resource does not own it |
+
+Only the resource that showed a card may hide it. Cards are also removed automatically when that
+resource stops, so a restart never strands one on the lock screen.
+
+## Now Playing
+
+Lets a resource with its own audio engine drive the phone's media surfaces: the Control Center card,
+the dynamic island mini player, the Now Playing home screen widget, and the lock screen card. Use it
+when your script already plays the audio, so players get one set of controls instead of a phone
+music player that knows nothing about what is actually playing.
+
+This does not touch sd-phone's built-in Music app engine. Taking the slot pauses the built-in player
+if it was running, and giving the slot back leaves the built-in player where it was.
+
+### setExternalNowPlaying
+
+Claims the Now Playing slot and sets what is displayed. Call it again to update.
+
+**Syntax**
+```lua
+local ok = exports['sd-phone']:setExternalNowPlaying(appId, track, onAction)
+```
+
+| Parameter | Type | Required | Description |
+|---|---|---|---|
+| `appId` | `string` | yes | Identifier for your provider. A custom app id is the natural choice |
+| `track` | `table` | yes | What to display. Fields below |
+| `onAction` | `function` | no | Called as `onAction(action, value)` when the player uses a transport control |
+
+`track` fields:
+
+| Field | Type | Required | Description |
+|---|---|---|---|
+| `title` | `string` | yes | Track title |
+| `artist` | `string` | no | Shown under the title |
+| `thumb` | `string` | no | Artwork URL. Wins over any derived cover |
+| `playing` | `boolean` | yes | Drives the play or pause glyph |
+| `position` | `number` | yes | Playhead in seconds |
+| `duration` | `number` | yes | Track length in seconds |
+| `canNext`<br>`canPrev` | `boolean` | no | Accepted, not honoured yet. Both controls are always drawn |
+
+`action` is one of `'toggle'`, `'next'`, `'prev'` or `'seek'`. Only `'seek'` carries `value`, the
+target position in seconds.
+
+| Return | Type | Description |
+|---|---|---|
+| `ok` | `boolean` | Whether the slot was set |
+
+Returns `false` when another resource already owns that `appId`. One provider holds the slot at a
+time and the most recent claim wins, so a second script calling this with its own `appId` takes over.
+
+**Example**
+```lua
+CreateThread(function()
+    while playing do
+        exports['sd-phone']:setExternalNowPlaying('boombox', {
+            title    = current.title,
+            artist   = current.artist,
+            thumb    = current.art,
+            playing  = true,
+            position = elapsed(),
+            duration = current.length,
+        }, function(action, value)
+            if action == 'toggle' then togglePlayback()
+            elseif action == 'next' then skip()
+            elseif action == 'seek'  then seekTo(value) end
+        end)
+        Wait(1000)
+    end
+end)
+```
+
+::: tip
+Push once a second at most. Every call re-renders the media surfaces, so a tighter loop buys nothing
+and costs frames.
+:::
+
+### clearExternalNowPlaying
+
+Gives the slot back, clearing the card everywhere.
+
+**Syntax**
+```lua
+exports['sd-phone']:clearExternalNowPlaying(appId)
+```
+
+Only the resource that claimed an `appId` may clear it, so a stale call from a provider that already
+lost the slot cannot wipe the current one. The slot is also released automatically when the owning
+resource stops.
+
 ::: tip
 Server-side exports for messages, mail, calls, contacts, and everything else are documented on the [Server Exports](./exports-server) page.
 :::

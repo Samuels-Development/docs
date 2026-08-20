@@ -51,6 +51,7 @@ time. See [Supporting both phones](#supporting-both-phones).
 | `icon` | `string` | no | Icon URL, usually `https://cfx-nui-<resource>/ui/icon.svg`. Without one the phone renders a monogram tile |
 | `images` | `string[]` | no | Screenshot URLs for the App Store listing |
 | `widgets` | `table[]` | no | Home screen widgets your app offers. See [Home screen widgets](#home-screen-widgets) |
+| `lockscreenWidgets` | `table[]` | no | Cards your app can push onto the lock screen. See [Lock screen widgets](#lock-screen-widgets) |
 | `wifi` | `string` | no | Network id from `configs/wifi.lua`; the app is only downloadable on that network. Needs `defaultApp` off, since it gates the **download**. UI-only for custom apps |
 | `size` | `number` | no | Cosmetic size in kB shown in the App Store |
 | `price` | `number` | no | Displayed price in the App Store |
@@ -145,6 +146,18 @@ exports['sd-phone']:addCustomApp({
             name  = 'Summary',
             ui    = GetCurrentResourceName() .. '/ui/widget.html',
             sizes = { 'sm', 'md', 'lg' },         -- absent = all three
+            interactive = false,                  -- true = real pointer events
+        },
+    },
+
+    -- Lock screen cards, pushed with showLockscreenWidget
+    lockscreenWidgets = {
+        {
+            id          = 'ride',
+            name        = 'Ride',
+            ui          = GetCurrentResourceName() .. '/ui/lock.html',
+            height      = 84,                     -- px, clamped to 48-240
+            interactive = false,
         },
     },
 
@@ -475,6 +488,7 @@ widgets = {
         name  = 'Summary',                                   -- required, shown in the gallery
         ui    = GetCurrentResourceName() .. '/ui/widget.html', -- required
         sizes = { 'sm', 'md', 'lg' },                        -- optional, absent means all three
+        interactive = false,                                 -- optional, see Interactive widgets below
     },
 }
 ```
@@ -505,18 +519,115 @@ window.addEventListener('message', (e) => {
 The message fires on load and again on any size or theme change, so treat it as the source of truth
 and the query string as the first paint.
 
-::: warning Widgets are display-only
-The widget frame is rendered with `pointer-events: none`. Taps pass through to the home screen and
-open your app rather than reaching your page, so a widget cannot have buttons. Anything interactive
-belongs in the app itself.
-:::
-
 Two more things to design around. A widget renders **while your app is closed**, so it cannot rely on
 state the app set up — fetch what it needs itself. And it is framed with a `no-referrer` policy in a
 sandbox allowing scripts and same-origin only, so treat it as a small standalone page.
 
 If the owning resource stops, or the widget id disappears from a later registration, the tile stays
 on the player's home screen showing "Not available" rather than vanishing.
+
+### Interactive widgets
+
+By default a widget is display-only: its frame is rendered with `pointer-events: none`, taps fall
+through to the tile and open your app, and your page cannot have working buttons. That is still the
+default, so widgets written before this existed behave exactly as they did.
+
+Set `interactive = true` to receive real pointer events instead:
+
+```lua
+widgets = {
+    { name = 'Controls', ui = UI('widget.html'), interactive = true },
+}
+```
+
+The trade is that your page now swallows every gesture over it, because a cross-origin frame's
+events never reach the page hosting it. Two home screen behaviours stop working on their own, and
+your page has to hand them back:
+
+```js
+// Treat this like a tap on the tile: opens your app, zooming out of the widget.
+window.parent.postMessage({ type: 'sd-phone:widget:open' }, '*');
+
+// Enter the home screen's rearrange mode, as a long press on the tile would.
+window.parent.postMessage({ type: 'sd-phone:widget:longpress' }, '*');
+```
+
+Wire the second one to your own long-press detection, otherwise a widget that fills its tile cannot
+be moved or removed without the player long-pressing somewhere else on the home screen first.
+
+Both messages are ignored unless the home screen is the view in front, so a widget cannot pull a
+player out of an app they are using, and repeats inside half a second are dropped. The frame also
+goes inert while the home screen is in rearrange mode, so drag and drop keeps working.
+
+::: warning What an interactive widget gives up
+Gestures that start on your page no longer reach the home screen. Swiping across a wide interactive
+widget will not turn the page, and a widget inside a stack cannot be scrolled to the next card.
+Prefer the smallest size that fits your controls, and leave a margin your page does not handle.
+:::
+
+## Lock screen widgets
+
+A lock screen widget is a card your resource pushes onto the lock screen, above the notification
+stack. The player never places it and it has no gallery entry: you show it when it is relevant and
+hide it when it is not, which suits a ride in progress, an active job, or a countdown.
+
+Declare them alongside `widgets`:
+
+```lua
+lockscreenWidgets = {
+    {
+        id          = 'ride',                                  -- optional, defaults to a slug of `name`
+        name        = 'Ride',                                  -- optional, defaults to a positional name
+        ui          = GetCurrentResourceName() .. '/ui/lock.html', -- required
+        height      = 84,                                      -- optional, px, clamped to 48-240
+        interactive = true,                                    -- optional, off by default
+    },
+}
+```
+
+Declaring one does not show it. Push it with
+[`showLockscreenWidget`](/resources/phone/exports-client#showlockscreenwidget) and take it away with
+[`hideLockscreenWidget`](/resources/phone/exports-client#hidelockscreenwidget). Cards from a resource
+that stops are removed for you.
+
+Like home screen widgets, the frame is inert unless you set `interactive = true`. Leave it off for a
+card that only displays, so the player can still scroll their notifications past it.
+
+### What your lock screen page receives
+
+```js
+const params = new URLSearchParams(location.search);
+params.get('app');      // your app identifier
+params.get('widget');   // this widget's id
+params.get('surface');  // always 'lockscreen'
+
+window.addEventListener('message', (e) => {
+    if (e.data?.type !== 'sd-phone:lockscreen-widget') return;
+    const { key, data } = e.data;   // `data` is the payload you passed to showLockscreenWidget
+});
+```
+
+The message fires on load and again on every `showLockscreenWidget` call, so pushing an update is
+just calling that export again with a new payload.
+
+An interactive card relays interactions back to your `onAction` handler:
+
+```js
+window.parent.postMessage({
+    type: 'sd-phone:lockscreenWidget:action',
+    action: 'cancel',
+    value: 1,
+}, '*');
+```
+
+`action` and `value` arrive as the first two arguments of the `onAction` you passed to
+`showLockscreenWidget`, with any `data` field as the third.
+
+::: warning The phone is locked
+This renders in front of the passcode and Face ID gate. Anything on the card is readable by whoever
+is holding the phone, so keep private detail out of it and never put an action there that you would
+gate behind the lock.
+:::
 
 ## Development workflow
 
