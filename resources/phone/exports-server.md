@@ -2403,6 +2403,150 @@ resource's events directly, so keep checking whatever actually matters server-si
 the phone's admin aces.
 :::
 
+## MDT firearms registry
+
+The Weapons section of the MDT is a serial-number registry: police look a firearm up by the serial
+stamped on its frame and see who it is registered to, what state it is in, and every note an officer
+has left on it. These exports are how a firearm gets onto that registry in the first place, so the
+record exists before an officer ever runs the serial.
+
+The obvious caller is a gun shop, at the moment it hands the weapon over. A crafting bench, an
+evidence locker or an admin script that spawns a weapon are the same shape.
+
+Every export here is server-side, and every one is safe to call on a server with the MDT switched
+off: they refuse quietly rather than erroring, so a resource that supports sd-phone optionally does
+not need to branch.
+
+### mdtRegisterWeapon
+
+Files a firearm on the registry. Omit `serial` and one is minted and handed back, which is what a
+shop wants: it knows the weapon and the buyer, but has no serial until one is issued.
+
+**Syntax**
+```lua
+local serial, message = exports['sd-phone']:mdtRegisterWeapon(data)
+```
+
+| Parameter | Type | Description |
+|---|---|---|
+| `data` | `table` | The firearm (see below) |
+
+| Field | Type | Description |
+|---|---|---|
+| `name` | `string` | Display name of the firearm, for example `Combat Pistol`. Required |
+| `serial` | `string?` | The serial on the frame. Omit it and a unique one is minted and returned |
+| `class` | `string?` | One of `pistol`, `smg`, `rifle`, `shotgun`, `sniper`, `melee`, `other`. Defaults to `other` |
+| `owner` | `string?` | Citizenid the firearm is registered to. Omit for an unregistered frame |
+| `notes` | `string?` | Free text shown on the record, for example where it was sold |
+| `registeredBy` | `string?` | Who to record as having filed it. A citizenid, or a marker such as `SHOP` |
+
+| Return | Type | Description |
+|---|---|---|
+| `serial` | `string\|false` | The serial it was filed under, or `false` on refusal |
+| `message` | `string?` | Reason when `serial` is `false` |
+
+**Example**
+```lua
+-- At the point of sale, after the weapon is actually given
+local serial, err = exports['sd-phone']:mdtRegisterWeapon({
+    name         = 'Combat Pistol',
+    class        = 'pistol',
+    owner        = citizenid,
+    notes        = 'Sold at Ammu-Nation Sandy Shores',
+    registeredBy = 'SHOP',
+})
+
+if serial then
+    -- Stamp the same serial on the item so the frame and the registry agree
+    item.metadata.serial = serial
+else
+    print(('registry refused the sale: %s'):format(err))
+end
+```
+
+Refusals are all validation, and every one is worth handling: an unnamed firearm, a class outside the
+list above, an `owner` that no citizen holds, or a `serial` already on the registry.
+
+::: tip Stamp the serial back onto the item
+The registry keys on the serial and nothing else. If the number in the weapon's metadata and the
+number on the record ever disagree, an officer running the frame finds nothing. Take the serial this
+returns and write it onto the item rather than generating your own.
+:::
+
+### mdtGetWeapon
+
+Reads one record by serial. The owner's display name is resolved live, so a citizen who changed
+their name reads correctly here.
+
+**Syntax**
+```lua
+local weapon = exports['sd-phone']:mdtGetWeapon(serial)
+```
+
+| Return | Type | Description |
+|---|---|---|
+| `weapon` | `table\|nil` | `nil` when no firearm is on file under that serial |
+
+### mdtGetWeaponsByOwner
+
+Every firearm registered to a citizen, newest first. The lookup a licence check or a warrant
+application wants.
+
+**Syntax**
+```lua
+local list = exports['sd-phone']:mdtGetWeaponsByOwner(citizenid)
+```
+
+| Return | Type | Description |
+|---|---|---|
+| `list` | `table[]` | Empty when the citizen has nothing registered |
+
+### mdtSetWeaponStatus
+
+Moves a firearm to another registry state. This is the hook for the script that seized it into
+evidence, destroyed it, or logged it stolen.
+
+**Syntax**
+```lua
+local ok, message = exports['sd-phone']:mdtSetWeaponStatus(serial, status, byCitizenid)
+```
+
+| Parameter | Type | Description |
+|---|---|---|
+| `serial` | `string` | The serial on the frame |
+| `status` | `string` | One of `registered`, `stolen`, `seized`, `destroyed` |
+| `byCitizenid` | `string?` | Who to record as having changed it |
+
+| Return | Type | Description |
+|---|---|---|
+| `ok` | `boolean` | `false` when the serial is not on file or the status is not one of the four |
+| `message` | `string?` | Reason when `ok` is `false` |
+
+**Example**
+```lua
+-- A player reports a burglary
+exports['sd-phone']:mdtSetWeaponStatus(serial, 'stolen', citizenid)
+```
+
+### mdtIsWanted
+
+Whether a citizen has an active warrant. The cheap predicate plate readers and NPC patrols read.
+
+**Syntax**
+```lua
+local wanted = exports['sd-phone']:mdtIsWanted(citizenid)
+```
+
+| Return | Type | Description |
+|---|---|---|
+| `wanted` | `boolean` | `false` when the MDT is disabled |
+
+::: warning These bypass the terminal's permissions on purpose
+Everything on this page is server-side and already trusted, so none of it checks a police
+permission the way the terminal does. Do not expose any of it through a client event a player can
+trigger, or you have handed them write access to the firearms registry.
+:::
+
 ::: tip
 Client-side exports for opening the phone, launching apps, and showing local notifications are documented on the [Client Exports](./exports-client) page.
 :::
