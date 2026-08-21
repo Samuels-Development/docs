@@ -88,6 +88,42 @@ keeps them, alongside [`getServiceLevel`](./exports-server#getservicelevel) and
 
 Stubbed families (safe defaults, one console breadcrumb naming the caller): crypto, DarkChat, trays, battery, camera components, the check hooks, and lb-phone's callback wire (`RegisterCallback` and friends).
 
+## Scripts that query lb-phone's tables directly
+
+The compatibility layer covers exports and events. A script that runs its own SQL against lb-phone's tables is outside it, because an export shim can intercept a function call but never a query: the query reaches the database on its own. sd-phone owns the same table names with its own schema, so an lb-shaped query fails on a column that never existed, for example `Unknown column 'link' in 'field list'`.
+
+The photo gallery pickers in vehicle sale and dealership scripts are the usual case. Their lb-phone adapter selects `link` from `phone_photos` keyed by `phone_number`, and sd-phone keys that table by identifier:
+
+| lb-phone column | sd-phone column |
+|---|---|
+| `phone_number` | `citizenid`, the owner's per-character identifier |
+| `link` | `url` |
+| `is_video` | none, read off the URL extension |
+| `is_favourite` | `favorite` |
+| `timestamp` | `created_at` |
+
+Most of these scripts ship one adapter file per supported phone and pick between them in their config. Point that setting at a custom or generic adapter and read through the exports instead of SQL:
+
+```lua
+-- Server side, inside the script's phone adapter.
+local citizenid = exports['sd-phone']:getIdentifierByNumber(phoneNumber)
+local photos = citizenid and exports['sd-phone']:getPhotosByIdentifier(citizenid, { limit = 50 }) or {}
+
+local gallery = {}
+for _, photo in ipairs(photos) do
+    if not photo.isVideo then
+        gallery[#gallery + 1] = photo.url
+    end
+end
+return gallery
+```
+
+See [getPhotos](./exports-server#getphotos) and [getPhotosByIdentifier](./exports-server#getphotosbyidentifier) for the full entry shape.
+
+::: warning Photos missing after a switch
+On first boot the phone moves any table it finds under one of its own names but carrying a foreign shape aside, renaming it to `<table>_lb`, then creates its own. An old library is therefore still in `phone_photos_lb` rather than lost, and the built-in migrator (`sdphone:migrate`) imports it into the new shape.
+:::
+
 ## Custom apps
 
 Custom apps built for lb-phone run unmodified: `AddCustomApp` registers them for real, the app page gets the same injected globals (both capitalizations), the same `componentsLoaded` handshake, and the same message relay, and `dependency 'lb-phone'` plus `GetResourceState('lb-phone')` boot polls are satisfied. The full mechanism, the field table and templates are covered in the [Custom Apps guide](./custom-apps).

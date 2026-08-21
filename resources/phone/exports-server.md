@@ -1452,6 +1452,77 @@ The photo exports save and host media for the Photos app.
 
 ## Photos and media
 
+### getPhotos
+
+Read a player's gallery, newest first, for a photo picker in another resource: a vehicle listing, an evidence board, a print shop. Read-only, and only ever that player's own photos.
+
+**Syntax**
+```lua
+local photos = exports['sd-phone']:getPhotos(source, opts)
+```
+
+| Parameter | Type | Description |
+|---|---|---|
+| `source` | `number` | The acting player's server ID; the gallery owner resolves from it |
+| `opts` | `table?` | `{ limit = number?, filter = 'favorites'\|'videos'\|nil }` |
+
+| Return | Type | Description |
+|---|---|---|
+| `photos` | `table[]` | Always an array, empty when nothing resolves |
+
+Each entry carries:
+
+| Field | Type | Description |
+|---|---|---|
+| `id` | `string` | Photo row ID |
+| `url` | `string` | Hosted media URL |
+| `isVideo` | `boolean` | Whether the URL points at a video, read off the extension |
+| `favorite` | `boolean` | Whether the owner starred it |
+| `timestamp` | `number` | Capture time as a unix integer, in seconds |
+
+`limit` defaults to 200 and is clamped to 200: this is one bounded page, not a paged read. Use the app itself for a full library.
+
+**Example**
+```lua
+local photos = exports['sd-phone']:getPhotos(source, { limit = 24 })
+for _, photo in ipairs(photos) do
+    if not photo.isVideo then
+        print(photo.id, photo.url)
+    end
+end
+```
+
+### getPhotosByIdentifier
+
+The same read keyed by owner identifier rather than a live server ID, for offline owners and for callers holding a phone number.
+
+**Syntax**
+```lua
+local photos = exports['sd-phone']:getPhotosByIdentifier(citizenid, opts)
+```
+
+| Parameter | Type | Description |
+|---|---|---|
+| `citizenid` | `string` | The owner's framework per-character identifier |
+| `opts` | `table?` | Same shape and defaults as [getPhotos](#getphotos) |
+
+| Return | Type | Description |
+|---|---|---|
+| `photos` | `table[]` | Same entry shape as [getPhotos](#getphotos) |
+
+**Example**
+
+Starting from a phone number, resolve the owner with [getIdentifierByNumber](#getidentifierbynumber) first:
+
+```lua
+local citizenid = exports['sd-phone']:getIdentifierByNumber(number)
+local photos = citizenid and exports['sd-phone']:getPhotosByIdentifier(citizenid, { limit = 24 }) or {}
+```
+
+::: info
+Photos are stored per character, keyed by identifier, not per phone number. A player who swaps SIM cards keeps the same gallery, so a number is a way in rather than the owner itself.
+:::
+
 ### addPhoto
 
 Save an already-hosted http(s) media URL into a player's gallery. The URL walks the same validation as the app's own save path; on success the photo is pushed live so an open Photos app updates.
