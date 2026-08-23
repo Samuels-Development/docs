@@ -463,6 +463,31 @@ export default defineConfig({
     ['meta', { property: 'og:type', content: 'website' }],
     ['meta', { property: 'og:title', content: "Samuel's Development — Docs" }],
     ['meta', { property: 'og:description', content: 'Documentation for premium FiveM scripts' }],
+
+    /*
+     * Cloudflare Web Analytics, matching heartbeat.re so both sites report
+     * into one dashboard rather than two products with two mental models.
+     *
+     * Cookieless, so there is no consent banner to add, and it costs the
+     * Vercel deployment nothing — the browser talks straight to Cloudflare
+     * instead of to a function.
+     *
+     * The token is public by construction: it ships in the HTML of every page.
+     * It is read from the environment so a local `vitepress dev` reports
+     * nothing, not to keep it hidden. Set CF_BEACON_TOKEN in the Vercel
+     * project's environment variables; unset, this spreads to nothing and the
+     * head is exactly as it was.
+     */
+    ...(process.env.CF_BEACON_TOKEN
+      ? [[
+          'script',
+          {
+            defer: '',
+            src: 'https://static.cloudflareinsights.com/beacon.min.js',
+            'data-cf-beacon': JSON.stringify({ token: process.env.CF_BEACON_TOKEN }),
+          },
+        ] as [string, Record<string, string>]]
+      : []),
   ],
 
   themeConfig: {
