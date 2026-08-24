@@ -1,4 +1,5 @@
 import { defineConfig } from 'vitepress'
+import { writeLlmsFiles } from './llms'
 
 const globalSidebar = [
   {
@@ -456,6 +457,18 @@ export default defineConfig({
   description: 'Documentation for FiveM scripts by Samuel\'s Development',
   lang: 'en-US',
   cleanUrls: true,
+
+  /*
+   * Machine-readable copies of these pages, written after every build.
+   *
+   * An assistant asked about one of these scripts otherwise has to read a
+   * VitePress theme wrapped around the answer, when the answer is markdown in
+   * this repository already. This emits /llms.txt and a .md beside every page;
+   * see .vitepress/llms.ts for the conventions and why nothing is committed.
+   */
+  buildEnd(siteConfig) {
+    writeLlmsFiles(siteConfig.srcDir, siteConfig.outDir, globalSidebar)
+  },
 
   head: [
     ['link', { rel: 'icon', type: 'image/png', href: '/logo.png' }],
