@@ -18,7 +18,9 @@ description: An iOS-themed smartphone with 45+ apps, real app accounts, a live g
 
 ## Framework support
 
-The phone talks to the world through a bridge layer that auto-detects the running framework (qb-core, qbx_core, ESX) and the installed inventory, banking, housing, garage, and dispatch resources. Nothing framework-specific leaks into the apps themselves.
+The phone talks to the world through a bridge layer that auto-detects the running framework (qb-core, qbx_core, ESX, ox_core, ND) and the installed inventory, banking, housing, garage, and dispatch resources. Nothing framework-specific leaks into the apps themselves.
+
+ox_core and ND are newer additions. ox_core needs its group types mapped to jobs and gangs in `configs/framework.lua`; ND needs no configuration at all, because `nd_groups` already flags which groups are jobs. Neither backs every feature: see the boot message the phone prints on startup for exactly what is and is not wired on yours.
 
 ## Getting started
 

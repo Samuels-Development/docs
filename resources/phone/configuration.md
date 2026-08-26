@@ -256,7 +256,7 @@ reaches their phone at all.
 | Condition | Meaning |
 | --- | --- |
 | `item` | Hold the item. `{ name = 'usb', count = 3 }` for an amount, `{ name = 'usb', metadata = { tier = 3 } }` to match slot metadata |
-| `metadata` | Framework player metadata, key by key. QBCore/QBox read `PlayerData.metadata`; ESX needs `getMeta` (1.10+) |
+| `metadata` | Framework player metadata, key by key. QBCore/QBox read `PlayerData.metadata`; ESX needs `getMeta` (1.10+); ox_core and ND read theirs natively |
 | `jobs` | A name, an array of names, or a `name = minimumGrade` map. Any one match is enough |
 | `check` | A server export called as `(source, appId)`. Only a literal `true` opens the gate |
 | `consume` | Swaps the `item` check for a permanent per-character unlock. Other conditions stay live |

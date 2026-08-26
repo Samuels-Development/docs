@@ -66,7 +66,7 @@ Hard requirements, both must start before the phone:
 | [oxmysql](https://github.com/CommunityOx/oxmysql) | database access |
 | [sd-phone-props](https://github.com/Samuels-Development/sd-phone-props) | streams the in-hand phone models, one per frame colour |
 
-The phone auto-detects the running framework (qb-core, qbx_core, ESX) and whichever inventory, banking, housing, garage, and voice resources are installed; there is nothing to configure for the common setups. Calls and the Radio app carry audio over pma-voice.
+The phone auto-detects the running framework (qb-core, qbx_core, ESX, ox_core, ND) and whichever inventory, banking, housing, garage, and voice resources are installed; there is nothing to configure for the common setups, ND included. Only ox_core needs a step: map your group types to jobs and gangs in `configs/framework.lua`. Calls and the Radio app carry audio over pma-voice.
 
 ## <span class="step-num">1</span> Add the Resource
 
