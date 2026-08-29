@@ -305,10 +305,32 @@ That's the whole integration. Sell or spawn `sim_card` anywhere you like — an 
 |---|---|---|
 | `sd_fivemanage_key` | empty | Legacy location for the Fivemanage media token; prefer `configs/server/apikeys.lua` |
 | `sd_phone_lbcompat` | `true` | The [lb-phone compatibility layer](./lb-phone-compatibility); set `false` to disable |
-| `sd_phone_turn_url`<br>`sd_phone_turn_username`<br>`sd_phone_turn_credential` | empty | Static TURN server for nearby-voice capture in camera videos and Photogram Live |
-| `sd_cf_turn_token_id`<br>`sd_cf_turn_api_token` | empty | Alternatively, Cloudflare Calls TURN credentials (auto-minted short-lived keys) |
+| `sd_phone_turn_url`<br>`sd_phone_turn_username`<br>`sd_phone_turn_credential` | empty | TURN relay for **video calls**. Needed for the picture to reach a player on a different network |
+| `sd_cf_turn_token_id`<br>`sd_cf_turn_api_token` | empty | Cloudflare Realtime TURN for the **nearby-voice mesh** (camera videos, Photogram Live, bodycams) |
 
-The TURN convars are optional: without them, video voice capture still records the player's own microphone, and nearby-player voices are captured whenever a direct connection succeeds.
+These are two separate systems and one does not stand in for the other. Video calls read only the
+`sd_phone_turn_*` set; the voice and streaming mesh reads only the `sd_cf_turn_*` set. Setting one
+leaves the other on public STUN.
+
+::: warning Video calls need TURN to work across networks
+Video calls send the picture peer-to-peer. Public STUN is built in and is enough when both players
+share a network, which is why this usually looks fine in testing. Two players on **different home
+connections need a TURN relay**, and without one the call connects, the audio works and each player
+sees their own self-view perfectly, while the other person's half of the screen stays black.
+
+```cfg
+set sd_phone_turn_url        "turn:turn.example.com:3478"
+set sd_phone_turn_username   "your-username"
+set sd_phone_turn_credential "your-password"
+```
+
+Any standard TURN server works: self-hosted [coturn](https://github.com/coturn/coturn), or a managed
+one from Cloudflare Realtime, Metered or Twilio. sd-phone prints a reminder in the server console at
+boot while this is unset; silence it with `WarnAboutTurn = false` in `configs/phone.lua`.
+:::
+
+Without the `sd_cf_turn_*` pair, camera videos still record the player's own microphone, and
+nearby-player voices are captured whenever a direct connection succeeds.
 
 ## Migrating from lb-phone
 

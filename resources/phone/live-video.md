@@ -21,7 +21,9 @@ Nothing chooses between these by hand. A terminal takes the best one available t
 
 Nothing to configure. Bodycams go direct where the two clients can reach each other, and through your server where they cannot.
 
-Direct connections use the same STUN and TURN settings as the phone's voice mesh, in `configs/voice.lua`. Public STUN is enough for most pairs of players. Adding TURN (`sd_cf_turn_token_id` and `sd_cf_turn_api_token`) covers the rest, and the same setting serves voice, video calls and bodycams together.
+Direct connections use the same STUN and TURN settings as the phone's voice mesh, in `configs/voice.lua`. Public STUN is enough for most pairs of players. Adding TURN (`sd_cf_turn_token_id` and `sd_cf_turn_api_token`) covers the rest, and the same setting serves the voice mesh, bodycams and Live together.
+
+Video calls are a separate system with its own relay settings (`sd_phone_turn_*`), covered in the [installation guide](./installation#convars). Configuring one does not configure the other.
 
 ::: tip
 A direct connection reveals each player's IP address to the other, exactly as voice does. With TURN configured you can force everything through the relay instead by setting the transport policy in `configs/voice.lua`.
