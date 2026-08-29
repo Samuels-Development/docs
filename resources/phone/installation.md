@@ -227,7 +227,64 @@ Photos, camera clips and voice memos upload to **[Fivemanage](https://refer.five
 
 </div>
 
-## <span class="step-num">5</span> Start the Resource
+## <span class="step-num">5</span> Turn On Video Calls (TURN)
+
+Video calls, Photogram Live and bodycams send their picture **directly between the two players**.
+That works out of the box when both are on the same network, which is why it usually looks fine
+while you test. Two players on **different home connections** need a relay server in the middle,
+called TURN.
+
+Skip this step and the failure is easy to mistake for a bug: the call connects, the timer runs, the
+audio works, each player sees their own camera perfectly, and the other person's half of the screen
+stays black.
+
+One setup covers video calls, nearby-voice capture in camera clips, Photogram Live and bodycams.
+
+### The easy way: Cloudflare (free)
+
+sd-phone talks to Cloudflare's TURN service directly, so you only paste two values and it handles
+the rest, including refreshing credentials before they expire.
+
+1. Sign in at [dash.cloudflare.com](https://dash.cloudflare.com) (a free account is fine).
+2. In the sidebar open **Realtime**, then the **TURN** tab.
+3. Click **Create TURN key** and give it any name, for example `sd-phone`.
+4. Cloudflare shows a **Turn Token ID** and a **API Token**. Copy both now; the API token is only
+   shown once.
+5. Put them in your `server.cfg` and restart:
+
+```cfg
+set sd_cf_turn_token_id  "paste-the-turn-token-id"
+set sd_cf_turn_api_token "paste-the-api-token"
+```
+
+That's it. The free tier covers a normal roleplay server, and `configs/voice.lua` already has
+`Turn.Provider = 'cloudflare'` switched on.
+
+::: tip How do I know it worked?
+While no relay is configured, sd-phone prints a reminder in your server console at boot. Once the
+convars are set, that line disappears. To test properly you need two players on **different**
+internet connections, not two clients on one PC.
+:::
+
+### The alternative: your own TURN server
+
+If you already run [coturn](https://github.com/coturn/coturn), or use a provider that gives you a
+**fixed** username and password such as [Metered](https://www.metered.ca/stun-turn), use these
+instead. They can also sit alongside the Cloudflare pair as an extra relay:
+
+```cfg
+set sd_phone_turn_url        "turn:turn.example.com:3478"
+set sd_phone_turn_username   "your-username"
+set sd_phone_turn_credential "your-password"
+```
+
+::: warning Cloudflare and Twilio credentials do not go here
+Both issue **short-lived** credentials through an API rather than a fixed password, so a value
+pasted into `sd_phone_turn_credential` stops working within a day. For Cloudflare use the
+`sd_cf_turn_*` convars above, which refresh themselves.
+:::
+
+## <span class="step-num">6</span> Start the Resource
 
 To load the resource, either restart your server entirely, or run the following in your **server console** (F8 or txAdmin live console):
 
@@ -305,32 +362,12 @@ That's the whole integration. Sell or spawn `sim_card` anywhere you like — an 
 |---|---|---|
 | `sd_fivemanage_key` | empty | Legacy location for the Fivemanage media token; prefer `configs/server/apikeys.lua` |
 | `sd_phone_lbcompat` | `true` | The [lb-phone compatibility layer](./lb-phone-compatibility); set `false` to disable |
-| `sd_phone_turn_url`<br>`sd_phone_turn_username`<br>`sd_phone_turn_credential` | empty | TURN relay for **video calls**. Needed for the picture to reach a player on a different network |
-| `sd_cf_turn_token_id`<br>`sd_cf_turn_api_token` | empty | Cloudflare Realtime TURN for the **nearby-voice mesh** (camera videos, Photogram Live, bodycams) |
+| `sd_cf_turn_token_id`<br>`sd_cf_turn_api_token` | empty | Cloudflare TURN, used by **every** WebRTC feature: video calls, nearby-voice capture, Photogram Live and bodycams. See [step 5](#_5-turn-on-video-calls-turn) |
+| `sd_phone_turn_url`<br>`sd_phone_turn_username`<br>`sd_phone_turn_credential` | empty | A fixed TURN server of your own (coturn, Metered), used in addition to the above |
 
-These are two separate systems and one does not stand in for the other. Video calls read only the
-`sd_phone_turn_*` set; the voice and streaming mesh reads only the `sd_cf_turn_*` set. Setting one
-leaves the other on public STUN.
-
-::: warning Video calls need TURN to work across networks
-Video calls send the picture peer-to-peer. Public STUN is built in and is enough when both players
-share a network, which is why this usually looks fine in testing. Two players on **different home
-connections need a TURN relay**, and without one the call connects, the audio works and each player
-sees their own self-view perfectly, while the other person's half of the screen stays black.
-
-```cfg
-set sd_phone_turn_url        "turn:turn.example.com:3478"
-set sd_phone_turn_username   "your-username"
-set sd_phone_turn_credential "your-password"
-```
-
-Any standard TURN server works: self-hosted [coturn](https://github.com/coturn/coturn), or a managed
-one from Cloudflare Realtime, Metered or Twilio. sd-phone prints a reminder in the server console at
-boot while this is unset; silence it with `WarnAboutTurn = false` in `configs/phone.lua`.
-:::
-
-Without the `sd_cf_turn_*` pair, camera videos still record the player's own microphone, and
-nearby-player voices are captured whenever a direct connection succeeds.
+Both are optional, and either one alone is enough. With neither, the phone falls back to public
+STUN: recordings still capture the player's own microphone, and video and nearby voices work only
+between players who can reach each other directly, which in practice means the same network.
 
 ## Migrating from lb-phone
 
