@@ -260,6 +260,11 @@ set sd_cf_turn_api_token "paste-the-api-token"
 That's it. The free tier covers a normal roleplay server, and `configs/voice.lua` already has
 `Turn.Provider = 'cloudflare'` switched on.
 
+**You set these once and never touch them again.** The two values are a long-lived key, not a
+password that expires. The phone uses them to mint short-lived relay credentials automatically,
+re-minting shortly before each one lapses, which is roughly one request a day for the whole server.
+Nothing to rotate, nothing to renew.
+
 ::: tip How do I know it worked?
 While no relay is configured, sd-phone prints a reminder in your server console at boot. Once the
 convars are set, that line disappears. To test properly you need two players on **different**
@@ -278,10 +283,13 @@ set sd_phone_turn_username   "your-username"
 set sd_phone_turn_credential "your-password"
 ```
 
-::: warning Cloudflare and Twilio credentials do not go here
-Both issue **short-lived** credentials through an API rather than a fixed password, so a value
-pasted into `sd_phone_turn_credential` stops working within a day. For Cloudflare use the
-`sd_cf_turn_*` convars above, which refresh themselves.
+::: warning Do not paste a generated Cloudflare or Twilio credential here
+These three convars are for a relay with a **fixed** password that you control, such as your own
+coturn box. Cloudflare and Twilio hand out credentials that expire within a day, and these convars
+have no way to renew one, so a pasted value would stop working overnight.
+
+That is not a reason to avoid Cloudflare: use the `sd_cf_turn_*` pair in the section above instead,
+where the phone renews credentials for you and you never have to touch them.
 :::
 
 ## <span class="step-num">6</span> Start the Resource
