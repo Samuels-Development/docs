@@ -242,6 +242,13 @@ One setup covers video calls, nearby-voice capture in camera clips, Photogram Li
 
 ### The easy way: Cloudflare (free)
 
+::: warning Needs sd-phone v0.9.10 or newer
+On **v0.9.9 and older**, video calls do not read the Cloudflare convars: they only accept a fixed
+relay through `sd_phone_turn_*`. If you are on an older build, either update, or use
+[the fixed-relay option below](#the-alternative-your-own-turn-server). The Cloudflare pair still
+works on older builds for camera-clip audio, Photogram Live and bodycams, just not for calls.
+:::
+
 sd-phone talks to Cloudflare's TURN service directly, so you only paste two values and it handles
 the rest, including refreshing credentials before they expire.
 
