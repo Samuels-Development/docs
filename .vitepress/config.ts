@@ -410,7 +410,7 @@ const globalSidebar = [
           { text: 'Unique Phones & SIMs', link: '/resources/phone/unique-phones' },
           { text: 'Custom Apps', link: '/resources/phone/custom-apps' },
           { text: 'Dispatch on the MDT', link: '/resources/phone/dispatch-mdt' },
-          { text: 'Live Video', link: '/resources/phone/live-video' },
+          { text: 'Live Broadcasts', link: '/resources/phone/live-video' },
           {
             text: 'Exports',
             collapsed: true,
