@@ -770,6 +770,43 @@ exports['sd-phone']:notifyNumber(reporterNumber, {
 })
 ```
 
+### emergencyAlert
+
+Send an emergency alert: the same banner funnel as [notify](#notify), given a distinct treatment the player cannot mistake for an ordinary notification. The card carries a red `EMERGENCY ALERT` label and a warning glyph, and it stays on screen until the player dismisses it instead of fading after a few seconds.
+
+Pass `-1` as the source to reach every online player at once, which is the usual case for a dispatch or city-wide alert.
+
+**Syntax**
+```lua
+local sent = exports['sd-phone']:emergencyAlert(source, data)
+```
+
+| Parameter | Type | Description |
+|---|---|---|
+| `source` | `number` | The player's server ID, or `-1` for every online player |
+| `data` | `table` | Notification payload, same contract as [notify](#notify) |
+
+| Return | Type | Description |
+|---|---|---|
+| `sent` | `boolean` | `false` on a non-number source or a payload without a string `title` |
+
+::: tip Icons
+`app` and `image` are accepted but not used for the alert's icon: an emergency alert always shows the warning glyph, so alerts stay recognizable at a glance whatever the calling resource passes.
+:::
+
+**Example**
+```lua
+-- A bank robbery script alerting every player in the city
+exports['sd-phone']:emergencyAlert(-1, {
+    title = 'Bank robbery in progress',
+    body  = 'Pacific Standard, Vinewood Blvd. All units respond.',
+})
+```
+
+::: info lb-phone
+`exports['lb-phone']:EmergencyNotification(source, data)` maps onto this export, so a resource written for lb-phone produces the same alert with no changes. It takes lb's field names (`content` and `icon` rather than `body` and `image`), defaults a missing title to "Emergency" instead of refusing the call, and returns `nil` rather than a boolean, matching lb's own contract.
+:::
+
 The message exports send SMS on a player's behalf or as a service.
 
 ## Messages
