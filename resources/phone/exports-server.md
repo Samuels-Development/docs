@@ -807,6 +807,63 @@ exports['sd-phone']:emergencyAlert(-1, {
 `exports['lb-phone']:EmergencyNotification(source, data)` maps onto this export, so a resource written for lb-phone produces the same alert with no changes. It takes lb's field names (`content` and `icon` rather than `body` and `image`), defaults a missing title to "Emergency" instead of refusing the call, and returns `nil` rather than a boolean, matching lb's own contract.
 :::
 
+## Racing
+
+### importRaceTrack
+
+Import one race track, or a pack of them, into the Racing app. Every entry goes through the same validation the in-world gate creator uses, so an import cannot save a track the creator would refuse: the name, the gate count against `Creator.MinGates`/`MaxGates`, and two finite 3D points per gate.
+
+A damaged entry is skipped and reported rather than failing the batch, so a pack with one bad track still lands the rest.
+
+**Syntax**
+```lua
+local result = exports['sd-phone']:importRaceTrack(data, authorName)
+```
+
+| Parameter | Type | Description |
+|---|---|---|
+| `data` | `table` | One track table, or an array of them |
+| `authorName` | `string?` | Credited author, defaults to `"Imported"` |
+
+| Track field | Type | Description |
+|---|---|---|
+| `name` | `string` | Track name |
+| `mode` | `string?` | `"sprint"` or `"circuit"` (default) |
+| `gates` | `table` | Gate list, each `{ {ax,ay,az}, {bx,by,bz} }` |
+
+| Return | Type | Description |
+|---|---|---|
+| `result.imported` | `integer` | Tracks saved |
+| `result.failed` | `table[]` | `{ index, name, reason }` per skipped entry |
+
+**Example**
+```lua
+local result = exports['sd-phone']:importRaceTrack({
+    name  = 'Vinewood Sprint',
+    mode  = 'sprint',
+    gates = {
+        { { 100.0, 200.0, 30.0 }, { 110.0, 200.0, 30.0 } },
+        { { 150.0, 250.0, 31.5 }, { 160.0, 250.0, 31.5 } },
+    },
+}, 'Track Pack')
+
+print(('imported %d, skipped %d'):format(result.imported, #result.failed))
+```
+
+::: tip Bulk import from a file
+An owner seeding a track pack does not need a script. Drop the JSON into the `sd-phone` folder and run this from the **server console**:
+
+```
+importtracks tracks.json
+```
+
+The path is relative to the resource folder. Each track saved and each entry skipped is printed with its reason. At most 50 tracks are taken from one call.
+:::
+
+::: info In the app
+Players can do the same by hand: **Copy JSON** on any track's detail page puts it on the clipboard, and the import button on the Tracks list takes a pasted track or list. That route is held to the track creator's permission and rate limits, since importing a track and recording one both add a row.
+:::
+
 The message exports send SMS on a player's behalf or as a service.
 
 ## Messages
