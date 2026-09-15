@@ -38,10 +38,10 @@ If a real resource named `lb-tablet` is present and started, the layer does not 
 
 | Export | Behaviour |
 |---|---|
-| `AddDispatch(options)` | Files the alert on the police or medical call board through the quarantined mirror path. Returns a numeric id, or `false` when nothing was filed |
-| `GetDispatch(id)` | The call behind an id in lb-tablet's `DispatchNotification` shape, or `nil` once it has expired or been taken off the board |
-| `RemoveDispatch(id)` | Takes the call off the board early. `true` when something was removed |
-| `UpdateDispatch(id, options)` | Not supported: the board has no in-place edit. Warns once and returns `false` |
+| `AddDispatch` | Files the alert on the police or medical call board through the quarantined mirror path. Returns a numeric id, or `false` when nothing was filed |
+| `GetDispatch` | The call behind an id in lb-tablet's `DispatchNotification` shape, or `nil` once it has expired or been taken off the board |
+| `RemoveDispatch` | Takes the call behind an id off the board early. `true` when something was removed |
+| `UpdateDispatch` | Not supported: the board has no in-place edit. Warns once and returns `false` |
 
 **How `options` maps onto the board**
 
@@ -53,7 +53,7 @@ If a real resource named `lb-tablet` is present and started, the layer does not 
 | `job` | Routed by job name the same way the automatic dispatch systems are |
 | `location.label`, `location.coords` | Street text and map pin. A `vector2`, `vector3` or `{ x, y }` table all work |
 | `description`, `fields` | Joined into the detail line as `description, label: value, ...`. A field whose label contains `weapon` fills the weapon slot instead |
-| `time`, `image`, `sound`, `blip`, `responders`, `notificationTime` | Dropped. The board has no equivalent |
+| everything else | Dropped. `time`, `image`, `sound`, `blip`, `responders` and `notificationTime` have no equivalent on the board |
 
 Ids are handed out per server session and the last 512 are remembered, which is well past the board's capacity. Everything that applies to a mirrored call applies here: the rate limit, the dedupe window, the mirrored share of the board and the priority floor are all described on the [dispatch page](./dispatch-mdt#how-mirrored-calls-behave).
 
@@ -61,11 +61,11 @@ Ids are handed out per server session and the last 512 are remembered, which is 
 
 | Export | Behaviour |
 |---|---|
-| `AddDispatch(options)` | Relays to the server, which files the alert as a client-raised one: the relay's per-character cooldown and proximity check run before the usual rate limit. Returns the numeric id or `false` |
-| `ToggleDispatchVisible(visible)` | No-op. Dispatches are read on the board, not as a popup |
-| `IsDispatchVisible()` | Always `true` |
-| `IsDispatchOnScreen()` | Always `false` |
-| `ViewDispatchInTablet(id)` | Always `false` |
+| `AddDispatch` | Relays to the server, which files the alert as a client-raised one: the relay's per-character cooldown and proximity check run before the usual rate limit. Returns the numeric id or `false` |
+| `ToggleDispatchVisible` | No-op. Dispatches are read on the board, not as a popup |
+| `IsDispatchVisible` | Always `true` |
+| `IsDispatchOnScreen` | Always `false` |
+| `ViewDispatchInTablet` | Always `false` |
 
 ## MDT exports
 
@@ -75,41 +75,46 @@ lb-tablet addresses an MDT by name. sd-phone's departments are configured by job
 
 | Export | Behaviour |
 |---|---|
-| `GetMDTs()` | Every configured department keyed by its lb name, each as `{ name, department, deviceName, jobsArray, tabs }`. `tabs` is always empty: sd-phone's terminal is not tab-configured |
-| `GetMDT(name)` | One of the above, or `nil` |
-| `IsEmployeeOfMDT(name, source)` | Whether that player belongs to that department. On the client `source` is omitted and resolved server-side, so a client cannot claim a job it does not hold |
-| `GetMDTPermissions(name, source)` | lb's `{ default, users, vehicles, reports, weapons, dispatch }` blocks with `view`, `create`, `edit`, `delete` booleans, derived from the permission keys the player actually holds |
+| `GetMDTs` | Every configured department keyed by its lb name, each as `{ name, department, deviceName, jobsArray, tabs }`. `tabs` is always empty: sd-phone's terminal is not tab-configured |
+| `GetMDT` | One of the above by name, or `nil` |
+| `IsEmployeeOfMDT` | Whether the player belongs to that department. On the client the source is resolved server-side, so a client cannot claim a job it does not hold |
+| `GetMDTPermissions` | lb's `default`, `users`, `vehicles`, `reports`, `weapons` and `dispatch` blocks with `view`, `create`, `edit` and `delete` booleans, derived from the permission keys the player actually holds |
 
 ### Staff
 
+Every export here takes the MDT name first and then the target, a server id or citizenid of an online player. The `Police...` and `Ambulance...` aliases drop the name argument and are otherwise identical.
+
 | Export | Behaviour |
 |---|---|
-| `GetMDTAccount(name, target)` | `{ id, name, avatar, callsign, rank }`, or `nil` when the target is not in that department |
-| `GetMDTCallsign(name, target)`, `GetPoliceCallsign(target)`, `GetAmbulanceCallsign(target)` | The callsign or `nil` |
-| `GetMDTAvatar(name, target)`, `GetPoliceAvatar(target)`, `GetAmbulanceAvatar(target)` | The avatar URL or `nil` |
-| `SetMDTCallsign(name, target, callsign, ignoreCheck)`, `SetPoliceCallsign(...)`, `SetAmbulanceCallsign(...)` | Sets the callsign and returns it, or `false` with `invalid_target`, `invalid_callsign` or `callsign_taken`. Without `ignoreCheck` the write is audited and needs the roster permission; with it the callsign is written directly, but only within the target's own department |
+| `GetMDTAccount` | `{ id, name, avatar, callsign, rank }`, or `nil` when the target is not in that department |
+| `GetMDTCallsign` | The callsign or `nil`. Aliases: `GetPoliceCallsign`, `GetAmbulanceCallsign` |
+| `GetMDTAvatar` | The avatar URL or `nil`. Aliases: `GetPoliceAvatar`, `GetAmbulanceAvatar` |
+| `SetMDTCallsign` | Sets the callsign and returns it, or `false` with `invalid_target`, `invalid_callsign` or `callsign_taken`. Aliases: `SetPoliceCallsign`, `SetAmbulanceCallsign` |
+
+`SetMDTCallsign` takes lb's fourth `ignoreCheck` argument. Without it the write is audited and needs the roster permission. With it the callsign is written directly, but still only within the target's own department.
 
 ### Persons, vehicles and weapons
 
 | Export | Behaviour |
 |---|---|
-| `GetMDTUser(name, target)` | The police person record with `id` set to the citizenid. Police departments only; `false` for any other |
-| `GetMDTVehicle(name, plate)` | The vehicle record with `id` set to the plate. Police only |
-| `RegisterMDTWeapon(name, serial, data, registrant)`, `RegisterWeapon(serial, data)` | Files the firearm through [`mdtRegisterWeapon`](./exports-server#mdtregisterweapon). `data.weaponName` or `data.name` and `data.owner` are read. Returns the serial or `false` |
-| `GetMDTWeapon(name, serial)` | The registry record with `id` set to the serial. Police only |
-| `GetPolicePlayerCharges(identifier)` | `{ { id = code, charges = count }, ... }` for every unexpunged police charge against the citizen. `id` is the sd-phone offence code rather than a numeric lb id |
+| `GetMDTUser` | The police person record with `id` set to the citizenid. Police departments only; `false` for any other |
+| `GetMDTVehicle` | The vehicle record by plate with `id` set to the plate. Police only |
+| `RegisterMDTWeapon` | Files the firearm through [`mdtRegisterWeapon`](./exports-server#mdtregisterweapon). Reads `weaponName` or `name` and `owner` from the data table. Returns the serial or `false`. Alias: `RegisterWeapon` |
+| `GetMDTWeapon` | The registry record by serial with `id` set to the serial. Police only |
+| `GetPolicePlayerCharges` | Every unexpunged police charge against the citizen as `{ id, charges }` entries. `id` is the sd-phone offence code rather than a numeric lb id |
 
 ### Reports
 
 | Export | Behaviour |
 |---|---|
-| `GetMDTReport(name, tabId, id)` | The report in lb's shape. Only `tabId = 'reports'` maps; any other tab returns `false` |
-| `CreateMDTReport(name, tabId, creator, data)`, `UpdateMDTReport(...)` | Files or amends a report as `creator`, who must be an online employee of that department. Returns the numeric part of the report ref |
-| `DeleteMDTReport(id)` | Deletes without an actor. `true` when a report was removed |
-| `CreatePoliceReport(creator, data)`, `UpdatePoliceReport`, `GetPoliceReport(id)`, `DeletePoliceReport(id)` | The police aliases of the four above |
-| `CreateAmbulanceReport(creator, data)`, `UpdateAmbulanceReport`, `GetAmbulanceReport(id)`, `DeleteAmbulanceReport(id)` | The medical aliases. `patient`, `doctors` and `injuries` map onto the medical report's roles and body |
-| `GetPoliceCase(id)` | The case in lb's shape, read-only |
-| `GetPoliceWarrant(id)` | The warrant in lb's shape, read-only |
+| `GetMDTReport` | The report in lb's shape. Only the `reports` tab maps; any other tab id returns `false` |
+| `CreateMDTReport` | Files a report as the creator, who must be an online employee of that department. Returns the numeric part of the report ref |
+| `UpdateMDTReport` | Amends a report the same way, addressed by `id` in the data |
+| `DeleteMDTReport` | Deletes without an actor. `true` when a report was removed |
+| `GetPoliceCase` | The case in lb's shape, read-only |
+| `GetPoliceWarrant` | The warrant in lb's shape, read-only |
+
+The four report exports also answer under their department aliases: `CreatePoliceReport`, `UpdatePoliceReport`, `GetPoliceReport` and `DeletePoliceReport`, plus the same four `...AmbulanceReport` names. On the medical side `patient`, `doctors` and `injuries` map onto the medical report's roles and body.
 
 A police report carrying `officers`, `weapons` or `tags` is **refused with a warning** rather than saved with those fields silently dropped. sd-phone reports store suspects, victims and witnesses and have no report-level weapon relation, so there is nowhere honest to put them.
 
