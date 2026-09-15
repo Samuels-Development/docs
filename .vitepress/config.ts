@@ -428,6 +428,7 @@ const globalSidebar = [
             ],
           },
           { text: 'lb-phone Compatibility', link: '/resources/phone/lb-phone-compatibility' },
+          { text: 'lb-tablet Compatibility', link: '/resources/phone/lb-tablet-compatibility' },
         ],
       },
       {

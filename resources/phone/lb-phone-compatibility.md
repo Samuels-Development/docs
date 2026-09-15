@@ -128,8 +128,6 @@ On first boot the phone moves any table it finds under one of its own names but 
 
 Custom apps built for lb-phone run unmodified: `AddCustomApp` registers them for real, the app page gets the same injected globals (both capitalizations), the same `componentsLoaded` handshake, and the same message relay, and `dependency 'lb-phone'` plus `GetResourceState('lb-phone')` boot polls are satisfied. The full mechanism, the field table and templates are covered in the [Custom Apps guide](./custom-apps).
 
-The complete per-export table with per-name notes ships with the resource in `docs/exports.md`.
-
 ::: tip
 lb-phone's per-player data (numbers, contacts, messages, photos, notes) can also be imported at boot by the built-in migrator: run `sdphone:migrate dry` from the server console for a non-destructive preview, then `sdphone:migrate` to import. The import is idempotent and marker-guarded, so it runs once.
 :::

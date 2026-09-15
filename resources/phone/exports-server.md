@@ -2707,9 +2707,376 @@ local wanted = exports['sd-phone']:mdtIsWanted(citizenid)
 | `wanted` | `boolean` | `false` when the MDT is disabled |
 
 ::: warning These bypass the terminal's permissions on purpose
-Everything on this page is server-side and already trusted, so none of it checks a police
+Everything in this section is server-side and already trusted, so none of it checks a police
 permission the way the terminal does. Do not expose any of it through a client event a player can
 trigger, or you have handed them write access to the firearms registry.
+:::
+
+## MDT records and paperwork
+
+The rest of the MDT is reachable the same way: departments and their staff, the person and vehicle records, and the paperwork itself, meaning reports, case files and warrants. This is the surface a court script, a prison, a fine system or a custom dispatch reads and writes when it wants to file something an officer will later open on the terminal.
+
+Two kinds of export live here, and the difference matters.
+
+- **Acting exports** take an `actor`: the acting officer's server id, or their citizenid while they are online. The call then walks exactly what the terminal walks for that officer, so the department, grade and domain checks apply, and every write lands in the audit log under their name. These return the record on success and `nil, message` on refusal.
+- **Trusted exports** take no actor. They exist to back lb-tablet's source-less exports through the [compatibility layer](./lb-tablet-compatibility), and they trust the calling resource the way the firearms registry does. Each one is scoped to a domain (`'leo'` or `'ems'`) so a police caller cannot read a medical report by accident, but nothing else is checked.
+
+Both kinds refuse quietly while the MDT is disabled, and an acting export refuses with `The MDT actor must be online` when the actor is not.
+
+A report, case or warrant is addressed by its reference, the `R-0042` style string the terminal shows. Every export that takes one also accepts the numeric row id as a convenience, which is what the compatibility layer passes.
+
+### mdtGetDepartments
+
+The departments configured in `configs/mdt.lua`, in a compact shape. Reads the config directly, so it answers even with the MDT off.
+
+**Syntax**
+```lua
+local departments = exports['sd-phone']:mdtGetDepartments()
+```
+
+| Return | Type | Description |
+|---|---|---|
+| `departments` | `table[]` | Each `{ job, type, label, short, seal, accent, callsign }`. `type` is `'leo'`, `'ems'` or `'doj'` |
+
+### mdtIsEmployee
+
+Whether a player belongs to an MDT department, optionally a specific one.
+
+**Syntax**
+```lua
+local employed = exports['sd-phone']:mdtIsEmployee(actor, department)
+```
+
+| Parameter | Type | Description |
+|---|---|---|
+| `actor` | `number\|string` | Server id, or the citizenid of an online player |
+| `department` | `string?` | A department's job name, short code or label. Omit to ask whether they hold any MDT department |
+
+| Return | Type | Description |
+|---|---|---|
+| `employed` | `boolean` | `false` when the player is offline or the MDT is disabled |
+
+### mdtGetPermissions
+
+The permission keys an officer actually holds, after their department and grade are resolved. Keys look like `reports.view`, `warrants.issue` or `vehicles.edit`, and they are the same strings the department config grants.
+
+**Syntax**
+```lua
+local keys = exports['sd-phone']:mdtGetPermissions(actor)
+```
+
+| Return | Type | Description |
+|---|---|---|
+| `keys` | `string[]` | Empty when the player is offline or holds no department |
+
+### mdtGetAccount
+
+The officer's MDT identity and profile.
+
+**Syntax**
+```lua
+local account, message = exports['sd-phone']:mdtGetAccount(actor)
+```
+
+| Return | Type | Description |
+|---|---|---|
+| `account` | `table\|nil` | `{ citizenid, name, job, department, grade, rank, callsign, badge, radio, avatar, duty }`. `department` is the configured department table |
+| `message` | `string?` | Reason when `account` is `nil`, for example `The actor has no MDT department` |
+
+### mdtGetCallsign
+
+The officer's callsign, or `nil` with a message.
+
+**Syntax**
+```lua
+local callsign, message = exports['sd-phone']:mdtGetCallsign(actor)
+```
+
+### mdtSetCallsign
+
+Sets another officer's callsign through the roster, audited under the actor's name. The actor needs the roster permission and the target has to be a member of their department. The callsign is uppercased.
+
+**Syntax**
+```lua
+local ok, officer = exports['sd-phone']:mdtSetCallsign(actor, target, callsign)
+```
+
+| Parameter | Type | Description |
+|---|---|---|
+| `actor` | `number\|string` | The officer making the change |
+| `target` | `number\|string` | Server id or citizenid of the officer whose callsign changes |
+| `callsign` | `string` | The new callsign |
+
+| Return | Type | Description |
+|---|---|---|
+| `ok` | `boolean` | `false` on refusal |
+| `officer` | `table?` | The updated roster row when `ok` |
+
+### mdtGetAvatar
+
+The profile picture URL the officer set on the terminal, or `nil` with a message.
+
+**Syntax**
+```lua
+local url, message = exports['sd-phone']:mdtGetAvatar(actor)
+```
+
+### mdtGetPerson
+
+A citizen's record as the acting officer would see it. Needs `persons.view`.
+
+**Syntax**
+```lua
+local person, message = exports['sd-phone']:mdtGetPerson(actor, citizenid)
+```
+
+| Return | Type | Description |
+|---|---|---|
+| `person` | `table\|nil` | `{ citizenid, name, firstname, lastname, dob, sex, phone, nationality, job, jobGrade, licences, fingerprint, bloodtype, mugshot, notes, flags, wanted, vehicles, warrants, priors, arrests }` |
+| `message` | `string?` | Reason when `person` is `nil` |
+
+### mdtGetVehicle
+
+A vehicle record by plate. Needs `vehicles.view`.
+
+**Syntax**
+```lua
+local vehicle, message = exports['sd-phone']:mdtGetVehicle(actor, plate)
+```
+
+| Return | Type | Description |
+|---|---|---|
+| `vehicle` | `table\|nil` | `{ plate, model, owner, ownerName, status, stolen, bolo, garage, stored, notes, points, image, updatedBy, updatedAt }` |
+| `message` | `string?` | Reason when `vehicle` is `nil` |
+
+### mdtUpdateVehicle
+
+Changes the MDT's overlay on a vehicle: registration status, points, notes, photo and the stolen and BOLO flags. Only the fields present in `data` change. Needs `vehicles.edit` and is audited.
+
+**Syntax**
+```lua
+local vehicle, message = exports['sd-phone']:mdtUpdateVehicle(actor, data)
+```
+
+| Field | Type | Description |
+|---|---|---|
+| `plate` | `string` | The plate. Required, and the vehicle must exist in the framework |
+| `status` | `string?` | One of `valid`, `suspended`, `expired`, `impounded` |
+| `points` | `number?` | Licence points on the vehicle, capped at 24 |
+| `notes` | `string?` | Free text, up to 2000 characters |
+| `image` | `string?` | An `https://` photo URL |
+| `stolen` | `boolean?` | Stolen flag |
+| `bolo` | `boolean?` | Be-on-the-lookout flag |
+
+**Example**
+```lua
+-- An impound lot marks the car on release
+exports['sd-phone']:mdtUpdateVehicle(officerSource, {
+    plate  = plate,
+    status = 'valid',
+    notes  = 'Released from impound, fees paid',
+})
+```
+
+### mdtGetReport
+
+One report with everything on it. Needs `reports.view`, and the report has to be one the officer's department can see.
+
+**Syntax**
+```lua
+local report, message = exports['sd-phone']:mdtGetReport(actor, refOrId)
+```
+
+| Return | Type | Description |
+|---|---|---|
+| `report` | `table\|nil` | `{ id, ref, title, type, body, author, authorCid, callsign, evidence, involved, charges, chargeCount, totalMonths, totalFine, caseRef, createdAt, updatedAt, canEdit, canDelete }` |
+| `message` | `string?` | Reason when `report` is `nil` |
+
+`involved` entries are `{ citizenid, name, role, notes }`. `charges` entries are `{ code, label, class, citizenid, name, count, months, fine }`, with `totalMonths` and `totalFine` already summed across them.
+
+### mdtSaveReport
+
+Files a report, or amends one when `ref` is present. Filing needs `reports.create`; amending your own report needs `reports.edit.own` and anyone else's `reports.edit.any`. The vocabulary is the actor's own terminal's: a medic is held to the medical report types and roles, an officer to the police ones, whatever the payload says.
+
+**Syntax**
+```lua
+local report, message = exports['sd-phone']:mdtSaveReport(actor, data)
+```
+
+| Field | Type | Description |
+|---|---|---|
+| `ref` | `string?` | Omit to file a new report, pass one to amend it |
+| `title` | `string` | Required, up to 160 characters |
+| `type` | `string?` | One of the department's configured report types. An unknown one falls back to the first |
+| `body` | `string?` | The narrative, up to 12000 characters |
+| `evidence` | `table[]?` | `{ url, label }` entries. `https://` and `nui://` URLs only, up to 24 |
+| `involved` | `table[]?` | `{ citizenid, role, notes? }` entries. Police roles are `suspect`, `victim` and `witness`; medical roles are the configured `EmsInvolvedRoles` |
+| `charges` | `table[]?` | `{ code, count, citizenid }` entries, police reports only. Every charge must name a listed suspect and a code from the penal code |
+
+| Return | Type | Description |
+|---|---|---|
+| `report` | `table\|nil` | The saved report, in the [mdtGetReport](#mdtgetreport) shape |
+| `message` | `string?` | Reason when `report` is `nil` |
+
+**Example**
+```lua
+-- A speed camera files the ticket under the officer who reviewed it
+local report, err = exports['sd-phone']:mdtSaveReport(officerSource, {
+    title    = ('Speeding on Route 68, %s'):format(plate),
+    type     = 'Traffic',
+    body     = ('Clocked at %d in a %d zone.'):format(speed, limit),
+    involved = { { citizenid = driverCid, role = 'suspect' } },
+    charges  = { { code = 'T-102', count = 1, citizenid = driverCid } },
+})
+```
+
+### mdtDeleteReport
+
+Deletes a report and everything hanging off it. A case it was linked to survives. Needs `reports.delete`.
+
+**Syntax**
+```lua
+local ok, message = exports['sd-phone']:mdtDeleteReport(actor, refOrId)
+```
+
+### mdtGetCase
+
+One case file. Needs `cases.view`.
+
+**Syntax**
+```lua
+local case, message = exports['sd-phone']:mdtGetCase(actor, refOrId)
+```
+
+| Return | Type | Description |
+|---|---|---|
+| `case` | `table\|nil` | `{ ref, title, summary, status, priority, evidence, officers, notes, reports, createdBy, createdAt, updatedAt, canEdit, canDelete }`. `officers`, `notes` and `reports` are lists |
+| `message` | `string?` | Reason when `case` is `nil` |
+
+### mdtSaveCase
+
+Opens a case file, or amends one when `ref` is present. Opening needs `cases.create`, amending `cases.edit`. The actor is put on a new case as its primary officer.
+
+**Syntax**
+```lua
+local case, message = exports['sd-phone']:mdtSaveCase(actor, data)
+```
+
+| Field | Type | Description |
+|---|---|---|
+| `ref` | `string?` | Omit to open a new case, pass one to amend it |
+| `title` | `string` | Required, up to 160 characters |
+| `summary` | `string?` | Up to 4000 characters |
+| `status` | `string?` | One of `open`, `in_progress`, `closed` |
+| `priority` | `string?` | One of `low`, `medium`, `high` |
+| `evidence` | `table[]?` | `{ url, label }` entries, as on a report |
+
+### mdtDeleteCase
+
+Deletes a case file. Its reports are unlinked, never deleted. Needs `cases.delete`.
+
+**Syntax**
+```lua
+local ok, message = exports['sd-phone']:mdtDeleteCase(actor, refOrId)
+```
+
+### mdtGetWarrant
+
+One warrant. Needs `warrants.view`.
+
+**Syntax**
+```lua
+local warrant, message = exports['sd-phone']:mdtGetWarrant(actor, refOrId)
+```
+
+| Return | Type | Description |
+|---|---|---|
+| `warrant` | `table\|nil` | `{ id, ref, citizenid, subject, reportRef, charges, felonies, misdemeanors, infractions, bond, officer, issuedCid, callsign, issuedAt, expiresAt, active }` |
+| `message` | `string?` | Reason when `warrant` is `nil` |
+
+### mdtIssueWarrant
+
+Issues a warrant, which flags the citizen as wanted everywhere the MDT reports it, including [mdtIsWanted](#mdtiswanted). Needs `warrants.issue` and is audited. The charges come from a report the citizen is a suspect on, or are given directly.
+
+**Syntax**
+```lua
+local warrant, message = exports['sd-phone']:mdtIssueWarrant(actor, data)
+```
+
+| Field | Type | Description |
+|---|---|---|
+| `citizenid` | `string` | The subject. Required |
+| `reportRef` | `string?` | Take the charges from this report, on which the citizen must be a listed suspect |
+| `charges` | `table[]?` | Or `{ code, count }` entries directly. One of the two is required, and at least one charge has to be in the penal code |
+| `expiryDays` | `number?` | How long it stands. Defaults to and is capped by `Warrants.DefaultExpiryDays` and `Warrants.MaxExpiryDays` in `configs/mdt.lua` |
+| `bond` | `number?` | Bond amount, capped by `Warrants.MaxBond` |
+
+| Return | Type | Description |
+|---|---|---|
+| `warrant` | `table\|nil` | The issued warrant, in the [mdtGetWarrant](#mdtgetwarrant) shape |
+| `message` | `string?` | Reason when `warrant` is `nil` |
+
+### mdtCloseWarrant
+
+Marks a warrant served. Only the issuing department can close its own warrants. Needs `warrants.close`.
+
+**Syntax**
+```lua
+local warrant, message = exports['sd-phone']:mdtCloseWarrant(actor, refOrId)
+```
+
+### mdtVoidWarrant
+
+Quashes a warrant from the bench. Unlike closing, this ignores which department issued it, because a court striking a warrant is not the issuing department deciding it is served. Needs `warrants.void`, which only a bench department is configured to hold.
+
+**Syntax**
+```lua
+local warrant, message = exports['sd-phone']:mdtVoidWarrant(actor, refOrId)
+```
+
+### Trusted reads
+
+These take no actor and trust the calling resource. Each returns the same shape as its acting counterpart, with `canEdit` and `canDelete` always `false`, or `nil` when nothing matches the reference in that domain.
+
+**Syntax**
+```lua
+local person  = exports['sd-phone']:mdtGetTrustedPerson(citizenid, 'leo')
+local vehicle = exports['sd-phone']:mdtGetTrustedVehicle(plate)
+local report  = exports['sd-phone']:mdtGetTrustedReport(refOrId, domain)
+local case    = exports['sd-phone']:mdtGetTrustedCase(refOrId, domain)
+local warrant = exports['sd-phone']:mdtGetTrustedWarrant(refOrId, domain)
+```
+
+| Parameter | Type | Description |
+|---|---|---|
+| `domain` | `string` | `'leo'` or `'ems'`. A record filed by the other domain's departments reads as `nil` |
+
+`mdtGetTrustedPerson` answers for `'leo'` only. There is no trusted medical person read.
+
+### mdtDeleteTrustedReport
+
+Deletes a report by reference with no actor and no audit row. Exists for lb-tablet's actor-less delete export; prefer [mdtDeleteReport](#mdtdeletereport) in your own code.
+
+**Syntax**
+```lua
+local ok = exports['sd-phone']:mdtDeleteTrustedReport(refOrId)
+```
+
+### mdtGetPlayerCharges
+
+Every unexpunged police charge against a citizen, totalled by offence code. What a fine or prison script wants when it sentences from the record rather than from one report.
+
+**Syntax**
+```lua
+local charges = exports['sd-phone']:mdtGetPlayerCharges(citizenid)
+```
+
+| Return | Type | Description |
+|---|---|---|
+| `charges` | `table[]` | `{ id, charges }` entries, where `id` is the offence code and `charges` the total count. Empty when nothing is on file |
+
+::: warning Keep the trusted exports server-side
+An acting export is safe to call on a player's behalf because it checks that player. A trusted export checks nothing but the domain, so it belongs in server code that is itself trusted, never behind a client event.
 :::
 
 ::: tip
