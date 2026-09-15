@@ -299,6 +299,13 @@ That is not a reason to avoid Cloudflare: use the `sd_cf_turn_*` pair in the sec
 where the phone renews credentials for you and you never have to touch them.
 :::
 
+::: tip Running Photogram Live or Vibez Live? That is a separate setup
+Live broadcasts do not use TURN. They go through their own relay, and without it a stream cuts out
+for anyone not on the streamer's network. The steps are on the [Live Broadcasts](./live-video) page,
+under [Set up the relay](./live-video#step-2-set-up-the-relay-stops-the-cutting-out). Bodycams need
+nothing extra.
+:::
+
 ## <span class="step-num">6</span> Start the Resource
 
 To load the resource, either restart your server entirely, or run the following in your **server console** (F8 or txAdmin live console):
