@@ -15,7 +15,7 @@ Everything is placed and managed in-game through `/scootadmin` - no coordinates 
 
 ### Rental Bunkers
 
-- Bunker props sit **flush with the pavement** and rise as a player approaches
+- Bunker props sit **flush with the pavement** and only rise when someone rents from them
 - Renting at a bunker plays a full **dispense animation** - shutter opens, ramp drops, the scooter rolls out and its stem snaps upright
 - Each bunker holds a configurable **stock** of scooters; docking a ride back puts one into stock
 
