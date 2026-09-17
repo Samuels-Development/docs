@@ -1,0 +1,234 @@
+{
+  "rear": [
+    {
+      "id": "none",
+      "label": "None",
+      "fee": 0
+    },
+    {
+      "id": "rack",
+      "label": "Rear carrier",
+      "fee": 2
+    },
+    {
+      "id": "delivery",
+      "label": "Delivery bag + rack",
+      "fee": 5
+    }
+  ],
+  "trim": [
+    {
+      "id": "stock",
+      "label": "Original teal",
+      "fee": 0
+    },
+    {
+      "id": "black",
+      "label": "Stealth black",
+      "fee": 1,
+      "hex": "#22292e"
+    },
+    {
+      "id": "silver",
+      "label": "Brushed silver",
+      "fee": 1,
+      "hex": "#b5bfc7"
+    },
+    {
+      "id": "orange",
+      "label": "Burnt orange",
+      "fee": 1,
+      "hex": "#eb802c"
+    },
+    {
+      "id": "lime",
+      "label": "Lime",
+      "fee": 1,
+      "hex": "#a6d947"
+    },
+    {
+      "id": "violet",
+      "label": "Violet",
+      "fee": 1,
+      "hex": "#956ee8"
+    }
+  ],
+  "lighting": [
+    {
+      "id": "off",
+      "label": "Off",
+      "fee": 0
+    },
+    {
+      "id": "black",
+      "label": "Black",
+      "fee": 2,
+      "hex": "#0d1116"
+    },
+    {
+      "id": "white",
+      "label": "White",
+      "fee": 2,
+      "hex": "#f4f4f4"
+    },
+    {
+      "id": "red",
+      "label": "Red",
+      "fee": 2,
+      "hex": "#c00e1a"
+    },
+    {
+      "id": "blue",
+      "label": "Blue",
+      "fee": 2,
+      "hex": "#0d5fb1"
+    },
+    {
+      "id": "yellow",
+      "label": "Yellow",
+      "fee": 2,
+      "hex": "#f7d117"
+    },
+    {
+      "id": "orange",
+      "label": "Orange",
+      "fee": 2,
+      "hex": "#f78616"
+    },
+    {
+      "id": "green",
+      "label": "Green",
+      "fee": 2,
+      "hex": "#4cc81f"
+    },
+    {
+      "id": "violet",
+      "label": "Purple",
+      "fee": 2,
+      "hex": "#7f2fdb"
+    },
+    {
+      "id": "pink",
+      "label": "Pink",
+      "fee": 2,
+      "hex": "#f21f99"
+    },
+    {
+      "id": "teal",
+      "label": "Teal",
+      "fee": 2,
+      "hex": "#1a6b78"
+    },
+    {
+      "id": "silver",
+      "label": "Silver",
+      "fee": 2,
+      "hex": "#777c87"
+    },
+    {
+      "id": "forest",
+      "label": "Forest Green",
+      "fee": 2,
+      "hex": "#003805"
+    },
+    {
+      "id": "ice",
+      "label": "Ice Blue",
+      "fee": 2,
+      "hex": "#95b2db"
+    },
+    {
+      "id": "cream",
+      "label": "Cream",
+      "fee": 2,
+      "hex": "#cfc0a5"
+    },
+    {
+      "id": "burgundy",
+      "label": "Burgundy",
+      "fee": 2,
+      "hex": "#4a0a0a"
+    }
+  ],
+  "bell": [
+    {
+      "id": "classic",
+      "label": "Chrome double-ring",
+      "fee": 0
+    },
+    {
+      "id": "black",
+      "label": "Matte black chime",
+      "fee": 1
+    },
+    {
+      "id": "electronic",
+      "label": "Electronic beep",
+      "fee": 1
+    }
+  ],
+  "decal": [
+    {
+      "id": "none",
+      "label": "None",
+      "fee": 0
+    },
+    {
+      "id": "stripes",
+      "label": "Racing stripes",
+      "fee": 1
+    },
+    {
+      "id": "number",
+      "label": "Race number",
+      "fee": 1
+    },
+    {
+      "id": "name",
+      "label": "Custom name",
+      "fee": 1
+    }
+  ],
+  "defaults": {
+    "rear": "none",
+    "trim": "stock",
+    "lighting": "off",
+    "bell": "classic",
+    "decal": "none",
+    "name": "",
+    "number": "07"
+  },
+  "presets": [
+    {
+      "id": "commuter",
+      "label": "Commuter",
+      "description": "Everyday essentials",
+      "options": {
+        "trim": "black",
+        "bell": "black",
+        "rear": "rack"
+      }
+    },
+    {
+      "id": "night",
+      "label": "Night Rider",
+      "description": "A little after-dark character",
+      "options": {
+        "trim": "violet",
+        "lighting": "violet",
+        "decal": "stripes",
+        "bell": "electronic"
+      }
+    },
+    {
+      "id": "courier",
+      "label": "Courier",
+      "description": "Carry the look",
+      "options": {
+        "rear": "delivery",
+        "trim": "orange",
+        "decal": "number"
+      }
+    }
+  ]
+}
