@@ -1,6 +1,6 @@
 # Client Exports
 
-SCOOT E-Scooters provides client-side exports for reusing its placement tool in other scripts, plus a client event and state bags for reacting to rides and scooters.
+Scooters provides client-side exports for reusing its placement tool in other scripts, plus a client event and state bags for reacting to rides and scooters.
 
 ## placeGhost
 

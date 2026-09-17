@@ -58,13 +58,6 @@ aside: false
         </div>
         <span class="res-card-desc">Multiple jobs with configurable limits</span>
       </a>
-      <a href="/resources/scooters/" class="res-card">
-        <div class="res-card-top">
-          <span class="res-card-name">SCOOT E-Scooters</span>
-          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="res-card-arrow"><path d="M7 17l9.2-9.2M17 17V7.8H7.8"/></svg>
-        </div>
-        <span class="res-card-desc">Rental bunkers, charging stations, phone app, live admin</span>
-      </a>
     </div>
   </div>
   <div class="res-group" style="--cat-color: #FF6B6B;">
@@ -150,6 +143,21 @@ aside: false
           <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="res-card-arrow"><path d="M7 17l9.2-9.2M17 17V7.8H7.8"/></svg>
         </div>
         <span class="res-card-desc">16 Watch Dogs-style vehicle hacks with secure validation</span>
+      </a>
+    </div>
+  </div>
+  <div class="res-group" style="--cat-color: #2DD4BF;">
+    <div class="res-group-head">
+      <span class="res-tag">Scooters</span>
+      <span class="res-sub">E-scooter rentals, charging, and fleet management</span>
+    </div>
+    <div class="res-grid">
+      <a href="/resources/scooters/" class="res-card">
+        <div class="res-card-top">
+          <span class="res-card-name">Scooters</span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="res-card-arrow"><path d="M7 17l9.2-9.2M17 17V7.8H7.8"/></svg>
+        </div>
+        <span class="res-card-desc">Rental bunkers, charging stations, phone app, live admin</span>
       </a>
     </div>
   </div>

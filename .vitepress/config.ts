@@ -147,40 +147,6 @@ const globalSidebar = [
     text: 'Heists',
     items: [
       {
-        text: 'SCOOT E-Scooters',
-        collapsed: true,
-        items: [
-          { text: 'Overview', link: '/resources/scooters/' },
-          { text: 'Installation', link: '/resources/scooters/installation' },
-          { text: 'Configuration', link: '/resources/scooters/configuration' },
-          {
-            text: 'Full Config Files',
-            collapsed: true,
-            items: [
-              { text: 'config.lua', link: '/resources/scooters/full-config' },
-              { text: 'admin.lua', link: '/resources/scooters/full-config-admin' },
-              { text: 'rentals.lua', link: '/resources/scooters/full-config-rentals' },
-              { text: 'battery.lua', link: '/resources/scooters/full-config-battery' },
-              { text: 'bunkers.lua', link: '/resources/scooters/full-config-bunkers' },
-              { text: 'stations.lua', link: '/resources/scooters/full-config-stations' },
-              { text: 'scooters.lua', link: '/resources/scooters/full-config-scooters' },
-              { text: 'handling.lua', link: '/resources/scooters/full-config-handling' },
-              { text: 'extras.json', link: '/resources/scooters/full-config-extras' },
-            ],
-          },
-          { text: 'Admin Panel', link: '/resources/scooters/admin-panel' },
-          { text: 'Rentals & Charging', link: '/resources/scooters/rentals' },
-          {
-            text: 'Exports',
-            collapsed: true,
-            items: [
-              { text: 'Client Exports', link: '/resources/scooters/exports-client' },
-              { text: 'Server Exports', link: '/resources/scooters/exports-server' },
-            ],
-          },
-        ],
-      },
-      {
         text: 'Bobcat Security Heist',
         collapsed: true,
         items: [
@@ -425,6 +391,45 @@ const globalSidebar = [
               { text: 'config.lua', link: '/resources/vehhack/full-config' },
               { text: 'hacks.lua', link: '/resources/vehhack/full-config-hacks' },
               { text: 'logs.lua', link: '/resources/vehhack/full-config-logs' },
+            ],
+          },
+        ],
+      },
+    ],
+  },
+  {
+    text: 'Scooters',
+    items: [
+      {
+        text: 'Scooters',
+        collapsed: true,
+        items: [
+          { text: 'Overview', link: '/resources/scooters/' },
+          { text: 'Installation', link: '/resources/scooters/installation' },
+          { text: 'Configuration', link: '/resources/scooters/configuration' },
+          {
+            text: 'Full Config Files',
+            collapsed: true,
+            items: [
+              { text: 'config.lua', link: '/resources/scooters/full-config' },
+              { text: 'admin.lua', link: '/resources/scooters/full-config-admin' },
+              { text: 'rentals.lua', link: '/resources/scooters/full-config-rentals' },
+              { text: 'battery.lua', link: '/resources/scooters/full-config-battery' },
+              { text: 'bunkers.lua', link: '/resources/scooters/full-config-bunkers' },
+              { text: 'stations.lua', link: '/resources/scooters/full-config-stations' },
+              { text: 'scooters.lua', link: '/resources/scooters/full-config-scooters' },
+              { text: 'handling.lua', link: '/resources/scooters/full-config-handling' },
+              { text: 'extras.json', link: '/resources/scooters/full-config-extras' },
+            ],
+          },
+          { text: 'Admin Panel', link: '/resources/scooters/admin-panel' },
+          { text: 'Rentals & Charging', link: '/resources/scooters/rentals' },
+          {
+            text: 'Exports',
+            collapsed: true,
+            items: [
+              { text: 'Client Exports', link: '/resources/scooters/exports-client' },
+              { text: 'Server Exports', link: '/resources/scooters/exports-server' },
             ],
           },
         ],

@@ -1,6 +1,6 @@
-# SCOOT E-Scooters <VersionBadge repo="sd-scooters" fallback="0.9.9" />
+# Scooters <VersionBadge repo="sd-scooters" fallback="0.9.9" />
 
-**SCOOT E-Scooters** (`sd-scooters`) is a complete e-scooter rental network for FiveM. It ships a custom standing-rider scooter, rental bunkers that rise out of the pavement and dispense a scooter, charging stations with live pay screens, a battery economy, a phone app for renting and ending rides, and a full in-game admin panel with a live map, ride analytics, and a live handling editor.
+**Scooters** (`sd-scooters`) is a complete e-scooter rental network for FiveM. It ships a custom standing-rider scooter, rental bunkers that rise out of the pavement and dispense a scooter, charging stations with live pay screens, a battery economy, a phone app for renting and ending rides, and a full in-game admin panel with a live map, ride analytics, and a live handling editor.
 
 Everything is placed and managed in-game through `/scootadmin` - no coordinates to copy into config files.
 

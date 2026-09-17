@@ -1,6 +1,6 @@
 # Full Config — Admin
 
-The complete default `configs/shared/admin.lua` for **SCOOT E-Scooters** — admin panel permissions, commands, and the placement tool.
+The complete default `configs/shared/admin.lua` for **Scooters** — admin panel permissions, commands, and the placement tool.
 
 ::: tip
 For a detailed explanation of each option, see the [Admin Panel](./configuration#admin-panel) section of the Configuration page.

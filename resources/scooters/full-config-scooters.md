@@ -1,6 +1,6 @@
 # Full Config — Scooters
 
-The complete default `configs/shared/scooters.lua` for **SCOOT E-Scooters** — the vehicle model, plates, and paint slots.
+The complete default `configs/shared/scooters.lua` for **Scooters** — the vehicle model, plates, and paint slots.
 
 ::: tip
 For a detailed explanation of each option, see the [Scooters](./configuration#scooters) section of the Configuration page.

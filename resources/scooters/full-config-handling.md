@@ -1,6 +1,6 @@
 # Full Config — Handling
 
-The complete default `configs/shared/handling.lua` for **SCOOT E-Scooters** — the live handling editor, its dials, templates, and editable fields.
+The complete default `configs/shared/handling.lua` for **Scooters** — the live handling editor, its dials, templates, and editable fields.
 
 ::: tip
 For a detailed explanation of each option, see the [Handling Editor](./configuration#handling-editor) section of the Configuration page.

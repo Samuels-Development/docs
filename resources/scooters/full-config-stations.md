@@ -1,6 +1,6 @@
 # Full Config — Charging Stations
 
-The complete default `configs/shared/stations.lua` for **SCOOT E-Scooters** — charging stations, docks, and the charger screen.
+The complete default `configs/shared/stations.lua` for **Scooters** — charging stations, docks, and the charger screen.
 
 ::: tip
 For a detailed explanation of each option, see the [Charging Stations](./configuration#charging-stations) section of the Configuration page.

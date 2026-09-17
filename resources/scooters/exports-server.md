@@ -1,6 +1,6 @@
 # Server Exports
 
-SCOOT E-Scooters provides server-side exports for managing bunkers, stations, and the fleet programmatically, and a rental API for phones and other scripts.
+Scooters provides server-side exports for managing bunkers, stations, and the fleet programmatically, and a rental API for phones and other scripts.
 
 ::: info Return values
 Management exports that change something return `ok` (or the new row) on success, and `false, errKey` on failure. `errKey` is a locale key from `locales/en.json`, e.g. `'err.no_bunker'`.

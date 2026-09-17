@@ -1,6 +1,6 @@
 # Full Config Reference
 
-The complete default `configs/config.lua` for **SCOOT E-Scooters**. Use this as a reference or starting point for your own configuration.
+The complete default `configs/config.lua` for **Scooters**. Use this as a reference or starting point for your own configuration.
 
 ::: tip
 This is the full unedited config file. For a detailed explanation of each option, see the [Configuration](./configuration) page.

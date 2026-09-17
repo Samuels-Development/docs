@@ -1,6 +1,6 @@
 # Full Config — Battery
 
-The complete default `configs/shared/battery.lua` for **SCOOT E-Scooters** — battery drain, charging, and paid charging.
+The complete default `configs/shared/battery.lua` for **Scooters** — battery drain, charging, and paid charging.
 
 ::: tip
 For a detailed explanation of each option, see the [Battery](./configuration#battery) section of the Configuration page.

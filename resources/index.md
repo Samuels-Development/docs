@@ -16,7 +16,7 @@ A complete crafting system with static and placeable workbenches, recipes, bluep
 ### [Dumpster Diving](/resources/dumpsters/)
 Loot dumpsters and trash bins, encounter the Hobo King, befriend rat companions, send them on expeditions, and recycle scrap at recycler stations.
 
-### [SCOOT E-Scooters](/resources/scooters/)
+### [Scooters](/resources/scooters/)
 A complete e-scooter rental network with a custom standing-rider scooter, rental bunkers that rise from the pavement and dispense scooters, charging stations with live pay screens, a battery economy, a rental app for sd-phone and lb-phone, and an in-game admin panel with a live map, ride analytics, and a live handling editor.
 
 ### [Beekeeping](/resources/beekeeping/)

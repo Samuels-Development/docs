@@ -1,6 +1,6 @@
 # Full Config — Rentals
 
-The complete default `configs/shared/rentals.lua` for **SCOOT E-Scooters** — rental fees, distances, and the phone app.
+The complete default `configs/shared/rentals.lua` for **Scooters** — rental fees, distances, and the phone app.
 
 ::: tip
 For a detailed explanation of each option, see the [Rentals](./configuration#rentals) section of the Configuration page.
