@@ -148,8 +148,8 @@ aside: false
   </div>
   <div class="res-group" style="--cat-color: #2DD4BF;">
     <div class="res-group-head">
-      <span class="res-tag">Scooters</span>
-      <span class="res-sub">E-scooter rentals, charging, and fleet management</span>
+      <span class="res-tag">Vehicles & Transport</span>
+      <span class="res-sub">Rentals, rides, and getting around</span>
     </div>
     <div class="res-grid">
       <a href="/resources/scooters/" class="res-card">

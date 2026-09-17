@@ -398,7 +398,7 @@ const globalSidebar = [
     ],
   },
   {
-    text: 'Scooters',
+    text: 'Vehicles & Transport',
     items: [
       {
         text: 'Scooters',
