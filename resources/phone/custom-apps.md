@@ -250,6 +250,8 @@ After the handshake these globals exist on your page's `window`. Both capitaliza
 | `UseCamera()` | Opens the phone's camera. Resolves the uploaded photo URL, or `null` if the player backs out |
 | `ShowConfirm(text)` | Yes/no dialog over `SetPopUp`, resolving a boolean |
 | `GetPhoneNumber()` | The acting character's number, or `null` when it cannot be resolved |
+| `GetEmails()` | Every Mail address the acting character is signed into, first one first. An empty array when they have no Mail account |
+| `SavePassword({ username, password, email?, phone? })` | Offers to keep a login in the player's Passwords app. Resolves `true` only when the player agreed and it was stored |
 | `GetStorage(key, fallback)`<br>`SetStorage(key, value)` | Per-app persistence, JSON in and out |
 | `OnAppOpen(cb)`<br>`OnAppClose(cb)` | Fires as your app is foregrounded and backgrounded |
 | `componentsSupports(name)` | Feature test that accounts for stubs; see below |
@@ -286,6 +288,39 @@ const prefs = await GetStorage('prefs', { sort: 'newest' });
 Pass `null` as the value to delete a key. `GetStorage` returns the fallback when the key is missing or unreadable.
 
 Two things to design around. It is **device-local**, so it does not follow a character between machines and a cleared cache loses it — persist anything that matters server-side through your own resource. And each app has a budget of **64 KB across 64 keys**; a write that would exceed it is refused and `SetStorage` resolves `false` rather than throwing. Check the return value if you store anything unbounded.
+
+### Sign-up forms
+
+The built-in account apps pre-fill a new account with the player's own email and number, then offer to keep the login in the Passwords app. Your app can do the same from `componentsVersion` 5:
+
+```js
+const [emails, number] = await Promise.all([GetEmails(), GetPhoneNumber()]);
+
+emailInput.value = emails[0] ?? '';
+phoneInput.value = number ?? '';
+
+// after your own resource has created the account
+const saved = await SavePassword({
+    username: form.username,
+    password: form.password,
+    email:    form.email,
+    phone:    form.phone,
+});
+```
+
+`GetEmails` returns every address the character is signed into, so offer a picker when there is more than one rather than always taking the first.
+
+`SavePassword` never writes silently. The phone shows the player the same "Save to Passwords?" prompt the built-in apps use, and the promise resolves `false` when they decline. It also resolves `false` when the username or password is missing, when either is longer than 64 characters, when a prompt from your app is already on screen, or when your app already holds 10 logins for that character. The entry is filed under your app's name and icon, and the player can remove it from the Passwords app like any other.
+
+It is deliberately one-way: nothing hands a saved password back to your page. Keep your own session (through `SetStorage` or, better, your own resource) rather than expecting to read the login again.
+
+Guard both calls so your app still runs on a phone that has not updated yet:
+
+```js
+if (componentsSupports('SavePassword')) {
+    await SavePassword({ username, password });
+}
+```
 
 ### Lifecycle
 
