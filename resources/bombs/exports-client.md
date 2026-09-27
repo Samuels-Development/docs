@@ -18,7 +18,7 @@ Returns a table of walls **keyed by ID**:
 | Field | Type | Description |
 |---|---|---|
 | `id` | `number` | Wall ID |
-| `style` | `string` | Style key |
+| `style` | `string` | The wall's style key, e.g. `'brick_red'` |
 | `color` | `string?` | Paint colour |
 | `state` | `string` | `'intact'` or `'broken'` |
 | `length` | `number` | Metres |
@@ -94,7 +94,7 @@ local placed = exports['sd-bombs']:startPlacement(style)
 
 | Parameter | Type | Description |
 |---|---|---|
-| `style` | `string?` | A style key. Default: the last one placed |
+| `style` | `string?` | The wall's **style key**, e.g. `'brick_red'` - see [Wall Styles](./walls#wall-styles) (not the wall-kit item name). Default: the last one placed |
 
 ::: warning Permission is checked on the server
 The server only builds the wall if the player may run `/wall_place`, just used a wall kit, or was given a one-off licence. To let **any** player put up a wall from your script, call the [`startWallPlacement`](./exports-server#startwallplacement) **server** export instead - it opens the tool for them and grants the licence.

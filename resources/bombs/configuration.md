@@ -209,6 +209,7 @@ return {
 | Setting | Description |
 |---|---|
 | `MaxLength` | The longest single run, in metres |
+| `Styles.<key>` | The **style key** (e.g. `brick_red`) - the name every wall export and `/wall_place` use |
 | `Styles.<key>.label` | The display name |
 | `Styles.<key>.toughness` | `1`-`4`: what an explosion's power has to reach to breach it |
 | `Styles.<key>.fx` | Breach particles: `'plaster'`, `'wood'`, `'metal'`, or `'masonry'` |
@@ -274,4 +275,4 @@ return {
 | `Commands.Restricted` | `'group.admin'` | Who may use the wall commands |
 | `Commands.*` | | Rename a command, or `false` to not register it |
 | `Commands.Reach` | `6.0` | Metres the "nearest wall" commands look around you |
-| `Items` | | Wall-kit item → the style it places. Remove an entry to drop that kit |
+| `Items` | | Wall-kit item name → the style key it places, e.g. `wallkit_brick_red = 'brick_red'`. Remove an entry to drop that kit |

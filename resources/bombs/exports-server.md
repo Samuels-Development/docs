@@ -10,6 +10,10 @@ Exports that change something return `true` (or the new ID) on success, and `fal
 
 A wall is a **run** - one straight stretch of one style, 3 m tall, any length in steps of 0.25 m. Coordinates are the **ground** position of the run's centre, and the heading the wall faces. See the [Walls Reference](./walls) for every style and hole shape.
 
+::: info Style keys
+Every wall export takes a wall's **style key** - `'brick_red'`, `'concrete_reinforced'`, `'steel_plate'` - listed under [Wall Styles](./walls#wall-styles) and returned by [`getWallStyles`](#getwallstyles). It is **not** the wall-kit item name: pass `'brick_red'`, not `'wallkit_brick_red'`.
+:::
+
 ### placeWall
 
 Place a wall.
@@ -21,7 +25,7 @@ local id = exports['sd-bombs']:placeWall(style, coords, opts)
 
 | Parameter | Type | Description |
 |---|---|---|
-| `style` | `string` | A style key, e.g. `'brick_red'` - see [`getWallStyles`](#getwallstyles) |
+| `style` | `string` | The wall's **style key**, e.g. `'brick_red'` - see [Wall Styles](./walls#wall-styles). Not the wall-kit item name |
 | `coords` | `vector4` | Ground position of the run's centre, and its heading |
 | `opts` | `table?` | Options (below) |
 
@@ -58,7 +62,7 @@ local id = exports['sd-bombs']:placeWallBetween(style, a, b, opts)
 
 | Parameter | Type | Description |
 |---|---|---|
-| `style` | `string` | A style key |
+| `style` | `string` | The wall's **style key**, e.g. `'brick_red'` - see [Wall Styles](./walls#wall-styles). Not the wall-kit item name |
 | `a` | `vector3` | One side of the gap |
 | `b` | `vector3` | The other side |
 | `opts` | `table?` | As [`placeWall`](#placewall), without `length`. `z` sets the height of the wall's foot - by default the lower of the two points' heights, so give ground-level points (a player's `GetEntityCoords` is about 1 m above the ground) |
@@ -140,7 +144,7 @@ local changed = exports['sd-bombs']:setWallStyle(id, style, color)
 | Parameter | Type | Description |
 |---|---|---|
 | `id` | `number` | The wall ID |
-| `style` | `string` | A style key |
+| `style` | `string` | The wall's **style key**, e.g. `'brick_red'` - see [Wall Styles](./walls#wall-styles). Not the wall-kit item name |
 | `color` | `string?` | A colour to repaint it in at the same time |
 
 ### setWallColor
@@ -167,7 +171,7 @@ local started = exports['sd-bombs']:startWallPlacement(source, style, opts)
 | Parameter | Type | Description |
 |---|---|---|
 | `source` | `number` | The player's server ID |
-| `style` | `string` | A style key |
+| `style` | `string` | The wall's **style key**, e.g. `'brick_red'` - see [Wall Styles](./walls#wall-styles). Not the wall-kit item name |
 | `opts` | `table?` | `{ persistent = boolean (default true), tag = string? }` |
 
 Returns `false` for an unknown style or player. Listen for [`wallPlaced`](#wallplaced-wallremoved-wallrepaired) to get the wall's ID once it stands.
@@ -288,7 +292,7 @@ local wall = exports['sd-bombs']:getWall(id)
 | Field | Type | Description |
 |---|---|---|
 | `id` | `number` | Wall ID |
-| `style` | `string` | Style key |
+| `style` | `string` | The wall's style key, e.g. `'brick_red'` |
 | `color` | `string?` | Paint colour |
 | `state` | `string` | `'intact'` or `'broken'` |
 | `length` | `number` | Metres |
@@ -342,7 +346,7 @@ local styles = exports['sd-bombs']:getWallStyles()
 
 | Field | Type | Description |
 |---|---|---|
-| `key` | `string` | Style key, e.g. `'brick_red'` |
+| `key` | `string` | The style key - what the wall exports take, e.g. `'brick_red'` |
 | `label` | `string` | Display name |
 | `toughness` | `number` | `1`-`4` |
 | `fx` | `string` | Breach effect: `'plaster'`, `'wood'`, `'metal'`, or `'masonry'` |
