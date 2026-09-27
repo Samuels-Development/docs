@@ -28,7 +28,10 @@ A planted **bomb** hits with the power of its [yield](#bombs-and-walls). Every v
 
 ## Wall Styles
 
-Each style below is shown as a 2 m piece, intact and breached with a doorway. The item is the style's [wall kit](./installation#_2-add-items).
+Each style below is shown as a 2 m piece, intact and breached with a doorway. Under each one:
+
+- **Style** - the style's key. This is what you pass to the exports (`placeWall`, `placeWallBetween`, `setWallStyle`, ...) and to `/wall_place`
+- **Item** - its **wall kit**: the inventory item that lets a player put up one 2 m module of this style (see [Add Items](./installation#_2-add-items)). You only need it if players place walls themselves
 
 ### Toughness 1 - light
 
@@ -37,27 +40,27 @@ Anything that goes bang gets through: a pipe bomb, a car going up, a hi-octane b
 <div class="render-grid wide">
   <figure>
     <div class="render-pair"><img src="/bombs/walls/corrugated_metal.jpg" alt="Corrugated iron sheeting" loading="lazy" /><img src="/bombs/walls/corrugated_metal-breached.jpg" alt="Corrugated iron sheeting, breached" loading="lazy" /></div>
-    <figcaption><b>Corrugated iron sheeting</b><code>corrugated_metal</code> · kit <code>wallkit_corrugated_metal</code><br />Breaks into metal fragments and sparks.</figcaption>
+    <figcaption><b>Corrugated iron sheeting</b>Style <code>corrugated_metal</code><br />Item <code>wallkit_corrugated_metal</code><br />Breaks into metal fragments and sparks.</figcaption>
   </figure>
   <figure>
     <div class="render-pair"><img src="/bombs/walls/stucco_old.jpg" alt="Old rendered wall" loading="lazy" /><img src="/bombs/walls/stucco_old-breached.jpg" alt="Old rendered wall, breached" loading="lazy" /></div>
-    <figcaption><b>Old rendered wall</b><code>stucco_old</code> · kit <code>wallkit_stucco_old</code><br />Breaks into plaster dust. Paintable: <b style="display:inline">19</b> colours.</figcaption>
+    <figcaption><b>Old rendered wall</b>Style <code>stucco_old</code><br />Item <code>wallkit_stucco_old</code><br />Breaks into plaster dust. Paintable: <b style="display:inline">19</b> colours.</figcaption>
   </figure>
   <figure>
     <div class="render-pair"><img src="/bombs/walls/wood_painted.jpg" alt="Painted plank wall" loading="lazy" /><img src="/bombs/walls/wood_painted-breached.jpg" alt="Painted plank wall, breached" loading="lazy" /></div>
-    <figcaption><b>Painted plank wall</b><code>wood_painted</code> · kit <code>wallkit_wood_painted</code><br />Breaks into splinters. Paintable: <b style="display:inline">21</b> colours.</figcaption>
+    <figcaption><b>Painted plank wall</b>Style <code>wood_painted</code><br />Item <code>wallkit_wood_painted</code><br />Breaks into splinters. Paintable: <b style="display:inline">21</b> colours.</figcaption>
   </figure>
   <figure>
     <div class="render-pair"><img src="/bombs/walls/roller_shutter.jpg" alt="Steel roller shutter" loading="lazy" /><img src="/bombs/walls/roller_shutter-breached.jpg" alt="Steel roller shutter, breached" loading="lazy" /></div>
-    <figcaption><b>Steel roller shutter</b><code>roller_shutter</code> · kit <code>wallkit_roller_shutter</code><br />Breaks into metal fragments and sparks. Paintable: <b style="display:inline">20</b> colours.</figcaption>
+    <figcaption><b>Steel roller shutter</b>Style <code>roller_shutter</code><br />Item <code>wallkit_roller_shutter</code><br />Breaks into metal fragments and sparks. Paintable: <b style="display:inline">20</b> colours.</figcaption>
   </figure>
   <figure>
     <div class="render-pair"><img src="/bombs/walls/drywall.jpg" alt="Stud wall (plasterboard)" loading="lazy" /><img src="/bombs/walls/drywall-breached.jpg" alt="Stud wall (plasterboard), breached" loading="lazy" /></div>
-    <figcaption><b>Stud wall (plasterboard)</b><code>drywall</code> · kit <code>wallkit_drywall</code><br />Breaks into plaster dust. Paintable: <b style="display:inline">20</b> colours.</figcaption>
+    <figcaption><b>Stud wall (plasterboard)</b>Style <code>drywall</code><br />Item <code>wallkit_drywall</code><br />Breaks into plaster dust. Paintable: <b style="display:inline">20</b> colours.</figcaption>
   </figure>
   <figure>
     <div class="render-pair"><img src="/bombs/walls/wood_planks.jpg" alt="Timber plank wall" loading="lazy" /><img src="/bombs/walls/wood_planks-breached.jpg" alt="Timber plank wall, breached" loading="lazy" /></div>
-    <figcaption><b>Timber plank wall</b><code>wood_planks</code> · kit <code>wallkit_wood_planks</code><br />Breaks into splinters.</figcaption>
+    <figcaption><b>Timber plank wall</b>Style <code>wood_planks</code><br />Item <code>wallkit_wood_planks</code><br />Breaks into splinters.</figcaption>
   </figure>
 </div>
 
@@ -68,27 +71,27 @@ Takes a grenade, a car, a barrel, or propane - not a bike or a firework.
 <div class="render-grid wide">
   <figure>
     <div class="render-pair"><img src="/bombs/walls/cinder_block.jpg" alt="Cinder block wall" loading="lazy" /><img src="/bombs/walls/cinder_block-breached.jpg" alt="Cinder block wall, breached" loading="lazy" /></div>
-    <figcaption><b>Cinder block wall</b><code>cinder_block</code> · kit <code>wallkit_cinder_block</code><br />Breaks into masonry and rock. Paintable: <b style="display:inline">20</b> colours.</figcaption>
+    <figcaption><b>Cinder block wall</b>Style <code>cinder_block</code><br />Item <code>wallkit_cinder_block</code><br />Breaks into masonry and rock. Paintable: <b style="display:inline">20</b> colours.</figcaption>
   </figure>
   <figure>
     <div class="render-pair"><img src="/bombs/walls/ledgestone.jpg" alt="Dry-stacked stone wall" loading="lazy" /><img src="/bombs/walls/ledgestone-breached.jpg" alt="Dry-stacked stone wall, breached" loading="lazy" /></div>
-    <figcaption><b>Dry-stacked stone wall</b><code>ledgestone</code> · kit <code>wallkit_ledgestone</code><br />Breaks into masonry and rock.</figcaption>
+    <figcaption><b>Dry-stacked stone wall</b>Style <code>ledgestone</code><br />Item <code>wallkit_ledgestone</code><br />Breaks into masonry and rock.</figcaption>
   </figure>
   <figure>
     <div class="render-pair"><img src="/bombs/walls/brick_painted.jpg" alt="Painted brick wall" loading="lazy" /><img src="/bombs/walls/brick_painted-breached.jpg" alt="Painted brick wall, breached" loading="lazy" /></div>
-    <figcaption><b>Painted brick wall</b><code>brick_painted</code> · kit <code>wallkit_brick_painted</code><br />Breaks into masonry and rock. Paintable: <b style="display:inline">21</b> colours.</figcaption>
+    <figcaption><b>Painted brick wall</b>Style <code>brick_painted</code><br />Item <code>wallkit_brick_painted</code><br />Breaks into masonry and rock. Paintable: <b style="display:inline">21</b> colours.</figcaption>
   </figure>
   <figure>
     <div class="render-pair"><img src="/bombs/walls/brick_red.jpg" alt="Red brick wall" loading="lazy" /><img src="/bombs/walls/brick_red-breached.jpg" alt="Red brick wall, breached" loading="lazy" /></div>
-    <figcaption><b>Red brick wall</b><code>brick_red</code> · kit <code>wallkit_brick_red</code><br />Breaks into masonry and rock.</figcaption>
+    <figcaption><b>Red brick wall</b>Style <code>brick_red</code><br />Item <code>wallkit_brick_red</code><br />Breaks into masonry and rock.</figcaption>
   </figure>
   <figure>
     <div class="render-pair"><img src="/bombs/walls/rusted_sheet.jpg" alt="Rusted sheet-steel wall" loading="lazy" /><img src="/bombs/walls/rusted_sheet-breached.jpg" alt="Rusted sheet-steel wall, breached" loading="lazy" /></div>
-    <figcaption><b>Rusted sheet-steel wall</b><code>rusted_sheet</code> · kit <code>wallkit_rusted_sheet</code><br />Breaks into metal fragments and sparks.</figcaption>
+    <figcaption><b>Rusted sheet-steel wall</b>Style <code>rusted_sheet</code><br />Item <code>wallkit_rusted_sheet</code><br />Breaks into metal fragments and sparks.</figcaption>
   </figure>
   <figure>
     <div class="render-pair"><img src="/bombs/walls/tile_white.jpg" alt="White tiled wall" loading="lazy" /><img src="/bombs/walls/tile_white-breached.jpg" alt="White tiled wall, breached" loading="lazy" /></div>
-    <figcaption><b>White tiled wall</b><code>tile_white</code> · kit <code>wallkit_tile_white</code><br />Breaks into plaster dust. Paintable: <b style="display:inline">20</b> colours.</figcaption>
+    <figcaption><b>White tiled wall</b>Style <code>tile_white</code><br />Item <code>wallkit_tile_white</code><br />Breaks into plaster dust. Paintable: <b style="display:inline">20</b> colours.</figcaption>
   </figure>
 </div>
 
@@ -99,23 +102,23 @@ Takes a sticky bomb, a rocket, a truck, a proximity mine, or the railgun.
 <div class="render-grid wide">
   <figure>
     <div class="render-pair"><img src="/bombs/walls/basalt_stone.jpg" alt="Fitted basalt wall" loading="lazy" /><img src="/bombs/walls/basalt_stone-breached.jpg" alt="Fitted basalt wall, breached" loading="lazy" /></div>
-    <figcaption><b>Fitted basalt wall</b><code>basalt_stone</code> · kit <code>wallkit_basalt_stone</code><br />Breaks into masonry and rock.</figcaption>
+    <figcaption><b>Fitted basalt wall</b>Style <code>basalt_stone</code><br />Item <code>wallkit_basalt_stone</code><br />Breaks into masonry and rock.</figcaption>
   </figure>
   <figure>
     <div class="render-pair"><img src="/bombs/walls/concrete_painted.jpg" alt="Painted concrete wall" loading="lazy" /><img src="/bombs/walls/concrete_painted-breached.jpg" alt="Painted concrete wall, breached" loading="lazy" /></div>
-    <figcaption><b>Painted concrete wall</b><code>concrete_painted</code> · kit <code>wallkit_concrete_painted</code><br />Breaks into masonry and rock. Paintable: <b style="display:inline">20</b> colours.</figcaption>
+    <figcaption><b>Painted concrete wall</b>Style <code>concrete_painted</code><br />Item <code>wallkit_concrete_painted</code><br />Breaks into masonry and rock. Paintable: <b style="display:inline">20</b> colours.</figcaption>
   </figure>
   <figure>
     <div class="render-pair"><img src="/bombs/walls/concrete.jpg" alt="Poured concrete wall" loading="lazy" /><img src="/bombs/walls/concrete-breached.jpg" alt="Poured concrete wall, breached" loading="lazy" /></div>
-    <figcaption><b>Poured concrete wall</b><code>concrete</code> · kit <code>wallkit_concrete</code><br />Breaks into masonry and rock.</figcaption>
+    <figcaption><b>Poured concrete wall</b>Style <code>concrete</code><br />Item <code>wallkit_concrete</code><br />Breaks into masonry and rock.</figcaption>
   </figure>
   <figure>
     <div class="render-pair"><img src="/bombs/walls/stone_block.jpg" alt="Rough stone block wall" loading="lazy" /><img src="/bombs/walls/stone_block-breached.jpg" alt="Rough stone block wall, breached" loading="lazy" /></div>
-    <figcaption><b>Rough stone block wall</b><code>stone_block</code> · kit <code>wallkit_stone_block</code><br />Breaks into masonry and rock.</figcaption>
+    <figcaption><b>Rough stone block wall</b>Style <code>stone_block</code><br />Item <code>wallkit_stone_block</code><br />Breaks into masonry and rock.</figcaption>
   </figure>
   <figure>
     <div class="render-pair"><img src="/bombs/walls/sandstone.jpg" alt="Sandstone block wall" loading="lazy" /><img src="/bombs/walls/sandstone-breached.jpg" alt="Sandstone block wall, breached" loading="lazy" /></div>
-    <figcaption><b>Sandstone block wall</b><code>sandstone</code> · kit <code>wallkit_sandstone</code><br />Breaks into masonry and rock.</figcaption>
+    <figcaption><b>Sandstone block wall</b>Style <code>sandstone</code><br />Item <code>wallkit_sandstone</code><br />Breaks into masonry and rock.</figcaption>
   </figure>
 </div>
 
@@ -126,15 +129,15 @@ Only a tank shell, a plane rocket, the Valkyrie cannon - or a well-packed bomb.
 <div class="render-grid wide">
   <figure>
     <div class="render-pair"><img src="/bombs/walls/castle_stone.jpg" alt="Castle ashlar wall" loading="lazy" /><img src="/bombs/walls/castle_stone-breached.jpg" alt="Castle ashlar wall, breached" loading="lazy" /></div>
-    <figcaption><b>Castle ashlar wall</b><code>castle_stone</code> · kit <code>wallkit_castle_stone</code><br />Breaks into masonry and rock.</figcaption>
+    <figcaption><b>Castle ashlar wall</b>Style <code>castle_stone</code><br />Item <code>wallkit_castle_stone</code><br />Breaks into masonry and rock.</figcaption>
   </figure>
   <figure>
     <div class="render-pair"><img src="/bombs/walls/concrete_reinforced.jpg" alt="Reinforced concrete wall" loading="lazy" /><img src="/bombs/walls/concrete_reinforced-breached.jpg" alt="Reinforced concrete wall, breached" loading="lazy" /></div>
-    <figcaption><b>Reinforced concrete wall</b><code>concrete_reinforced</code> · kit <code>wallkit_concrete_reinforced</code><br />Breaks into masonry and rock.</figcaption>
+    <figcaption><b>Reinforced concrete wall</b>Style <code>concrete_reinforced</code><br />Item <code>wallkit_concrete_reinforced</code><br />Breaks into masonry and rock.</figcaption>
   </figure>
   <figure>
     <div class="render-pair"><img src="/bombs/walls/steel_plate.jpg" alt="Riveted steel plate wall" loading="lazy" /><img src="/bombs/walls/steel_plate-breached.jpg" alt="Riveted steel plate wall, breached" loading="lazy" /></div>
-    <figcaption><b>Riveted steel plate wall</b><code>steel_plate</code> · kit <code>wallkit_steel_plate</code><br />Breaks into metal fragments and sparks.</figcaption>
+    <figcaption><b>Riveted steel plate wall</b>Style <code>steel_plate</code><br />Item <code>wallkit_steel_plate</code><br />Breaks into metal fragments and sparks.</figcaption>
   </figure>
 </div>
 
@@ -240,6 +243,57 @@ A planted bomb breaches only a wall it is **set against** - stuck on it, or stan
 | 6 blocks | 5 | whole section down | whole section down | whole section down | whole section down | whole section down |
 
 While a player aims a bomb, the walls it would breach - and the hole each would get - are previewed on the wall.
+
+## Placing from a Script
+
+Put walls up from your own resource with the [server exports](./exports-server#walls). Pass the **style** key from the list above.
+
+### Between two points
+
+[`placeWallBetween`](./exports-server#placewallbetween) closes the gap between two points: the wall runs from the first to the second, and its length and heading are worked out for you.
+
+```lua
+-- Brick up a doorway: two points on the ground, one at each side of it
+local wallId = exports['sd-bombs']:placeWallBetween('brick_red',
+    vec3(253.2, 225.4, 101.8), -- one side of the gap
+    vec3(256.9, 224.1, 101.8), -- the other side
+    { tag = 'my-heist' }
+)
+print(('Wall %d placed'):format(wallId))
+```
+
+The length is rounded **up** to the next 0.25 m, so the wall always closes the gap. The wall's foot goes at the **lower** of the two points' heights - give ground-level points, or pass `z` in the options.
+
+::: warning Ground height
+A player's position (`GetEntityCoords(ped)`) is about **1 m above the ground**. Copying it straight in leaves the wall floating - take 1 m off its `z`, or pass the ground height as `z`.
+:::
+
+### At a position
+
+[`placeWall`](./exports-server#placewall) puts a wall of a given length centred on a point, facing a heading:
+
+```lua
+-- A 6 m painted brick wall, navy, centred on this spot and facing 90 degrees
+local wallId = exports['sd-bombs']:placeWall('brick_painted', vec4(-1182.4, -884.2, 13.8, 90.0), {
+    length = 6.0,
+    color = 'navy',       -- a colour the style comes in (see Paint Colours)
+    persistent = true,      -- saved in data/walls.json, back after a restart
+})
+```
+
+### Options
+
+| Option | Default | Description |
+|---|---|---|
+| `length` | `2` | `placeWall` only: metres, rounded up to 0.25 (max 40) |
+| `color` | - | A paint colour the style comes in |
+| `persistent` | `false` | Save it so it comes back after a restart |
+| `tag` | - | Your own label - remove all your walls at once with `removeWallsByTag('my-heist')` |
+| `z` | the lower point | `placeWallBetween` only: the height of the wall's foot |
+
+::: tip Walls a script rebuilds every time
+Leave `persistent` off and give your walls a `tag`: put them up when your heist starts, and tear them down with `removeWallsByTag` when it resets. Nothing is left behind in `data/walls.json`.
+:::
 
 ## Breaching from a Script
 

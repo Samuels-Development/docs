@@ -61,7 +61,9 @@ local id = exports['sd-bombs']:placeWallBetween(style, a, b, opts)
 | `style` | `string` | A style key |
 | `a` | `vector3` | One side of the gap |
 | `b` | `vector3` | The other side |
-| `opts` | `table?` | As [`placeWall`](#placewall), without `length`. `z` overrides the ground height |
+| `opts` | `table?` | As [`placeWall`](#placewall), without `length`. `z` sets the height of the wall's foot - by default the lower of the two points' heights, so give ground-level points (a player's `GetEntityCoords` is about 1 m above the ground) |
+
+Returns `nil` when the points are less than 5 cm apart.
 
 ### removeWall
 
