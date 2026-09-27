@@ -4,6 +4,9 @@ Welcome to the documentation for all Samuel's Development scripts. Select a reso
 
 ## Scripts
 
+### [Bombs & Breakable Walls](/resources/bombs/)
+Co-op bomb defusal on a real 3D bomb with a paper field manual, a hands-on bomb builder on workbenches in the world, and breakable walls in 20 styles that any explosion can blow a hole through - with an in-game admin panel over all three.
+
 ### [Shops Pro](/resources/shops/)
 A comprehensive shop system featuring ownership, employees, stock management, loyalty programs, coupons, sales, and a fully featured management UI. Supports regular shops, pawn shops, armories, illegal shops, and restricted shops.
 

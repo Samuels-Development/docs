@@ -109,6 +109,13 @@ aside: false
       <span class="res-sub">Deliveries, selling, and survival</span>
     </div>
     <div class="res-grid">
+      <a href="/resources/bombs/" class="res-card">
+        <div class="res-card-top">
+          <span class="res-card-name">Bombs & Breakable Walls</span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="res-card-arrow"><path d="M7 17l9.2-9.2M17 17V7.8H7.8"/></svg>
+        </div>
+        <span class="res-card-desc">Co-op defusal, a hands-on bomb builder, walls any blast breaches</span>
+      </a>
       <a href="/resources/horde/" class="res-card">
         <div class="res-card-top">
           <span class="res-card-name">Horde Mission</span>

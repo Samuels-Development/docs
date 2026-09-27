@@ -306,3 +306,52 @@ button,
   color: var(--vp-c-brand-1);
   border: 1px solid var(--vp-c-brand-soft);
 }
+
+/* Render galleries (e.g. Bombs & Breakable Walls > Walls): a grid of captioned images. A figure with two images shows
+   them side by side (a wall intact and breached). */
+.render-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 14px;
+  margin: 18px 0 24px;
+}
+.render-grid.wide {
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+}
+.render-grid figure {
+  margin: 0;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 10px;
+  overflow: hidden;
+  background: var(--vp-c-bg-soft);
+}
+.render-grid .render-pair {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: var(--vp-c-divider);
+}
+.render-grid img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  margin: 0;
+}
+.render-grid .render-pair img {
+  aspect-ratio: 3 / 4; /* (a wall is taller than it is wide: cropped to it, it fills the frame) */
+}
+.render-grid figcaption {
+  padding: 8px 11px 10px;
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--vp-c-text-2);
+}
+.render-grid figcaption b {
+  display: block;
+  color: var(--vp-c-text-1);
+  font-size: 14px;
+}
+.render-grid figcaption code {
+  font-size: 12px;
+}

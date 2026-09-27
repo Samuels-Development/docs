@@ -250,6 +250,39 @@ const globalSidebar = [
     text: 'Crime & Missions',
     items: [
       {
+        text: 'Bombs & Breakable Walls',
+        collapsed: true,
+        items: [
+          { text: 'Overview', link: '/resources/bombs/' },
+          { text: 'Installation', link: '/resources/bombs/installation' },
+          { text: 'Configuration', link: '/resources/bombs/configuration' },
+          {
+            text: 'Full Config Files',
+            collapsed: true,
+            items: [
+              { text: 'config.lua', link: '/resources/bombs/full-config' },
+              { text: 'admin.lua', link: '/resources/bombs/full-config-admin' },
+              { text: 'bomb.lua', link: '/resources/bombs/full-config-bomb' },
+              { text: 'items.lua', link: '/resources/bombs/full-config-items' },
+              { text: 'walls.lua', link: '/resources/bombs/full-config-walls' },
+              { text: 'breaking.lua', link: '/resources/bombs/full-config-breaking' },
+              { text: 'placement.lua', link: '/resources/bombs/full-config-placement' },
+              { text: 'props.lua', link: '/resources/bombs/full-config-props' },
+            ],
+          },
+          { text: 'Building Bombs', link: '/resources/bombs/building' },
+          { text: 'Walls Reference', link: '/resources/bombs/walls' },
+          {
+            text: 'Exports',
+            collapsed: true,
+            items: [
+              { text: 'Client Exports', link: '/resources/bombs/exports-client' },
+              { text: 'Server Exports', link: '/resources/bombs/exports-server' },
+            ],
+          },
+        ],
+      },
+      {
         text: 'Petty Crimes',
         collapsed: true,
         items: [
