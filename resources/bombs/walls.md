@@ -301,7 +301,13 @@ Leave `persistent` off and give your walls a `tag`: put them up when your heist 
 
 ## Breaching from a Script
 
-Break a wall exactly the way you want with the [`breachWall`](./exports-server#breachwall) export - pick the shape by name and where along the wall it goes:
+::: info You do not need this to blow walls up
+**Bombs and explosions breach walls on their own.** A planted bomb opens the wall it is set against when it goes off, and grenades, sticky bombs, rockets, and exploding vehicles do the same - no script, no setup. See [Bombs and Walls](#bombs-and-walls) and [Toughness](#toughness).
+
+This section is for **developers** who want a wall to open **without an explosion**, or exactly the way they choose - a thermite or cutting-torch minigame that opens a wall when it is won, a truck driven through a wall in a scripted scene, a heist that always leaves the same hole in the same spot.
+:::
+
+Open a wall your way with the [`breachWall`](./exports-server#breachwall) export - pick the shape by name and where along the wall it goes:
 
 ```lua
 -- A doorway 3 m along wall 12

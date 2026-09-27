@@ -190,6 +190,10 @@ end)
 
 Blow a hole in a wall - **the shape you want, where you want it**.
 
+::: tip Not needed for bombs and explosions
+Planted bombs and game explosions breach walls **by themselves** - you do not call anything for that. Use `breachWall` when a wall should open **without** an explosion (a thermite or torch minigame, a scripted scene) or exactly the way your script chooses.
+:::
+
 **Syntax**
 ```lua
 local ok, hole = exports['sd-bombs']:breachWall(id, shape, opts)
