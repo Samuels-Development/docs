@@ -35,6 +35,8 @@ local id = exports['sd-bombs']:placeWall(style, coords, opts)
 | `color` | `string?` | - | A paint colour the style comes in, e.g. `'navy'` |
 | `persistent` | `boolean` | `false` | Save it, so it comes back after a restart |
 | `tag` | `string?` | - | Your own label - remove every wall with it at once with [`removeWallsByTag`](#removewallsbytag) |
+| `scriptOnly` | `boolean` | `false` | Game explosions and planted bombs **never** breach it - only [`breachWall`](#breachwall) / [`breakWall`](#breakwall) (and staff) open it |
+| `autoRepair` | `boolean` | `true` | `false` = it never rebuilds itself: it stays breached until [`repairWall`](#repairwall-repairallwalls) |
 
 Returns the new wall's `id`, or `nil` for an unknown style.
 
@@ -186,12 +188,32 @@ RegisterNetEvent('my-job:server:buildBarricade', function()
 end)
 ```
 
+### setWallRules
+
+Change how a wall may be breached, and whether it rebuilds itself. A field left out stays as it is.
+
+**Syntax**
+```lua
+local changed = exports['sd-bombs']:setWallRules(id, rules)
+```
+
+| Field (`rules`) | Type | Description |
+|---|---|---|
+| `scriptOnly` | `boolean?` | `true` = explosions and bombs never breach it; `false` = they do again |
+| `autoRepair` | `boolean?` | `false` = it never rebuilds itself; `true` = it does after `RepairAfter` |
+
+**Example**
+```lua
+-- The vault wall only your thermite opens - until the alarm is cut, then anything goes
+exports['sd-bombs']:setWallRules(vaultWall, { scriptOnly = false })
+```
+
 ### breachWall
 
 Blow a hole in a wall - **the shape you want, where you want it**.
 
 ::: tip Not needed for bombs and explosions
-Planted bombs and game explosions breach walls **by themselves** - you do not call anything for that. Use `breachWall` when a wall should open **without** an explosion (a thermite or torch minigame, a scripted scene) or exactly the way your script chooses.
+Planted bombs and game explosions breach walls **by themselves** - you do not call anything for that. Use `breachWall` when a wall should open **without** an explosion (a thermite or torch minigame, a scripted scene) or exactly the way your script chooses. To stop explosions opening **your** wall at all, place it with `scriptOnly = true` (or [`setWallRules`](#setwallrules)).
 :::
 
 **Syntax**
@@ -305,6 +327,8 @@ local wall = exports['sd-bombs']:getWall(id)
 | `persistent` | `boolean` | Saved across restarts |
 | `tag` | `string?` | Its tag |
 | `brokenAt` | `number?` | When it was last breached (unix seconds) |
+| `scriptOnly` | `boolean` | Only scripts breach it, never explosions or bombs |
+| `autoRepair` | `boolean` | Rebuilds itself after `RepairAfter` |
 
 ### getWalls
 

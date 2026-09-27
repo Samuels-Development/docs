@@ -293,6 +293,8 @@ local wallId = exports['sd-bombs']:placeWall('brick_painted', vec4(-1182.4, -884
 | `color` | - | A paint colour the style comes in |
 | `persistent` | `false` | Save it so it comes back after a restart |
 | `tag` | - | Your own label - remove all your walls at once with `removeWallsByTag('my-heist')` |
+| `scriptOnly` | `false` | Explosions and bombs never breach it - only your script does. See [Only Your Script Opens It](#only-your-script-opens-it) |
+| `autoRepair` | `true` | `false` = it never rebuilds itself: it stays breached until `repairWall` |
 | `z` | the lower point | `placeWallBetween` only: the height of the wall's foot |
 
 ::: tip Walls a script rebuilds every time
@@ -306,6 +308,29 @@ Leave `persistent` off and give your walls a `tag`: put them up when your heist 
 
 This section is for **developers** who want a wall to open **without an explosion**, or exactly the way they choose - a thermite or cutting-torch minigame that opens a wall when it is won, a truck driven through a wall in a scripted scene, a heist that always leaves the same hole in the same spot.
 :::
+
+### Only Your Script Opens It
+
+By default a wall your script places still breaks to **any** explosion - a player with a grenade can open your vault wall early. To keep a wall **strictly** to your script, place it with `scriptOnly = true`: game explosions and planted bombs never breach it, and the bomb planting preview leaves it out. Only `breachWall` / `breakWall` - and staff from the admin panel - open it.
+
+```lua
+local vaultWall = exports['sd-bombs']:placeWallBetween('concrete_reinforced',
+    vec3(253.2, 225.4, 100.8), vec3(256.9, 224.1, 100.8), {
+    tag = 'my-heist',
+    scriptOnly = true,   -- explosions and bombs never breach it: only your script does
+    autoRepair = false,  -- and it stays open until you call repairWall
+})
+
+-- When the thermite minigame is won:
+exports['sd-bombs']:breachWall(vaultWall, 'doorway', { along = 1.8, type = 'thermite' })
+
+-- When the heist resets:
+exports['sd-bombs']:repairWall(vaultWall)
+```
+
+Change it later with [`setWallRules`](./exports-server#setwallrules), e.g. `setWallRules(vaultWall, { scriptOnly = false })` once the alarm is cut. To turn explosion breaching off for **every** wall on the server instead, set `Explosions.Enabled = false` and `Bomb.Enabled = false` in `configs/shared/breaking.lua` - see [Configuration](./configuration#breaking).
+
+### Opening a Wall
 
 Open a wall your way with the [`breachWall`](./exports-server#breachwall) export - pick the shape by name and where along the wall it goes:
 
