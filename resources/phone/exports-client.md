@@ -458,7 +458,7 @@ that has to hold, such as gating what a boombox will play or what a headset can 
 
 ### openSimTray
 
-Opens the SIM tray of the phone in `slot`. Intended for the phone item's `buttons` entry in `ox_inventory/data/items.lua` under [`SimTray` mode](/resources/phone/unique-phones#physical-sim-trays); the server re-derives the tray from the slot, so it only ever opens a tray belonging to a phone the caller actually carries. A no-op outside tray mode.
+Opens the SIM tray of the phone in `slot`. Intended for the phone item's `buttons` entry in `ox_inventory/data/items.lua` under [`SimTray` mode](/resources/phone/unique-phones#physical-sim-trays); the server re-derives the tray from the slot, so it only ever opens a tray belonging to a phone the caller actually carries. A no-op outside tray mode. On one_inventory the button is added automatically, so this export is not needed there.
 
 **Syntax**
 ```lua

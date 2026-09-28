@@ -321,7 +321,7 @@ ensure sd-phone
 
 Skip this unless you are running [unique phones](/resources/phone/unique-phones) with `SimTray = true`, where the SIM is a physical card dragged into the phone. In every other mode the phone item above is complete as-is.
 
-In tray mode, using the phone opens the phone, so the tray needs its own right-click entry. Add a `buttons` field to **each** phone item:
+On **one_inventory** there is nothing to add: sd-phone puts the **SIM Tray** entry on every phone item itself. On **ox_inventory**, using the phone opens the phone, so the tray needs its own right-click entry. Add a `buttons` field to **each** phone item:
 
 ```lua
 buttons = {
@@ -346,7 +346,7 @@ Which gives you, for example:
 
 Note the comma added after `server = { ... }` once a field follows it. Repeat for every phone item you added; an item without the entry simply has no way to reach its tray.
 
-`buttons` is an ox_inventory feature, which is why SIM trays are ox-only. Leaving the entry in place on a server that later switches away from tray mode is harmless, since [`openSimTray`](/resources/phone/exports-client#opensimtray) is a no-op outside it.
+`buttons` is an ox_inventory feature; one_inventory lets a resource register the entry itself instead, which is why it needs no edit. Leaving the entry in place on a server that later switches away from tray mode is harmless, since [`openSimTray`](/resources/phone/exports-client#opensimtray) is a no-op outside it.
 
 ### SIM card item (optional)
 

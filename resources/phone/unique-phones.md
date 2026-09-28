@@ -57,9 +57,9 @@ Flipping a `'sim'` server to `'device'` is safe and automatic: on first use each
 
 ## Physical SIM trays
 
-`SimTray = true` (ox_inventory only) gives every phone item its own 1-slot **SIM tray**. Instead of using a `sim_card` item to install it, players drag the card into the tray and drag it back out to eject. The tray belongs to that individual phone and travels with the item, so a phone that changes hands takes its SIM with it.
+`SimTray = true` (ox_inventory or one_inventory) gives every phone item its own 1-slot **SIM tray**. Instead of using a `sim_card` item to install it, players drag the card into the tray and drag it back out to eject. The tray belongs to that individual phone and travels with the item, so a phone that changes hands takes its SIM with it.
 
-Using the phone item still opens the phone. The tray gets its own right-click button, which you declare on each phone item in `ox_inventory/data/items.lua`:
+Using the phone item still opens the phone. The tray gets its own right-click button. On one_inventory, sd-phone adds it to every phone item for you. On ox_inventory, declare it on each phone item in `ox_inventory/data/items.lua`:
 
 ```lua
 buttons = {
@@ -67,7 +67,7 @@ buttons = {
 },
 ```
 
-This is the one setup step tray mode adds; the [installation guide](/resources/phone/installation#sim-tray-button-only-for-simtray) shows it in place on a full item.
+This is the one setup step tray mode adds on ox_inventory; the [installation guide](/resources/phone/installation#sim-tray-button-only-for-simtray) shows it in place on a full item.
 
 Only the player currently carrying a phone can open its tray, and only a `sim_card` will go in.
 
@@ -103,7 +103,7 @@ Every option in `configs/uniqueandsim.lua`:
 | `BuiltInNumbers` | `false` | Phones mint their own permanent numbers; no SIM items at all |
 | `SimItem` | `'sim_card'` | The inventory item that carries a number in its metadata |
 | `ActivateBlankSims` | `true` | Blank cards self-activate with a fresh number on first use. Off = only `/givesim` and the `giveSimCard` export produce usable SIMs |
-| `SimTray` | `false` | ox_inventory only: each phone gets a 1-slot "SIM tray" and SIMs are physically dragged in and out. Needs a `buttons` entry on the phone item (see [Physical SIM trays](#physical-sim-trays)). Renamed from `UseContainers`, which is still read when this key is absent |
+| `SimTray` | `false` | ox_inventory or one_inventory: each phone gets a 1-slot "SIM tray" and SIMs are physically dragged in and out. On ox_inventory it needs a `buttons` entry on the phone item (see [Physical SIM trays](#physical-sim-trays)). Renamed from `UseContainers`, which is still read when this key is absent |
 | `AllowEject` | `true` | Metadata mode: allow ejecting the installed SIM from Settings → SIM & Backup (the card returns to the inventory with its number intact) |
 | `Backup.Enabled` | `true` | The Cloud Backup section in Settings |
 | `Backup.MaxProfiles` | `3` | How many phones one character can back up at once (each holds a full snapshot) |
