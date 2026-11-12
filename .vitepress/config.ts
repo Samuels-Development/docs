@@ -514,6 +514,24 @@ const globalSidebar = [
     ],
   },
   {
+    text: 'Developer Tools',
+    items: [
+      {
+        text: 'Interact',
+        collapsed: true,
+        items: [
+          { text: 'Overview', link: '/resources/interact/' },
+          { text: 'Installation', link: '/resources/interact/installation' },
+          { text: 'Adding Prompts', link: '/resources/interact/adding-prompts' },
+          { text: 'Examples', link: '/resources/interact/examples' },
+          { text: 'Client Exports', link: '/resources/interact/exports-client' },
+          { text: 'Configuration', link: '/resources/interact/configuration' },
+          { text: 'Replacing ox_target / qb-target', link: '/resources/interact/target-compatibility' },
+        ],
+      },
+    ],
+  },
+  {
     text: 'FAQ',
     items: [
       { text: 'General FAQ', link: '/faq/' },
