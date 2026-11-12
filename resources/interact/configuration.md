@@ -58,7 +58,7 @@ How the prompt and the dots look.
 
 | Option | Default | Description |
 |---|---|---|
-| `Locale` | `'en'` | Which `locales/*.json` to use: the key mapping names in the settings menu and the word "Hold" |
+| `Locale` | `'en'` | Which `locales/*.json` to use: `'en'`, `'da'` (Danish) or `'sv'` (Swedish). It names the key mappings in the settings menu and the word "Hold" |
 | `Debug` | `false` | Prints focus changes and draws every point's anchor |
 
 ## The replace convar

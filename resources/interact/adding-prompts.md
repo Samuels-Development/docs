@@ -69,7 +69,7 @@ options = {
 
 | Field | |
 |---|---|
-| `label` | What it does, in sentence case: "Take Pump Shotgun". Required: an option without a label is dropped |
+| `label` | What it does, in sentence case: "Take Pump Shotgun". Required: an option without one (or with an empty one) is dropped, with a warning in the F8 console. A point left with no options isn't made, and its `add*` export returns `nil` |
 | `icon` | Font Awesome classes (`'fa-solid fa-gun'`, `'fas fa-box'`), or a [Lucide](https://lucide.dev/icons) icon name (`'phone'`, `'hand-coins'`) |
 | `description` | A second, smaller line under the label |
 | `hold` | Milliseconds to hold the key instead of pressing it. An outline runs round the tile as the player holds |

@@ -11,7 +11,7 @@ Each file is commented line by line. This page says what each one is for and lis
 
 | Option | Default | Description |
 |---|---|---|
-| `Locale` | `'en'` | Which `locales/*.json` to use |
+| `Locale` | `'en'` | Which `locales/*.json` to use: `'en'` or `'zh-CN'` (Simplified Chinese). Customer texts, contact lines and names are in the config files below, not the locale |
 | `Debug` | `false` | Dev logging, target zone outlines and the `/trap_*` test commands |
 | `AdminAce` | `'command.trapphone'` | The ace needed for `/trapadmin` |
 

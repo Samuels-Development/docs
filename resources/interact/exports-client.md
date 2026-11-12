@@ -18,7 +18,7 @@ local id = exports['sd-interact']:addCoords(coords, data)
 
 | Return | Type | Description |
 |---|---|---|
-| `id` | `integer?` | The point's id, or `nil` if `coords` was unusable |
+| `id` | `integer?` | The point's id, or `nil` if `coords` was unusable or no option had a label |
 
 **Example**
 ```lua
@@ -43,7 +43,7 @@ local id = exports['sd-interact']:addLocalEntity(entity, data)
 
 | Return | Type | Description |
 |---|---|---|
-| `id` | `integer?` | The point's id, or `nil` if `entity` was 0 or not a number |
+| `id` | `integer?` | The point's id, or `nil` if `entity` was 0 or not a number, or no option had a label |
 
 **Example**
 ```lua
@@ -69,7 +69,7 @@ local id = exports['sd-interact']:addEntity(netId, data)
 
 | Return | Type | Description |
 |---|---|---|
-| `id` | `integer?` | The point's id |
+| `id` | `integer?` | The point's id, or `nil` if no option had a label |
 
 ## addModel
 
@@ -87,7 +87,7 @@ local id = exports['sd-interact']:addModel(models, data)
 
 | Return | Type | Description |
 |---|---|---|
-| `id` | `integer` | The point's id |
+| `id` | `integer?` | The point's id, or `nil` if no option had a label |
 
 **Example**
 ```lua
@@ -114,7 +114,7 @@ local id = exports['sd-interact']:addGlobalPlayer(data)
 
 | Return | Type | Description |
 |---|---|---|
-| `id` | `integer` | The point's id |
+| `id` | `integer?` | The point's id, or `nil` if no option had a label |
 
 ## update
 
@@ -132,7 +132,7 @@ local updated = exports['sd-interact']:update(id, data)
 
 | Return | Type | Description |
 |---|---|---|
-| `updated` | `boolean` | `false` if there is no such point |
+| `updated` | `boolean` | `false` if there is no such point, or if `options` was given and none had a label. The point then keeps its current options |
 
 ## remove
 
