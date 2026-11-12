@@ -511,6 +511,23 @@ const globalSidebar = [
           { text: 'Installation', link: '/resources/tablet/installation' },
         ],
       },
+      {
+        text: 'Trap Phone',
+        collapsed: true,
+        items: [
+          { text: 'Overview', link: '/resources/trapphone/' },
+          { text: 'Installation', link: '/resources/trapphone/installation' },
+          { text: 'Configuration', link: '/resources/trapphone/configuration' },
+          {
+            text: 'Exports',
+            collapsed: true,
+            items: [
+              { text: 'Client Exports', link: '/resources/trapphone/exports-client' },
+              { text: 'Server Exports', link: '/resources/trapphone/exports-server' },
+            ],
+          },
+        ],
+      },
     ],
   },
   {
