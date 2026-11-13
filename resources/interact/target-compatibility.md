@@ -52,7 +52,8 @@ Matched against ox_target 1.17.2:
 - **Handler data.** `onSelect`, `export`, `event` and `serverEvent` get what ox_target gives them: a copy of the option with `entity`, `coords`, `distance` and `zone` set on it. `serverEvent` gets the entity as its network id. An option marked `qtarget` gets only the entity in `onSelect`.
 - **`export`** is called on the resource that added the option, as in ox_target.
 - **Checks.** `groups`, `items` and `anyItem` (read from ox_inventory, else the framework's inventory), `distance` and `canInteract` (with ox_target's arguments: entity, distance, coords, name, bone).
-- **Placement.** Options with `bones` get a prompt on each bone. Options with `offset` get a prompt of their own. A zone becomes a prompt at its middle, reachable from the options' distance plus up to 1.5 m of the zone's own size.
+- **Placement.** Options with `bones` get a prompt on each bone. Options with `offset` get a prompt of their own. Options with neither sit on the part of the entity nearest you, and their `distance` is measured from there: ox_target measures it to where you aim, so ox_inventory's trunk option (1.5 m, only from behind the car) opens at the boot. A zone becomes a prompt at its middle, reachable from the options' distance plus up to 1.5 m of the zone's own size.
+- **One prompt per spot.** Options from different scripts that land on the same spot of an entity share one prompt, as they would share ox_target's menu. Scroll through them as usual. The shortest-range options come first, so standing at a car's boot puts the trunk on top.
 - **Self targets** open on your own ped while the camera looks down at it.
 - **Removing** by option name only touches the calling resource's options, and adding an option again under the same name replaces it.
 
@@ -60,7 +61,7 @@ Matched against ox_target 1.17.2:
 
 `AddBoxZone`, `AddCircleZone`, `AddPolyZone`, `AddComboZone`, `AddEntityZone`, `RemoveZone`, `AddTargetEntity`, `RemoveTargetEntity`, `AddTargetModel`, `RemoveTargetModel`, `AddTargetBone`, `RemoveTargetBone`, `AddGlobalPed` / `Vehicle` / `Object` / `Player` and their `RemoveGlobal*`, `AllowTargeting`, `IsTargetActive` and `IsTargetSuccess`.
 
-Matched against qb-target 5.5.0: `action`, `event` with `type = 'client' | 'server' | 'command' | 'qbcommand'`, `job`, `gang`, `item`, `citizenid` and `canInteract`. Handlers get the option as qb-target stores it. Options are removed by label, and adding one again under the same label replaces it. The ox_target and qtarget layers keep their points apart, so removing through one never removes the other's.
+Matched against qb-target 5.5.0: `action`, `event` with `type = 'client' | 'server' | 'command' | 'qbcommand'`, `job`, `gang`, `item`, `citizenid` and `canInteract`. Handlers get the option as qb-target stores it. An entity option that isn't on a bone sits on the part of the entity nearest you, as with ox_target. Options are removed by label, and adding one again under the same label replaces it. The ox_target and qtarget layers keep their points apart, so removing through one never removes the other's.
 
 ## Known differences
 

@@ -44,7 +44,7 @@ A point is measured to its middle, but players reach for its near side: a shopke
 | `offset` | `vec3` from the entity, in the entity's own space (x right, y forward, z up). For a coords point, it is added to the coords |
 | `bone` | A bone name (`'boot'`, `'door_dside_f'`, `'wheel_lf'`) or a ped bone id (`31086` for the head). The prompt rides the bone as it moves |
 
-With neither, an entity point sits in the middle of the entity's model.
+With neither, an entity point sits in the middle of the entity's model. Points on the same entity with neither share that spot, so they share one prompt: all their options go on one drum, the shortest-range point's first. Options that come in through the ox_target or qb-target layers sit on the part of the entity nearest the player instead (see [Replacing ox_target / qb-target](./target-compatibility)).
 
 ### Other point fields
 
